@@ -42,3 +42,4 @@ if type _git &> /dev/null && [ -f /usr/local/etc/bash_completion.d/git-completio
 fi;
 
 
+export PATH="$PATH:/opt/homebrew/bin"
