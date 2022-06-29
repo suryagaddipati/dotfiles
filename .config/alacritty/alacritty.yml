@@ -1,0 +1,4 @@
+shell:
+    program: /opt/homebrew/bin/bash
+font:
+    size: 20.0
