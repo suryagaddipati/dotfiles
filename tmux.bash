@@ -48,7 +48,7 @@ tm() {
 				tmux new $SHELL  -s $attach -n $1  \; set default-shell $SHELL
 			else
 				echo "Attempting to create $1"
-				tmux new $SHELL -s $1   \; set default-shell $SHELL 
+				tmux new  -s $1   \; set default-shell $SHELL 
 			fi
 		fi
 	else
