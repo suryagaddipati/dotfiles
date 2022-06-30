@@ -45,13 +45,13 @@ tm() {
 			if [ $# -gt 1 ]; then
 				attach=$1
 				shift
-				tmux new-session $SHELL  -s $attach -n $1  \; set default-shell $SHELL
+				tmux new $SHELL  -s $attach -n $1  \; set default-shell $SHELL
 			else
 				echo "Attempting to create $1"
-				tmux new-session $SHELL -s $1   \; set default-shell $SHELL 
+				tmux new $SHELL -s $1   \; set default-shell $SHELL 
 			fi
 		fi
 	else
-		tmux new-session $SHELL \; set default-shell $SHELL
+		tmux new $SHELL \; set default-shell $SHELL
 	fi
 }
