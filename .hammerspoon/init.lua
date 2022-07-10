@@ -1,5 +1,8 @@
 -- Set up hotkey combinations
 local hyper = {"cmd", "alt", "ctrl","shift"}
+local log = hs.logger.new('hammerspoon','debug')
+log.i("init")
+
 sys_name  = "Hammerspoon"
 local myWatcher = hs.pathwatcher.new(os.getenv("HOME") .. "/.hammerspoon/", hs.reload):start()
 
@@ -18,8 +21,9 @@ function reloadAndAlert()
   hs.alert.show(sys_name .. " reloaded!")
 end
 
-function launchOrActivateApp(appName)
+function launchOrActivateApp(appName,k)
   hs.application.launchOrFocus(appName)
+  k:exit() 
 end
 
 appShortcuts = {
@@ -27,17 +31,48 @@ appShortcuts = {
   ['T'] = 'Alacritty',
   ['F'] = 'Firefox',
   ['S'] = 'Slack',
-  ['J'] = 'IntelliJ IDEA',
+  ['I'] = 'IntelliJ IDEA',
   ['M'] = 'Spotify',
 }
 
 -- Bindings
-function defineKeybindings()
+function defineAppKeybindings()
+
+  k = hs.hotkey.modal.new(hyper, 'a')
+  function k:entered() hs.alert'Entered mode' end
+  function k:exited()  hs.alert'Exited mode'  end
   for key, app in pairs(appShortcuts) do
-    hs.hotkey.bind(hyper, key, function() launchOrActivateApp(app) end)
+    k:bind('',key,nil,function() launchOrActivateApp(app,k) end)
   end
-  hs.hotkey.bind(hyper, "R", reloadAndAlert)
 end
 
-defineKeybindings()
+
+-- Grid 
+function gridBindings()
+  local grid = require "hs.grid"
+  hs.window.animationDuration=0.2
+  local hotkey = require "hs.hotkey"
+
+  grid.MARGINX = 20
+  grid.MARGINY = 20
+  grid.GRIDHEIGHT = 4
+  grid.GRIDWIDTH = 6
+
+  local mod_resize = {"ctrl", "cmd"}
+  local mod_move = {"ctrl", "alt"}
+  
+  hotkey.bind(mod_resize, 'k', grid.resizeWindowShorter)
+end
+--
+
+
+
+k = hs.hotkey.modal.new(hyper, 'd')
+function k:entered() hs.alert'Entered mode' end
+function k:exited()  hs.alert'Exited mode'  end
+k:bind('', 'escape', function() k:exit() end)
+
+defineAppKeybindings()
+gridBindings()
 hs.alert.show(sys_name .. " loaded!", 3)
+
