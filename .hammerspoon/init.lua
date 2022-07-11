@@ -44,6 +44,13 @@ function defineAppKeybindings()
   end
 end
 
+function startPomo(k)
+  k:exit()
+  log.i(spoon.Cherry)
+  spoon.Cherry:start()
+end
+
+
 -- Pomodoro
 function definePomodoroKeyBindings()
 
@@ -51,7 +58,8 @@ function definePomodoroKeyBindings()
 
   k = hs.hotkey.modal.new(hyper, 'p')
   function k:entered() hs.alert'pomodoro' end
-  k:bind('','s',nil,function() spoon.Cherry:start(); k:exit() end)
+  function k:exited() hs.alert'pomo exilaulaunchncht' end
+  k:bind('','s',nil,function()  startPomo(k) end)
 end
 
 definePomodoroKeyBindings()
