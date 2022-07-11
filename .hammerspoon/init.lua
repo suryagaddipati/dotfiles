@@ -37,16 +37,24 @@ appShortcuts = {
 
 -- Bindings
 function defineAppKeybindings()
-
   k = hs.hotkey.modal.new(hyper, 'a')
-  function k:entered() hs.alert'Entered mode' end
-  function k:exited()  hs.alert'Exited mode'  end
+  function k:entered() hs.alert'launch' end
   for key, app in pairs(appShortcuts) do
     k:bind('',key,nil,function() launchOrActivateApp(app,k) end)
   end
 end
 
+-- Pomodoro
+function definePomodoroKeyBindings()
 
+  hs.loadSpoon("Cherry")
+
+  k = hs.hotkey.modal.new(hyper, 'p')
+  function k:entered() hs.alert'pomodoro' end
+  k:bind('','s',nil,function() spoon.Cherry:start(); k:exit() end)
+end
+
+definePomodoroKeyBindings()
 -- Grid 
 function gridBindings()
   local grid = require "hs.grid"
@@ -66,13 +74,8 @@ end
 --
 
 
-
-k = hs.hotkey.modal.new(hyper, 'd')
-function k:entered() hs.alert'Entered mode' end
-function k:exited()  hs.alert'Exited mode'  end
-k:bind('', 'escape', function() k:exit() end)
-
 defineAppKeybindings()
 gridBindings()
+
 hs.alert.show(sys_name .. " loaded!", 3)
 
