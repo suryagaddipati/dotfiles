@@ -61,7 +61,7 @@ function definePomodoroKeyBindings()
   k:bind('','s',nil,function()  startPomo(k) end)
 end
 
-definePomodoroKeyBindings()
+--definePomodoroKeyBindings()
 -- Grid 
 
 
@@ -81,12 +81,13 @@ function gridBindings()
   local mod_resize = {"ctrl", "cmd"}
   local mod_move = {"ctrl", "alt"}
 
-  k = hs.hotkey.modal.new(hyper, 'w')
-  function k:entered() hs.alert'window' end
-  winFunc('t',k, grid.resizeWindowTaller)
-  winFunc('s',k, grid.resizeWindowShorter)
-  winFunc('w',k, grid.resizeWindowWider)
-  winFunc('h',k, grid.resizeWindowThinner)
+  j = hs.hotkey.modal.new(hyper, 'w')
+  function j:entered() hs.alert'window' end
+  function j:exited() hs.alert'exit window' end
+  winFunc('t',j, grid.resizeWindowTaller)
+  winFunc('s',j, grid.resizeWindowShorter)
+  winFunc('w',j, grid.resizeWindowWider)
+  winFunc('h',j, grid.resizeWindowThinner)
 
 
   -- Move Window
