@@ -44,18 +44,17 @@ function defineAppKeybindings()
   end
 end
 
+defineAppKeybindings()
+
+-- Pomodoro
 function startPomo(k)
   k:exit()
   log.i(spoon.Cherry)
   spoon.Cherry:start()
 end
 
-
--- Pomodoro
 function definePomodoroKeyBindings()
-
   hs.loadSpoon("Cherry")
-
   k = hs.hotkey.modal.new(hyper, 'p')
   function k:entered() hs.alert'pomodoro' end
   function k:exited() hs.alert'pomo exilaulaunchncht' end
@@ -64,10 +63,15 @@ end
 
 definePomodoroKeyBindings()
 -- Grid 
+
+
+function winFunc(key,k,func)
+  k:bind('',key,nil,function() k:exit() ; func()   end)
+end
+
 function gridBindings()
-  local grid = require "hs.grid"
   hs.window.animationDuration=0.2
-  local hotkey = require "hs.hotkey"
+  local grid = require "hs.grid"
 
   grid.MARGINX = 20
   grid.MARGINY = 20
@@ -76,13 +80,29 @@ function gridBindings()
 
   local mod_resize = {"ctrl", "cmd"}
   local mod_move = {"ctrl", "alt"}
-  
-  hotkey.bind(mod_resize, 'k', grid.resizeWindowShorter)
+
+  k = hs.hotkey.modal.new(hyper, 'w')
+  function k:entered() hs.alert'window' end
+  winFunc('t',k, grid.resizeWindowTaller)
+  winFunc('s',k, grid.resizeWindowShorter)
+  winFunc('w',k, grid.resizeWindowWider)
+  winFunc('h',k, grid.resizeWindowThinner)
+
+
+  -- Move Window
+  -- hotkey.bind(mod_move, 'j', grid.pushWindowDown)
+  -- hotkey.bind(mod_move, 'k', grid.pushWindowUp)
+  -- hotkey.bind(mod_move, 'h', grid.pushWindowLeft)
+  -- hotkey.bind(mod_move, 'l', grid.pushWindowRight)
+  --
+  -- -- Resize Window
+  -- hotkey.bind(mod_resize, 'k', grid.resizeWindowShorter)
+  -- hotkey.bind(mod_resize, 'j', grid.resizeWindowTaller)
+  -- hotkey.bind(mod_resize, 'l', grid.resizeWindowWider)
+  -- hotkey.bind(mod_resize, 'h', grid.resizeWindowThinne
 end
 --
-
-
-defineAppKeybindings()
+--
 gridBindings()
 
 hs.alert.show(sys_name .. " loaded!", 3)
