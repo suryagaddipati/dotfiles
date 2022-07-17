@@ -32,7 +32,9 @@ appShortcuts = {
   ['F'] = 'Firefox',
   ['S'] = 'Slack',
   ['I'] = 'IntelliJ IDEA',
+  ['C'] = 'Calendar',
   ['M'] = 'Spotify',
+  ['O'] = 'Obsidian',
 }
 
 -- Bindings
@@ -70,24 +72,20 @@ function winFunc(key,k,func)
 end
 
 function gridBindings()
-  hs.window.animationDuration=0.2
-  local grid = require "hs.grid"
 
-  grid.MARGINX = 20
-  grid.MARGINY = 20
-  grid.GRIDHEIGHT = 4
-  grid.GRIDWIDTH = 6
-
-  local mod_resize = {"ctrl", "cmd"}
-  local mod_move = {"ctrl", "alt"}
+  hs.loadSpoon("WinWin")
 
   j = hs.hotkey.modal.new(hyper, 'w')
+
   function j:entered() hs.alert'window' end
-  function j:exited() hs.alert'exit window' end
-  winFunc('t',j, grid.resizeWindowTaller)
-  winFunc('s',j, grid.resizeWindowShorter)
-  winFunc('w',j, grid.resizeWindowWider)
-  winFunc('h',j, grid.resizeWindowThinner)
+  --function j:exited() hs.alert'exit window' end
+
+  winFunc('h',j, function() spoon.WinWin:moveAndResize('halfleft') end )
+  winFunc('k',j, function() spoon.WinWin:moveAndResize('halfright') end )
+  winFunc('u',j, function() spoon.WinWin:moveAndResize('halfup') end )
+  winFunc('n',j, function() spoon.WinWin:moveAndResize('halfdown') end )
+  winFunc('j',j, function() spoon.WinWin:moveAndResize('center') end )
+  winFunc('f',j, function() spoon.WinWin:moveAndResize('maximize') end )
 
 
   -- Move Window
