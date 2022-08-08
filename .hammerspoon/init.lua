@@ -33,8 +33,11 @@ appShortcuts = {
   ['S'] = 'Slack',
   ['I'] = 'IntelliJ IDEA',
   ['C'] = 'Calendar',
-  ['M'] = 'Spotify',
+  ['M'] = 'Google Meet',
   ['O'] = 'Obsidian',
+  ['G'] = 'Mail',
+  ['P'] = 'Spotify',
+  ['V'] = 'Visual Studio Code',
 }
 
 -- Bindings
