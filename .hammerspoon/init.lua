@@ -1,6 +1,6 @@
 -- Set up hotkey combinations
 local hyper = {"cmd", "alt", "ctrl","shift"}
-local log = hs.logger.new('hammerspoon','debug')
+local log = hs.logger.new('surya config','debug')
 log.i("init")
 
 sys_name  = "Hammerspoon"
@@ -74,6 +74,28 @@ function winFunc(key,k,func)
   k:bind('',key,nil,function() k:exit() ; func()   end)
 end
 
+
+
+function centerTheWindow(cwin)
+		local cscreen = cwin:screen()
+		local cres = cscreen:frame()
+		local wf = cwin:frame()
+		local desiredWidth = cres.w/1.4
+		local desiredHeight = cres.h/1.4
+		local emptyWidth = (cres.w - desiredWidth)/2
+		cwin:setFrame({x=cres.x+emptyWidth, y=cres.y, w=desiredWidth, h=desiredHeight})
+end
+
+function centerWindow()
+	local cwin = hs.window.focusedWindow()
+	if cwin then
+   centerTheWindow(cwin)
+	else
+		log.i("no focused window")
+	end
+end
+
+
 function gridBindings()
 
   hs.loadSpoon("WinWin")
@@ -89,7 +111,11 @@ function gridBindings()
   winFunc('n',j, function() spoon.WinWin:moveAndResize('halfdown') end )
   winFunc('j',j, function() spoon.WinWin:moveAndResize('center') end )
   winFunc('f',j, function() spoon.WinWin:moveAndResize('maximize') end )
+  winFunc('c',j, centerWindow)
 
+  winFunc('right',j, function() spoon.WinWin:moveToScreen('next') end )
+  winFunc('up',j, function() spoon.WinWin:stepResize('up') end )
+  winFunc('down',j, function() spoon.WinWin:stepResize('down') end )
 
   -- Move Window
   -- hotkey.bind(mod_move, 'j', grid.pushWindowDown)
@@ -106,6 +132,32 @@ end
 --
 --
 gridBindings()
+
+
+function applicationWatcher(appName, eventType, appObject)
+		local dell = hs.screen('Dell')
+		local laptop= hs.screen('Built%-in')
+    if (eventType == hs.application.watcher.activated or  eventType == hs.application.watcher.unhidden) then
+        if (appName == "Slack" or appName=="Google Meet") then
+            local slackWindow  = hs.window.find(appName)
+						slackWindow:moveToScreen(dell)
+            centerTheWindow(slackWindow)
+        end
+    end
+
+    if (eventType == hs.application.watcher.deactivated or eventType == hs.application.watcher.hidden) then
+        if (appName == "Slack" or appName=="Google Meet") then
+            local slackWindow  = hs.window.find(appName)
+						slackWindow:moveToScreen(laptop)
+            slackWindow:maximize()
+            slackWindow:raise()
+        end
+    end
+end
+
+appWatcher = hs.application.watcher.new(applicationWatcher)
+appWatcher:start()
+
 
 hs.alert.show(sys_name .. " loaded!", 3)
 

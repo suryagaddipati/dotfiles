@@ -43,3 +43,4 @@ fi;
 
 
 export PATH="$PATH:/opt/homebrew/bin"
+source /opt/homebrew/opt/autoenv/activate.sh

@@ -46,3 +46,13 @@ endfunction
 filetype indent on
 set smartindent
 autocmd BufRead,BufWritePre *.jsx normal gg=G `` zz
+
+"netrw settings
+let g:netrw_banner = 0
+let g:netrw_liststyle = 3
+let g:netrw_browse_split = 4
+let g:netrw_altv = 1
+let g:netrw_winsize = 25
+
+" ctrl p
+let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']

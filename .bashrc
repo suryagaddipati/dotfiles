@@ -4,4 +4,5 @@ eval "$(starship init bash)"
 export PATH="$HOME/.jenv/bin:$PATH"
 eval "$(jenv init -)"
 eval "$(pyenv init -)"
+export PATH=/Users/suryag/.local/bin:$PATH
 
