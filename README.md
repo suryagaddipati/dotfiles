@@ -1,156 +1,70 @@
 # Personal Dotfiles
 
-A comprehensive collection of configuration files for a productive Linux development environment featuring bash, git, tmux, and vim with extensive customizations and shortcuts.
+Configuration files for bash, git, tmux, and vim with productivity shortcuts.
 
-## 🚀 Quick Setup
+## Table of Contents
+- [Quick Setup](#quick-setup)
+- [Commands](#commands)
+- [Files](#files)
+- [Shortcuts](#shortcuts)
+- [Requirements](#requirements)
+
+## Quick Setup
 
 ```bash
-# Clone the repository
 git clone https://github.com/yourusername/dotfiles.git ~/dotfiles
 cd ~/dotfiles
-
-# Full installation with dependencies
 make full-install
-
-# OR quick installation (assumes dependencies are installed)
-make install
 ```
 
-## 🔧 Makefile Commands
-
-The included Makefile automates common dotfiles management tasks:
+## Commands
 
 ```bash
-make help           # Show all available commands
 make install        # Install dotfiles with backup
-make full-install   # Install with dependencies and dev tools
+make full-install   # Install with dependencies
 make status         # Check installation status
 make backup         # Backup existing configs
-make restore        # Restore from backup
-make uninstall      # Remove symlinks (keeps backups)
-make update         # Update from git repository
-make clean          # Clean up backups and plugins
+make update         # Update from git
 ```
 
-## 📁 What's Included
+## Files
 
-- **`.bashrc`** - Shell configuration with smart aliases and functions
-- **`.gitconfig`** - Git configuration with helpful aliases
-- **`.tmux.conf`** - Feature-rich tmux setup with custom prefix (Ctrl-Y)
-- **`.vimrc`** - Comprehensive vim configuration with plugins
-- **`tmux.bash`** - Advanced tmux session management
-- **`DisableNonCountedBasicMotions.vim`** - Vim training plugin for better habits
+- `.bashrc` - Shell configuration
+- `.gitconfig` - Git configuration  
+- `.tmux.conf` - Tmux setup (prefix: Ctrl-Y)
+- `.vimrc` - Vim configuration (leader: ,)
+- `Makefile` - Installation automation
 
-## ⚡ Key Features
+## Shortcuts
 
-### Bash Shortcuts
-```bash
-g              # git (shorthand)
-t              # smart tmux session management
-ll             # ls -alF (detailed list)
-la             # ls -A (show hidden)
-```
+### Bash
+- `g` - git
+- `t` - smart tmux session
+- `ll` - ls -alF
 
-### Git Aliases
-```bash
-git s          # git status
-git co         # git checkout  
-git b          # git branch
-git push       # git push -u origin HEAD (auto-upstream)
-```
+### Git
+- `git s` - status
+- `git co` - checkout
+- `git b` - branch
 
 ### Tmux (Prefix: Ctrl-Y)
-- **Sessions**: `Ctrl-Y s` (list), `Ctrl-Y S` (new), `Ctrl-Y N` (new in current dir)
-- **Windows**: `Ctrl-Y c` (create), `Alt+1-9` (switch), `Ctrl-Y ,` (rename)
-- **Panes**: `Ctrl-Y |` (horizontal split), `Ctrl-Y -` (vertical split)
-- **Navigation**: `Ctrl-Y h/j/k/l` or `Alt+h/j/k/l` (vim-style)
-- **Zoom**: `Ctrl-Y f` (toggle pane zoom)
-- **Copy**: `Ctrl-Y Enter` (copy mode), `v` (select), `y` (copy)
+- `Ctrl-Y |` - horizontal split
+- `Ctrl-Y -` - vertical split
+- `Ctrl-Y h/j/k/l` - navigate panes
+- `Alt+1-9` - switch windows
+- `Ctrl-Y f` - zoom pane
 
 ### Vim (Leader: ,)
-- **Files**: `,f` (find files), `,g` (search in files), `,t` (file tree)
-- **Navigation**: `Ctrl+h/j/k/l` (split navigation), `,e` (explorer)  
-- **Buffers**: `,b` (list), `Tab/Shift+Tab` (next/prev), `,bd` (delete)
-- **Quick**: `,w` (save), `,q` (quit), `,/` (clear search)
-- **Editing**: `Space` (fold), `,S` (find/replace word)
+- `,f` - find files
+- `,g` - search in files
+- `,t` - file tree
+- `,w` - save
+- `Ctrl+h/j/k/l` - navigate splits
 
-## 🛠 Advanced Features
-
-### Smart Tmux Session Management
-```bash
-# Auto-attach or create sessions
-t                    # attach to existing or create 'main'
-t project           # attach to 'project' or create it
-tmux_smart_session  # same functionality
-
-# Advanced wrapper with window support  
-tm session-name window-name
-```
-
-### Vim Productivity
-- **FZF Integration**: Fast file finding and text search
-- **Git Integration**: Fugitive for git operations, NERDTree git status
-- **Auto-formatting**: Language-specific formatting on save
-- **Linting**: Real-time error checking with ALE
-- **Snippets**: UltiSnips with extensive snippet library
-
-### Development Environment
-- **NVM**: Node.js version management
-- **SDKMAN**: Java/JVM tool management  
-- **Language Support**: Python, JavaScript, TypeScript, Go, HTML/CSS
-- **Terminal Integration**: Clipboard support, 256 colors, mouse support
-
-## 🎨 Appearance
-
-- **Color Scheme**: Gruvbox theme throughout (vim, tmux status)
-- **Status Bars**: Airline for vim, custom tmux status with git integration
-- **File Explorer**: NERDTree with icons and git status indicators
-- **Terminal**: 256-color support with custom prompts
-
-## 🔧 Customization
-
-### Language-Specific Settings
-- **Python**: 4-space tabs, black/isort formatting, flake8/pylint linting
-- **JavaScript/TypeScript**: 2-space tabs, prettier/eslint formatting
-- **Go**: Tab indentation, no expansion
-- **YAML**: 2-space tabs
-
-### Motion Training
-The included vim plugin enforces counted motions (`5j` instead of `j`) to build better navigation habits:
-```vim
-:ToggleDisablingOfNonCountedBasicMotions  " Toggle training mode
-```
-
-## 📋 Requirements
-
-### Essential
-```bash
-sudo apt install git tmux vim curl build-essential fzf ripgrep xclip
-```
-
-### Optional (Installed by scripts)
-- **NVM**: Node.js version management
-- **SDKMAN**: Java development tools
-- **Powerline Fonts**: Better status bar appearance
-
-## 🔄 Keeping Updated
-
-Since configurations are symlinked, changes are immediately active:
+## Requirements
 
 ```bash
-cd ~/dotfiles
-git pull origin master    # Get latest updates
-source ~/.bashrc          # Reload shell if needed
+sudo apt install git tmux vim curl fzf ripgrep xclip
 ```
 
-## 🎯 Philosophy
-
-These dotfiles prioritize:
-- **Productivity**: Extensive shortcuts and smart defaults
-- **Consistency**: Vim-style navigation everywhere possible  
-- **Discoverability**: Well-documented with help always available
-- **Flexibility**: Easy to customize while maintaining core functionality
-
----
-
-For detailed documentation of all shortcuts and installation instructions, see [CLAUDE.md](CLAUDE.md).
+For complete documentation see [CLAUDE.md](CLAUDE.md).
