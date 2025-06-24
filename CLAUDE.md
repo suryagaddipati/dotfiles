@@ -8,10 +8,10 @@ This is a personal dotfiles repository containing configuration files for bash, 
 
 ## File Structure
 
-- `bashrc` - Bash shell configuration with aliases, functions, and environment setup
-- `gitconfig` - Git configuration with user settings and aliases  
-- `tmux.conf` - Comprehensive tmux configuration with custom key bindings and appearance
-- `vimrc` - Full-featured vim configuration with plugins and custom mappings
+- `.bashrc` - Bash shell configuration with aliases, functions, and environment setup
+- `.gitconfig` - Git configuration with user settings and aliases  
+- `.tmux.conf` - Comprehensive tmux configuration with custom key bindings and appearance
+- `.vimrc` - Full-featured vim configuration with plugins and custom mappings
 - `tmux.bash` - Tmux session management wrapper function
 - `DisableNonCountedBasicMotions.vim` - Vim plugin to enforce counted motions
 
@@ -112,12 +112,13 @@ sudo apt install -y xclip  # clipboard integration
 2. **Install configurations:**
    ```bash
    # Create symlinks or copy files
-   ln -sf ~/dotfiles/bashrc ~/.bashrc
-   ln -sf ~/dotfiles/gitconfig ~/.gitconfig
-   ln -sf ~/dotfiles/tmux.conf ~/.tmux.conf
-   ln -sf ~/dotfiles/vimrc ~/.vimrc
+   ln -sf ~/dotfiles/.bashrc ~/.bashrc
+   ln -sf ~/dotfiles/.gitconfig ~/.gitconfig
+   ln -sf ~/dotfiles/.tmux.conf ~/.tmux.conf
+   ln -sf ~/dotfiles/.vimrc ~/.vimrc
    
-   # Copy vim plugin file
+   # Create vim plugin directory and copy plugin
+   mkdir -p ~/.vim/plugin
    cp ~/dotfiles/DisableNonCountedBasicMotions.vim ~/.vim/plugin/
    ```
 
@@ -315,3 +316,30 @@ The `DisableNonCountedBasicMotions.vim` plugin enforces counted motions:
 - `:ToggleDisablingOfNonCountedBasicMotions` - Toggle training mode
 
 Affected motions: `h`, `j`, `k`, `l` (must be prefixed with count like `5j`)
+
+## Repository Management
+
+### Common Git Commands for Dotfiles
+```bash
+# Quick status check
+g s                    # git status (using alias)
+
+# Add and commit changes
+git add .bashrc .vimrc .tmux.conf .gitconfig
+git commit -m "update configs"
+
+# Push with upstream tracking
+g push                 # git push -u origin HEAD (using alias)
+
+# Check what's different
+git diff               # see unstaged changes
+git diff --staged      # see staged changes
+```
+
+### Backup and Sync
+The repository uses actual dotfiles (.bashrc, .gitconfig, etc.) that can be directly symlinked. When making changes:
+
+1. Edit files in the repository
+2. Changes are automatically reflected in your shell (since they're symlinked)
+3. Commit changes to track your configuration evolution
+4. Push to keep configurations synchronized across machines
