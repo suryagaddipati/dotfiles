@@ -4,7 +4,6 @@ A comprehensive collection of configuration files for a productive Linux develop
 
 ## 🚀 Quick Setup
 
-### Option 1: Automated Installation (Recommended)
 ```bash
 # Clone the repository
 git clone https://github.com/yourusername/dotfiles.git ~/dotfiles
@@ -15,35 +14,6 @@ make full-install
 
 # OR quick installation (assumes dependencies are installed)
 make install
-```
-
-### Option 2: Manual Installation
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/dotfiles.git ~/dotfiles
-cd ~/dotfiles
-
-# Backup existing configs
-cp ~/.bashrc ~/.bashrc.backup 2>/dev/null || true
-cp ~/.gitconfig ~/.gitconfig.backup 2>/dev/null || true
-cp ~/.tmux.conf ~/.tmux.conf.backup 2>/dev/null || true
-cp ~/.vimrc ~/.vimrc.backup 2>/dev/null || true
-
-# Install configurations
-ln -sf ~/dotfiles/.bashrc ~/.bashrc
-ln -sf ~/dotfiles/.gitconfig ~/.gitconfig
-ln -sf ~/dotfiles/.tmux.conf ~/.tmux.conf
-ln -sf ~/dotfiles/.vimrc ~/.vimrc
-
-# Setup vim
-curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-mkdir -p ~/.vim/plugin
-cp ~/dotfiles/DisableNonCountedBasicMotions.vim ~/.vim/plugin/
-vim +PlugInstall +qall
-
-# Reload shell
-source ~/.bashrc
 ```
 
 ## 🔧 Makefile Commands
