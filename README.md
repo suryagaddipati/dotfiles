@@ -4,6 +4,20 @@ A comprehensive collection of configuration files for a productive Linux develop
 
 ## 🚀 Quick Setup
 
+### Option 1: Automated Installation (Recommended)
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/dotfiles.git ~/dotfiles
+cd ~/dotfiles
+
+# Full installation with dependencies
+make full-install
+
+# OR quick installation (assumes dependencies are installed)
+make install
+```
+
+### Option 2: Manual Installation
 ```bash
 # Clone the repository
 git clone https://github.com/yourusername/dotfiles.git ~/dotfiles
@@ -30,6 +44,22 @@ vim +PlugInstall +qall
 
 # Reload shell
 source ~/.bashrc
+```
+
+## 🔧 Makefile Commands
+
+The included Makefile automates common dotfiles management tasks:
+
+```bash
+make help           # Show all available commands
+make install        # Install dotfiles with backup
+make full-install   # Install with dependencies and dev tools
+make status         # Check installation status
+make backup         # Backup existing configs
+make restore        # Restore from backup
+make uninstall      # Remove symlinks (keeps backups)
+make update         # Update from git repository
+make clean          # Clean up backups and plugins
 ```
 
 ## 📁 What's Included
