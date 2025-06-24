@@ -53,6 +53,12 @@ set encoding=utf-8              " Use UTF-8 encoding
 set fileencoding=utf-8          " File encoding
 set backspace=indent,eol,start  " Better backspace behavior
 
+" Auto reload files when changed on disk
+" Trigger autoread when changing buffers or coming back to vim
+au FocusGained,BufEnter * :silent! !
+" Trigger autoread when cursor stops moving
+au CursorHold,CursorHoldI * :silent! checktime
+
 " Backup and Undo
 " =============================================================================
 set backup                      " Enable backups
