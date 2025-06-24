@@ -14,6 +14,7 @@ This is a personal dotfiles repository containing configuration files for bash, 
 - `.vimrc` - Full-featured vim configuration with plugins and custom mappings
 - `tmux.bash` - Tmux session management wrapper function
 - `DisableNonCountedBasicMotions.vim` - Vim plugin to enforce counted motions
+- `Makefile` - Automated installation and management system
 
 ## Key Configuration Details
 
@@ -49,6 +50,24 @@ This is a personal dotfiles repository containing configuration files for bash, 
 - Comprehensive key mappings for productivity
 
 ## Common Development Tasks
+
+### Installation and Management
+```bash
+# Quick installation
+make install
+
+# Full installation with dependencies
+make full-install
+
+# Check status
+make status
+
+# Backup existing configs
+make backup
+
+# Update from repository
+make update
+```
 
 ### Tmux Session Management
 ```bash
