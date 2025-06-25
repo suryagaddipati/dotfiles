@@ -4,16 +4,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-This is a personal dotfiles repository containing configuration files for bash, git, tmux, and vim. The configurations are designed for a Linux development environment with productivity-focused customizations.
+This is a personal dotfiles repository containing configuration files for bash, git, tmux, and neovim. The configurations are designed for a Linux development environment with productivity-focused customizations.
 
 ## File Structure
 
 - `.bashrc` - Bash shell configuration with aliases, functions, and environment setup
 - `.gitconfig` - Git configuration with user settings and aliases  
 - `.tmux.conf` - Comprehensive tmux configuration with custom key bindings and appearance
-- `.vimrc` - Full-featured vim configuration with plugins and custom mappings
+- `init.lua` - Modern neovim configuration with lua-based plugins and custom mappings
 - `tmux.bash` - Tmux session management wrapper function
-- `DisableNonCountedBasicMotions.vim` - Vim plugin to enforce counted motions
+- `DisableNonCountedBasicMotions.vim` - Vim plugin to enforce counted motions (works with neovim)
 - `Makefile` - Automated installation and management system
 
 ## Key Configuration Details
@@ -39,13 +39,14 @@ This is a personal dotfiles repository containing configuration files for bash, 
 - Alt+number shortcuts for quick window switching
 - F12 for nested tmux session support
 
-### Vim Configuration
+### Neovim Configuration
 - Leader key: comma (,)
-- Extensive plugin setup using vim-plug
-- Gruvbox color scheme
-- NERDTree file explorer with git status integration
-- FZF fuzzy finder integration
-- ALE for linting/fixing with language-specific settings
+- Modern plugin setup using lazy.nvim
+- Gruvbox color scheme with true color support
+- nvim-tree file explorer with git status integration
+- Telescope fuzzy finder integration
+- Built-in LSP with completion via nvim-cmp
+- Treesitter for advanced syntax highlighting
 - Auto-pairs for bracket/quote completion
 - Comprehensive key mappings for productivity
 
@@ -56,8 +57,17 @@ This is a personal dotfiles repository containing configuration files for bash, 
 # Quick installation
 make install
 
-# Full installation with dependencies
+# Full installation with dependencies and dev tools
 make full-install
+
+# Quick install without dependencies
+make quick-install
+
+# Install system dependencies only
+make install-deps
+
+# Install development tools (NVM, SDKMAN)
+make install-dev
 
 # Check status
 make status
@@ -65,8 +75,17 @@ make status
 # Backup existing configs
 make backup
 
+# Restore from backup
+make restore
+
 # Update from repository
 make update
+
+# Remove dotfile symlinks
+make uninstall
+
+# Clean up backups and vim plugins
+make clean
 ```
 
 ### Tmux Session Management
@@ -78,11 +97,13 @@ tmux_smart_session [session-name]
 tm session-name [window-name]
 ```
 
-### Vim Plugin Management
+### Neovim Plugin Management
 ```vim
-:PlugInstall    # Install plugins
-:PlugUpdate     # Update plugins  
-:PlugClean      # Remove unused plugins
+:Lazy           # Open plugin manager
+:Lazy sync      # Install/update/clean plugins
+:Lazy install   # Install plugins
+:Lazy update    # Update plugins
+:Lazy clean     # Remove unused plugins
 ```
 
 ### Key Tmux Bindings (Prefix: Ctrl-Y)
@@ -93,10 +114,10 @@ tm session-name [window-name]
 - `Alt+1-9` - Switch to window 1-9
 - `Ctrl-Y r` - Reload config
 
-### Key Vim Bindings (Leader: ,)
-- `,t` - Toggle NERDTree
-- `,f` - Find files (FZF)
-- `,g` - Search in files (ripgrep)
+### Key Neovim Bindings (Leader: ,)
+- `,t` - Toggle nvim-tree
+- `,f` - Find files (Telescope)
+- `,g` - Live grep (Telescope)
 - `,w` - Save file
 - `,q` - Quit
 - `Ctrl+h/j/k/l` - Navigate splits
@@ -106,10 +127,10 @@ tm session-name [window-name]
 ### Prerequisites
 ```bash
 # Essential tools
-sudo apt update && sudo apt install -y git tmux vim curl build-essential
+sudo apt update && sudo apt install -y git tmux neovim curl build-essential
 
-# For vim fuzzy finding
-sudo apt install -y fzf ripgrep
+# For neovim fuzzy finding and features
+sudo apt install -y fzf ripgrep xclip
 
 # For better terminal experience
 sudo apt install -y xclip  # clipboard integration
@@ -134,23 +155,23 @@ sudo apt install -y xclip  # clipboard integration
    ln -sf ~/dotfiles/.bashrc ~/.bashrc
    ln -sf ~/dotfiles/.gitconfig ~/.gitconfig
    ln -sf ~/dotfiles/.tmux.conf ~/.tmux.conf
-   ln -sf ~/dotfiles/.vimrc ~/.vimrc
+   ln -sf ~/dotfiles/init.lua ~/.config/nvim/init.lua
    
-   # Create vim plugin directory and copy plugin
+   # Create neovim config directory and link init.lua
+   mkdir -p ~/.config/nvim
+   ln -sf ~/dotfiles/init.lua ~/.config/nvim/init.lua
+   
+   # Create vim plugin directory and copy plugin (for compatibility)
    mkdir -p ~/.vim/plugin
    cp ~/dotfiles/DisableNonCountedBasicMotions.vim ~/.vim/plugin/
    ```
 
-3. **Install vim-plug:**
+3. **Start neovim (plugins will install automatically):**
    ```bash
-   curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+   nvim
    ```
-
-4. **Install vim plugins:**
-   ```bash
-   vim +PlugInstall +qall
-   ```
+   
+   Note: lazy.nvim will bootstrap itself and install all plugins on first startup.
 
 5. **Install NVM (Node Version Manager):**
    ```bash
@@ -240,46 +261,41 @@ tm session-name [window-name]    # Advanced tmux session wrapper
 - `Ctrl-Y /` - Search in copy mode
 - `F12` - Toggle nested tmux mode (for SSH sessions)
 
-### Vim Key Bindings (Leader: ,)
+### Neovim Key Bindings (Leader: ,)
 
 #### File Operations
 - `,w` - Save file
 - `,q` - Quit
 - `,x` - Save and quit
 - `,Q` - Force quit without saving
-- `,ev` - Edit vimrc
-- `,sv` - Source/reload vimrc
+- `,ev` - Edit init.lua
+- `,sv` - Source/reload init.lua
 
-#### File Explorer (NERDTree)
-- `,t` - Toggle NERDTree
-- `,nf` - Find current file in NERDTree
-- `l` - Open file/expand directory (in NERDTree)
-- `h` - Close directory (in NERDTree)
+#### File Explorer (nvim-tree)
+- `,t` - Toggle nvim-tree
+- `,nf` - Find current file in nvim-tree
+- `l` - Open file/expand directory (in nvim-tree)
+- `h` - Close directory (in nvim-tree)
 
-#### File Finding (FZF)
+#### File Finding (Telescope)
 - `,f` - Find files in project
 - `,F` - Find git files
-- `,g` - Search text in files (ripgrep)
-- `,l` - Search lines in all files
-- `,bl` - Search lines in current buffer
-- `,bt` - Browse tags
+- `,g` - Live grep (search text in files)
+- `,l` - Search current buffer
 - `,h` - Recent files history
 - `,hf` - Command history
 - `,hs` - Search history
+- `,b` - Find buffers
 
 #### Navigation
 - `Ctrl+h/j/k/l` - Move between splits
-- `,e` - File explorer (netrw)
-- `,v` - Vertical file explorer
-- `,s` - Horizontal file explorer
+- `,e` - File explorer (netrw fallback)
 - `j/k` - Move by visual lines (not actual lines)
 - `n/N` - Next/previous search result (centered)
 
 #### Window and Split Management
 - `,+/-` - Resize window vertically
 - `,>/<` - Resize window horizontally
-- `,vs` - Vertical split + file finder
-- `,sp` - Horizontal split + file finder
 
 #### Buffer Management
 - `,b` - List buffers
@@ -321,6 +337,13 @@ tm session-name [window-name]    # Advanced tmux session wrapper
 - `{` - Inserts `{}|`
 - `{<CR>` - Inserts block with proper indentation
 
+#### LSP Features (when available)
+- `gd` - Go to definition
+- `gr` - Go to references
+- `K` - Hover documentation
+- `<leader>rn` - Rename symbol
+- `<leader>ca` - Code actions
+
 ### Language-Specific Settings
 - **Python**: 4-space indentation, flake8/pylint linting, black/isort formatting
 - **JavaScript/TypeScript**: 2-space indentation, eslint linting, prettier formatting
@@ -329,7 +352,7 @@ tm session-name [window-name]    # Advanced tmux session wrapper
 - **YAML**: 2-space indentation
 
 ### Vim Motion Training
-The `DisableNonCountedBasicMotions.vim` plugin enforces counted motions:
+The `DisableNonCountedBasicMotions.vim` plugin enforces counted motions (works in neovim):
 - `:DisableNonCountedBasicMotions` - Enable motion training
 - `:EnableNonCountedBasicMotions` - Disable motion training
 - `:ToggleDisablingOfNonCountedBasicMotions` - Toggle training mode
@@ -344,7 +367,7 @@ Affected motions: `h`, `j`, `k`, `l` (must be prefixed with count like `5j`)
 g s                    # git status (using alias)
 
 # Add and commit changes
-git add .bashrc .vimrc .tmux.conf .gitconfig
+git add .bashrc init.lua .tmux.conf .gitconfig
 git commit -m "update configs"
 
 # Push with upstream tracking
@@ -356,9 +379,10 @@ git diff --staged      # see staged changes
 ```
 
 ### Backup and Sync
-The repository uses actual dotfiles (.bashrc, .gitconfig, etc.) that can be directly symlinked. When making changes:
+The repository uses actual dotfiles (.bashrc, .gitconfig, etc.) and init.lua that can be directly symlinked. When making changes:
 
 1. Edit files in the repository
-2. Changes are automatically reflected in your shell (since they're symlinked)
-3. Commit changes to track your configuration evolution
-4. Push to keep configurations synchronized across machines
+2. Changes are automatically reflected in your shell/neovim (since they're symlinked)
+3. For neovim config changes, restart neovim or run `:source ~/.config/nvim/init.lua`
+4. Commit changes to track your configuration evolution
+5. Push to keep configurations synchronized across machines

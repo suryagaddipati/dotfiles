@@ -228,6 +228,7 @@ Plug 'Xuyuanp/nerdtree-git-plugin' " Git status in NERDTree
 " Language support
 Plug 'sheerun/vim-polyglot'        " Language pack
 Plug 'dense-analysis/ale'          " Linting and fixing
+Plug 'dylon/vim-antlr'             " ANTLR4 syntax highlighting
 
 " Appearance
 Plug 'vim-airline/vim-airline'     " Status line
@@ -261,13 +262,12 @@ if !has('gui_running')
     set t_Co=256
 endif
 
-" NERDTree Configuration
+" NERDTree - File Explorer
 " =============================================================================
-" Toggle NERDTree
+" ,t=toggle ,nf=find current file | l=open h=close I=ignored H=hidden R=refresh m=menu
 nnoremap <leader>t :NERDTreeToggle<CR>
 nnoremap <leader>nf :NERDTreeFind<CR>
 
-" NERDTree settings
 let g:NERDTreeWinSize = 30
 let g:NERDTreeShowHidden = 1
 let g:NERDTreeMinimalUI = 1
@@ -277,6 +277,15 @@ let g:NERDTreeQuitOnOpen = 0
 let g:NERDTreeShowLineNumbers = 0
 let g:NERDTreeMapActivateNode = "l"
 let g:NERDTreeMapCloseDir = "h"
+let g:NERDTreeRespectWildIgnore = 1
+
+" Hide clutter files
+let g:NERDTreeIgnore = [
+    \ '\.pyc$', '\.pyo$', '\.rbc$', '\.rbo$', '\.class$', '\.o$', '\~$',
+    \ '\.DS_Store$', 'Thumbs.db$', '\.git$', '\.hg$', '\.svn$', '\.bzr$',
+    \ 'node_modules$', '__pycache__$', '\.egg-info$', 'dist$', 'build$',
+    \ '\.idea$', '\.vscode$', '*.swp$', '*.swo$', '*.tmp$'
+    \ ]
 
 " Close vim if NERDTree is the only window left
 autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
@@ -285,7 +294,18 @@ autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTr
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
 
-" NERDTree Git Plugin
+" Auto-refresh on save and focus
+autocmd BufWritePost * call NERDTreeRefreshIfOpen()
+autocmd FocusGained * call NERDTreeRefreshIfOpen()
+
+function! NERDTreeRefreshIfOpen()
+    if exists("g:NERDTree") && g:NERDTree.IsOpen() && &filetype != 'nerdtree'
+        call g:NERDTree.ForCurrentTab().getRoot().refresh()
+        call g:NERDTree.ForCurrentTab().render()
+    endif
+endfunction
+
+" Git status symbols: ✹=Modified ✚=Staged ✭=Untracked ➜=Renamed ═=Unmerged ✖=Deleted ✗=Dirty ✔︎=Clean ☒=Ignored ?=Unknown
 let g:NERDTreeGitStatusIndicatorMapCustom = {
     \ "Modified"  : "✹",
     \ "Staged"    : "✚",
@@ -299,9 +319,9 @@ let g:NERDTreeGitStatusIndicatorMapCustom = {
     \ "Unknown"   : "?"
     \ }
 
-" FZF Configuration
+" FZF - Fuzzy Finder
 " =============================================================================
-" FZF key mappings
+" ,f=files ,F=git-files ,g=search ,l=lines ,bl=buffer-lines ,bt=tags ,h=history ,hf=cmd-history ,hs=search-history
 nnoremap <leader>f :Files<CR>
 nnoremap <leader>F :GFiles<CR>
 nnoremap <leader>g :Rg<CR>
@@ -312,11 +332,8 @@ nnoremap <leader>h :History<CR>
 nnoremap <leader>hf :History:<CR>
 nnoremap <leader>hs :History/<CR>
 
-" FZF settings
 let g:fzf_preview_window = 'right:50%'
 let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
-
-" Respect gitignore
 let $FZF_DEFAULT_COMMAND = 'rg --files --hidden --follow --glob "!.git/*"'
 
 " FZF colors to match gruvbox
