@@ -32,7 +32,7 @@ make update         # Update from git
 - `.bashrc` - Shell configuration
 - `.gitconfig` - Git configuration  
 - `.tmux.conf` - Tmux setup (prefix: Ctrl-Y)
-- `.vimrc` - Vim configuration (leader: ,)
+- `init.lua` - Neovim configuration (leader: ,)
 - `Makefile` - Installation automation
 
 ## Shortcuts
@@ -54,17 +54,27 @@ make update         # Update from git
 - `Alt+1-9` - switch windows
 - `Ctrl-Y f` - zoom pane
 
-### Vim (Leader: ,)
-- `,f` - find files
-- `,g` - search in files
-- `,t` - file tree
+### Neovim (Leader: ,)
+- `,f` - find files (telescope)
+- `,g` - live grep (telescope)
+- `,t` - file tree (nvim-tree)
 - `,w` - save
 - `Ctrl+h/j/k/l` - navigate splits
 
 ## Requirements
 
 ```bash
-sudo apt install git tmux vim curl fzf ripgrep xclip
+sudo apt install git tmux neovim curl fzf ripgrep xclip
 ```
 
 For complete documentation see [CLAUDE.md](CLAUDE.md).
+
+## Modern Features
+
+- **Neovim with Lua**: Modern neovim configuration using Lua
+- **Telescope**: Powerful fuzzy finder for files, text, and more
+- **nvim-tree**: Modern file explorer with git integration
+- **Treesitter**: Advanced syntax highlighting and code understanding
+- **LSP**: Built-in Language Server Protocol support
+- **Auto-completion**: Intelligent code completion with nvim-cmp
+- **lazy.nvim**: Fast and modern plugin manager
