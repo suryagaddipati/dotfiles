@@ -14,7 +14,7 @@ This is a personal dotfiles repository containing configuration files for bash, 
 - `init.lua` - Modern neovim configuration with lua-based plugins and custom mappings
 - `tmux.bash` - Tmux session management wrapper function
 - `DisableNonCountedBasicMotions.vim` - Vim plugin to enforce counted motions (works with neovim)
-- `Makefile` - Automated installation and management system
+- `justfile` - Automated installation and management system
 
 ## Key Configuration Details
 
@@ -55,37 +55,37 @@ This is a personal dotfiles repository containing configuration files for bash, 
 ### Installation and Management
 ```bash
 # Quick installation
-make install
+just install
 
 # Full installation with dependencies and dev tools
-make full-install
+just full-install
 
 # Quick install without dependencies
-make quick-install
+just quick-install
 
 # Install system dependencies only
-make install-deps
+just install-deps
 
 # Install development tools (NVM, SDKMAN)
-make install-dev
+just install-dev
 
 # Check status
-make status
+just status
 
 # Backup existing configs
-make backup
+just backup
 
 # Restore from backup
-make restore
+just restore
 
 # Update from repository
-make update
+just update
 
 # Remove dotfile symlinks
-make uninstall
+just uninstall
 
 # Clean up backups and vim plugins
-make clean
+just clean
 ```
 
 ### Tmux Session Management

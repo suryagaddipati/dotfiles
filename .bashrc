@@ -155,5 +155,27 @@ export SDKMAN_DIR="$HOME/.sdkman"
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
+# Add ~/.local/bin to PATH for user-installed tools (including just)
+export PATH="$HOME/.local/bin:$PATH"
+
 # Set vi mode
 set -o vi
+grp() {
+  if [ "$#" -lt 2 ]; then
+    echo "Usage: grp <pattern> <ext1> [<ext2> ...]"
+    echo "Example: grp TODO js ts py"
+    return 1
+  fi
+
+  local pattern="$1"
+  shift
+
+  # Build regex: \.js$|\.ts$|\.py$
+  local ext_regex=$(printf "\\.%s$|" "$@" | sed 's/|$//')
+
+  # Use git to list all unignored files, filter by extension, and grep
+  git ls-files --cached --others --exclude-standard \
+    | grep -E "$ext_regex" \
+    | xargs -d '\n' grep --color=auto -n "$pattern" 2>/dev/null
+}
+
