@@ -6,6 +6,26 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a personal dotfiles repository containing configuration files for bash, git, tmux, and neovim. The configurations are designed for a Linux development environment with productivity-focused customizations.
 
+## Architecture and Key Insights
+
+### Installation Strategy
+- **Symlink-based**: All configurations are symlinked from the repository to their target locations
+- **Automated via justfile**: The `just` command provides comprehensive installation, backup, and management
+- **Backup-first approach**: Always backs up existing configurations before installation
+- **Dual editor support**: Both vim (.vimrc) and neovim (init.lua) configurations maintained
+
+### Integration Patterns
+- **Consistent theming**: Gruvbox color scheme across all tools
+- **Unified key bindings**: Vim-style navigation throughout (tmux panes, neovim splits)
+- **Smart session management**: Intelligent tmux session attachment/creation via `t` alias
+- **Multi-extension search**: `grp` function for efficient codebase searching
+
+### Key Technical Details
+- **Tmux prefix**: Ctrl-Space instead of default Ctrl-B
+- **Neovim leader**: Comma (,) for all custom mappings
+- **Plugin managers**: lazy.nvim (neovim), vim-plug (vim)
+- **Development tools**: NVM (Node.js), SDKMAN (Java), integrated package managers
+
 ## File Structure
 
 - `.bashrc` - Bash shell configuration with aliases, functions, and environment setup
@@ -23,6 +43,7 @@ This is a personal dotfiles repository containing configuration files for bash, 
 - `t` alias maps to `tmux_smart_session` function for intelligent tmux session management
 - NVM and SDKMAN integration for Node.js and Java development
 - Custom `tmux_smart_session()` function for automated session attachment/creation
+- `grp()` function for multi-extension grep searches (e.g., `grp TODO js ts py`)
 
 ### Git Configuration
 - Email: meowlicious99@gmail.com, Name: Surya G  
@@ -31,7 +52,7 @@ This is a personal dotfiles repository containing configuration files for bash, 
 - Auto-push to origin HEAD with `-u` flag
 
 ### Tmux Configuration
-- **Prefix key changed from Ctrl-B to Ctrl-Y**
+- **Prefix key changed from Ctrl-B to Ctrl-Space**
 - Vim-style navigation (h/j/k/l for panes)
 - Custom color scheme (gruvbox-inspired)
 - Mouse support enabled
@@ -106,13 +127,13 @@ tm session-name [window-name]
 :Lazy clean     # Remove unused plugins
 ```
 
-### Key Tmux Bindings (Prefix: Ctrl-Y)
-- `Ctrl-Y |` - Split horizontally
-- `Ctrl-Y -` - Split vertically  
-- `Ctrl-Y h/j/k/l` - Navigate panes
+### Key Tmux Bindings (Prefix: Ctrl-Space)
+- `Ctrl-Space |` - Split horizontally
+- `Ctrl-Space -` - Split vertically  
+- `Ctrl-Space h/j/k/l` - Navigate panes
 - `Alt+h/j/k/l` - Navigate panes (no prefix)
 - `Alt+1-9` - Switch to window 1-9
-- `Ctrl-Y r` - Reload config
+- `Ctrl-Space r` - Reload config
 
 ### Key Neovim Bindings (Leader: ,)
 - `,t` - Toggle nvim-tree
@@ -208,57 +229,60 @@ git push  # git push -u origin HEAD (auto-upstream)
 # Tmux functions
 tmux_smart_session [name]        # Attach to existing or create new session
 tm session-name [window-name]    # Advanced tmux session wrapper
+
+# Search functions
+grp pattern ext1 [ext2...]       # Multi-extension grep (e.g., grp TODO js ts py)
 ```
 
-### Tmux Key Bindings (Prefix: Ctrl-Y)
+### Tmux Key Bindings (Prefix: Ctrl-Space)
 
 #### Session Management
-- `Ctrl-Y s` - List sessions
-- `Ctrl-Y S` - Create new session (prompted for name)
-- `Ctrl-Y R` - Rename session
-- `Ctrl-Y N` - New session in current directory
+- `Ctrl-Space s` - List sessions
+- `Ctrl-Space S` - Create new session (prompted for name)
+- `Ctrl-Space R` - Rename session
+- `Ctrl-Space N` - New session in current directory
 
 #### Window Management
-- `Ctrl-Y c` - Create new window
-- `Ctrl-Y n` - Next window
-- `Ctrl-Y p` - Previous window
-- `Ctrl-Y l` - Last window
-- `Ctrl-Y w` - List windows
-- `Ctrl-Y ,` - Rename window
-- `Ctrl-Y X` - Kill window
-- `Ctrl-Y <` - Move window left
-- `Ctrl-Y >` - Move window right
+- `Ctrl-Space c` - Create new window
+- `Ctrl-Space n` - Next window
+- `Ctrl-Space p` - Previous window
+- `Ctrl-Space l` - Last window
+- `Ctrl-Space w` - List windows
+- `Ctrl-Space ,` - Rename window
+- `Ctrl-Space X` - Kill window
+- `Ctrl-Space <` - Move window left
+- `Ctrl-Space >` - Move window right
 - `Alt+1-9` - Switch to window 1-9 (no prefix needed)
 
 #### Pane Management
-- `Ctrl-Y |` or `Ctrl-Y \` - Split horizontally
-- `Ctrl-Y -` or `Ctrl-Y _` - Split vertically
-- `Ctrl-Y h/j/k/l` - Navigate panes (vim-style)
+- `Ctrl-Space |` or `Ctrl-Space \` - Split horizontally
+- `Ctrl-Space -` or `Ctrl-Space _` - Split vertically
+- `Ctrl-Space h/j/k/l` - Navigate panes (vim-style)
 - `Alt+h/j/k/l` - Navigate panes (no prefix needed)
-- `Ctrl-Y H/J/K/L` - Resize panes
-- `Ctrl-Y f` - Toggle pane zoom
-- `Ctrl-Y x` - Kill pane
-- `Ctrl-Y q` - Show pane numbers
-- `Ctrl-Y space` - Next layout
-- `Ctrl-Y o` - Rotate panes
-- `Ctrl-Y a` - Toggle pane synchronization
-- `Ctrl-Y @` - Join pane from window
-- `Ctrl-Y !` - Break pane to window
+- `Ctrl-Space H/J/K/L` - Resize panes
+- `Ctrl-Space f` - Toggle pane zoom
+- `Ctrl-Space x` - Kill pane
+- `Ctrl-Space q` - Show pane numbers
+- `Ctrl-Space space` - Next layout
+- `Ctrl-Space o` - Rotate panes
+- `Ctrl-Space a` - Toggle pane synchronization
+- `Ctrl-Space @` - Join pane from window
+- `Ctrl-Space !` - Break pane to window
 
 #### Copy Mode and Clipboard
-- `Ctrl-Y Enter` - Enter copy mode
+- `Ctrl-Space Enter` - Enter copy mode
 - `v` - Begin selection (in copy mode)
 - `y` - Copy selection to clipboard
 - `r` - Rectangle selection toggle
-- `Ctrl-Y P` - Paste from buffer
-- `Ctrl-Y b` - List paste buffers
-- `Ctrl-Y B` - Delete buffer
+- `Ctrl-Space P` - Paste from buffer
+- `Ctrl-Space b` - List paste buffers
+- `Ctrl-Space B` - Delete buffer
 
 #### Miscellaneous
-- `Ctrl-Y r` - Reload tmux config
-- `Ctrl-Y C-l` - Clear screen
-- `Ctrl-Y C-k` - Clear screen and history
-- `Ctrl-Y /` - Search in copy mode
+- `Ctrl-Space r` - Reload tmux config
+- `Ctrl-Space C-l` - Clear screen
+- `Ctrl-Space C-k` - Clear screen and history
+- `Ctrl-Space /` - Search in copy mode
 - `F12` - Toggle nested tmux mode (for SSH sessions)
 
 ### Neovim Key Bindings (Leader: ,)
@@ -386,3 +410,25 @@ The repository uses actual dotfiles (.bashrc, .gitconfig, etc.) and init.lua tha
 3. For neovim config changes, restart neovim or run `:source ~/.config/nvim/init.lua`
 4. Commit changes to track your configuration evolution
 5. Push to keep configurations synchronized across machines
+
+## AI Assistant Guidelines
+
+### Essential Commands for Development
+- **Always use `just` for installation tasks**: `just install`, `just status`, `just backup`
+- **Check installation status first**: Run `just status` before making changes
+- **Respect the symlink architecture**: Edit files in the repository, not in home directory
+- **Use the smart session function**: `t session-name` for tmux management
+- **Leverage the grp function**: `grp pattern ext1 ext2` for efficient code searching
+
+### Key Bindings to Remember
+- **Tmux prefix**: Ctrl-Space - not Ctrl-B or backtick
+- **Neovim leader**: Comma (,) for all custom mappings
+- **Alt+h/j/k/l**: Navigate tmux panes without prefix
+- **Alt+1-9**: Switch tmux windows without prefix
+
+### Common Workflow Patterns
+1. **Installation**: `just install` (handles backup automatically)
+2. **Status check**: `just status` (shows what's installed/symlinked)
+3. **Config editing**: Edit files in repository, changes reflect immediately
+4. **Session management**: Use `t session-name` for intelligent tmux sessions
+5. **Code searching**: Use `grp pattern js ts py` for multi-extension searches
