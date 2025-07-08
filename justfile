@@ -13,7 +13,7 @@ vim_dir := home_dir / '.vim'
 
 # Files to manage
 dotfiles := '.bashrc .gitconfig .tmux.conf init.lua'
-vim_plugins := 'DisableNonCountedBasicMotions.vim'
+# vim_plugins := 'DisableNonCountedBasicMotions.vim'  # Removed plugin
 
 # Colors
 red := '\033[0;31m'

@@ -14,3 +14,5 @@
 	push = push -u origin HEAD
 	co = checkout
 	b = branch
+[init]
+	defaultBranch = main

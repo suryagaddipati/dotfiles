@@ -33,7 +33,6 @@ This is a personal dotfiles repository containing configuration files for bash, 
 - `.tmux.conf` - Comprehensive tmux configuration with custom key bindings and appearance
 - `init.lua` - Modern neovim configuration with lua-based plugins and custom mappings
 - `tmux.bash` - Tmux session management wrapper function
-- `DisableNonCountedBasicMotions.vim` - Vim plugin to enforce counted motions (works with neovim)
 - `justfile` - Automated installation and management system
 
 ## Key Configuration Details
@@ -182,9 +181,8 @@ sudo apt install -y xclip  # clipboard integration
    mkdir -p ~/.config/nvim
    ln -sf ~/dotfiles/init.lua ~/.config/nvim/init.lua
    
-   # Create vim plugin directory and copy plugin (for compatibility)
+   # Create vim plugin directory if needed
    mkdir -p ~/.vim/plugin
-   cp ~/dotfiles/DisableNonCountedBasicMotions.vim ~/.vim/plugin/
    ```
 
 3. **Start neovim (plugins will install automatically):**
@@ -375,13 +373,6 @@ grp pattern ext1 [ext2...]       # Multi-extension grep (e.g., grp TODO js ts py
 - **Go**: 4-space indentation, no tab expansion
 - **YAML**: 2-space indentation
 
-### Vim Motion Training
-The `DisableNonCountedBasicMotions.vim` plugin enforces counted motions (works in neovim):
-- `:DisableNonCountedBasicMotions` - Enable motion training
-- `:EnableNonCountedBasicMotions` - Disable motion training
-- `:ToggleDisablingOfNonCountedBasicMotions` - Toggle training mode
-
-Affected motions: `h`, `j`, `k`, `l` (must be prefixed with count like `5j`)
 
 ## Repository Management
 
