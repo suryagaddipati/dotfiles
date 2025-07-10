@@ -9,22 +9,23 @@ This is a personal dotfiles repository containing configuration files for bash, 
 ## Architecture and Key Insights
 
 ### Installation Strategy
-- **Symlink-based**: All configurations are symlinked from the repository to their target locations
-- **Automated via justfile**: The `just` command provides comprehensive installation, backup, and management
-- **Backup-first approach**: Always backs up existing configurations before installation
-- **Dual editor support**: Both vim (.vimrc) and neovim (init.lua) configurations maintained
+- **Symlink-based architecture**: All configurations are symlinked from the repository to their target locations, enabling live editing
+- **Automated via justfile**: The `just` command provides comprehensive installation, backup, and management with cross-platform support
+- **Backup-first approach**: Always backs up existing configurations before installation to `~/.dotfiles_backup`
+- **Dual editor support**: Both vim (.vimrc) and neovim (init.lua) configurations maintained with shared keybindings
 
 ### Integration Patterns
-- **Consistent theming**: Gruvbox color scheme across all tools
-- **Unified key bindings**: Vim-style navigation throughout (tmux panes, neovim splits)
-- **Smart session management**: Intelligent tmux session attachment/creation via `t` alias
-- **Multi-extension search**: `grp` function for efficient codebase searching
+- **Consistent theming**: Gruvbox color scheme unified across tmux, vim, and neovim
+- **Unified key bindings**: Vim-style navigation throughout (tmux panes, neovim splits, Alt+hjkl shortcuts)
+- **Smart session management**: Intelligent tmux session attachment/creation via `t` alias and `tmux_smart_session` function
+- **Multi-extension search**: `grp` function for efficient codebase searching across file types
 
 ### Key Technical Details
-- **Tmux prefix**: Ctrl-Space instead of default Ctrl-B
+- **Tmux prefix**: Ctrl-Space instead of default Ctrl-B (critical for avoiding conflicts)
 - **Neovim leader**: Comma (,) for all custom mappings
-- **Plugin managers**: lazy.nvim (neovim), vim-plug (vim)
+- **Plugin managers**: lazy.nvim (neovim), vim-plug (vim) with auto-installation
 - **Development tools**: NVM (Node.js), SDKMAN (Java), integrated package managers
+- **Cross-platform support**: Justfile detects and uses appropriate package manager (apt/brew/yum)
 
 ## File Structure
 
@@ -70,43 +71,39 @@ This is a personal dotfiles repository containing configuration files for bash, 
 - Auto-pairs for bracket/quote completion
 - Comprehensive key mappings for productivity
 
-## Common Development Tasks
+## Essential Commands for Development
 
-### Installation and Management
+### Installation and Management (using justfile)
 ```bash
-# Quick installation
-just install
+# Primary installation commands
+just install           # Install dotfiles with automatic backup
+just full-install      # Complete setup: dependencies + dotfiles + dev tools
+just quick-install     # Same as 'just install' (backup + install)
 
-# Full installation with dependencies and dev tools
-just full-install
+# Dependency management
+just install-deps      # Install system dependencies (git, tmux, neovim, etc.)
+just install-dev       # Install development tools (NVM, SDKMAN)
 
-# Quick install without dependencies
-just quick-install
+# Status and maintenance
+just status            # Show detailed installation status and health check
+just backup            # Create backup of existing config files
+just restore           # Restore from backup
+just update            # Pull latest changes from git repository
+just uninstall         # Remove dotfile symlinks (preserves backups)
+just clean             # Remove backups and plugin directories
 
-# Install system dependencies only
-just install-deps
-
-# Install development tools (NVM, SDKMAN)
-just install-dev
-
-# Check status
-just status
-
-# Backup existing configs
-just backup
-
-# Restore from backup
-just restore
-
-# Update from repository
-just update
-
-# Remove dotfile symlinks
-just uninstall
-
-# Clean up backups and vim plugins
-just clean
+# Specialized setup
+just setup-nvim        # Setup neovim configuration and install plugins
+just check-nvim        # Verify neovim installation
 ```
+
+### Core Architecture Commands
+The justfile provides a comprehensive automation layer that:
+- **Automatically backs up** existing configs before installation
+- **Creates proper symlinks** from repository to home directory locations
+- **Handles cross-platform** package management (apt/brew/yum)
+- **Manages neovim plugins** via lazy.nvim bootstrap
+- **Provides color-coded status** reporting
 
 ### Tmux Session Management
 ```bash
@@ -157,55 +154,46 @@ sudo apt install -y xclip  # clipboard integration
 ```
 
 ### Setup Instructions
-1. **Clone and backup existing configs:**
-   ```bash
-   git clone https://github.com/username/dotfiles.git ~/dotfiles
-   cd ~/dotfiles
-   
-   # Backup existing configs
-   cp ~/.bashrc ~/.bashrc.backup 2>/dev/null || true
-   cp ~/.gitconfig ~/.gitconfig.backup 2>/dev/null || true
-   cp ~/.tmux.conf ~/.tmux.conf.backup 2>/dev/null || true
-   cp ~/.vimrc ~/.vimrc.backup 2>/dev/null || true
-   ```
+**Recommended:** Use the automated justfile approach for safe, comprehensive installation:
 
-2. **Install configurations:**
-   ```bash
-   # Create symlinks or copy files
-   ln -sf ~/dotfiles/.bashrc ~/.bashrc
-   ln -sf ~/dotfiles/.gitconfig ~/.gitconfig
-   ln -sf ~/dotfiles/.tmux.conf ~/.tmux.conf
-   ln -sf ~/dotfiles/init.lua ~/.config/nvim/init.lua
-   
-   # Create neovim config directory and link init.lua
-   mkdir -p ~/.config/nvim
-   ln -sf ~/dotfiles/init.lua ~/.config/nvim/init.lua
-   
-   # Create vim plugin directory if needed
-   mkdir -p ~/.vim/plugin
-   ```
+```bash
+# Clone repository
+git clone https://github.com/username/dotfiles.git ~/dotfiles
+cd ~/dotfiles
 
-3. **Start neovim (plugins will install automatically):**
-   ```bash
-   nvim
-   ```
-   
-   Note: lazy.nvim will bootstrap itself and install all plugins on first startup.
+# Full automated installation (recommended)
+just full-install     # Installs deps + dotfiles + dev tools + backups existing configs
 
-5. **Install NVM (Node Version Manager):**
-   ```bash
-   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
-   ```
+# Or step-by-step installation
+just install-deps     # Install system dependencies
+just install          # Install dotfiles with automatic backup
+just install-dev      # Install development tools (NVM, SDKMAN)
+```
 
-6. **Install SDKMAN (Java/SDK Manager):**
-   ```bash
-   curl -s "https://get.sdkman.io" | bash
-   ```
+**Manual installation** (if justfile unavailable):
+```bash
+# 1. Backup existing configs (justfile does this automatically)
+mkdir -p ~/.dotfiles_backup
+cp ~/.bashrc ~/.dotfiles_backup/bashrc.backup 2>/dev/null || true
+cp ~/.gitconfig ~/.dotfiles_backup/gitconfig.backup 2>/dev/null || true
+cp ~/.tmux.conf ~/.dotfiles_backup/tmux.conf.backup 2>/dev/null || true
 
-7. **Reload shell configuration:**
-   ```bash
-   source ~/.bashrc
-   ```
+# 2. Create symlinks
+ln -sf ~/dotfiles/.bashrc ~/.bashrc
+ln -sf ~/dotfiles/.gitconfig ~/.gitconfig
+ln -sf ~/dotfiles/.tmux.conf ~/.tmux.conf
+mkdir -p ~/.config/nvim
+ln -sf ~/dotfiles/init.lua ~/.config/nvim/init.lua
+
+# 3. Reload shell
+source ~/.bashrc
+```
+
+**Post-installation verification:**
+```bash
+just status            # Check installation health
+nvim                   # Plugins will install automatically on first start
+```
 
 ## Complete Shortcuts and Aliases Reference
 
@@ -406,20 +394,403 @@ The repository uses actual dotfiles (.bashrc, .gitconfig, etc.) and init.lua tha
 
 ### Essential Commands for Development
 - **Always use `just` for installation tasks**: `just install`, `just status`, `just backup`
-- **Check installation status first**: Run `just status` before making changes
-- **Respect the symlink architecture**: Edit files in the repository, not in home directory
+- **Check installation status first**: Run `just status` before making changes to verify setup
+- **Respect the symlink architecture**: Edit files in the repository, not in home directory (changes reflect immediately)
 - **Use the smart session function**: `t session-name` for tmux management
-- **Leverage the grp function**: `grp pattern ext1 ext2` for efficient code searching
+- **Leverage the grp function**: `grp pattern ext1 ext2` for efficient code searching across file types
 
-### Key Bindings to Remember
-- **Tmux prefix**: Ctrl-Space - not Ctrl-B or backtick
+### Critical System Details
+- **Tmux prefix**: Ctrl-Space - not Ctrl-B or backtick (this is a key difference from defaults)
 - **Neovim leader**: Comma (,) for all custom mappings
-- **Alt+h/j/k/l**: Navigate tmux panes without prefix
-- **Alt+1-9**: Switch tmux windows without prefix
+- **Alt+h/j/k/l**: Navigate tmux panes without prefix (works system-wide)
+- **Alt+1-9**: Switch tmux windows without prefix (instant window switching)
 
 ### Common Workflow Patterns
-1. **Installation**: `just install` (handles backup automatically)
-2. **Status check**: `just status` (shows what's installed/symlinked)
-3. **Config editing**: Edit files in repository, changes reflect immediately
-4. **Session management**: Use `t session-name` for intelligent tmux sessions
-5. **Code searching**: Use `grp pattern js ts py` for multi-extension searches
+1. **Installation**: `just install` (handles backup automatically, safe to run)
+2. **Status check**: `just status` (shows detailed installation health and symlink status)
+3. **Config editing**: Edit files in repository, changes reflect immediately via symlinks
+4. **Session management**: Use `t session-name` for intelligent tmux sessions (attaches if exists, creates if not)
+5. **Code searching**: Use `grp pattern js ts py` for multi-extension searches with ripgrep
+6. **Plugin management**: Neovim plugins auto-install on first startup via lazy.nvim bootstrap
+
+## Plugin Documentation
+
+### Vim Plugins (.vimrc)
+
+#### Essential Functionality
+**tpope/vim-sensible** - Sensible defaults
+- Auto-enabled, provides better default settings
+
+**tpope/vim-surround** - Surround text with quotes/brackets
+```vim
+cs"'        " Change surrounding " to '
+cs'<q>      " Change ' to <q></q>
+cst"        " Change surrounding tag to "
+ds"         " Delete surrounding "
+ysiw]       " Surround inner word with []
+yss)        " Surround entire line with ()
+S]          " Surround selection with [] (visual mode)
+```
+
+**tpope/vim-commentary** - Toggle comments
+```vim
+gcc         " Comment/uncomment current line
+gc<motion>  " Comment motion (e.g., gcap for paragraph)
+gc          " Comment selection (visual mode)
+```
+
+**tpope/vim-fugitive** - Git integration
+```vim
+:Git status " or :G - Git status
+:Git add .  " Stage files
+:Git commit " Commit
+:Git push   " Push
+:Git blame  " Git blame
+:Gdiff      " Git diff in split
+```
+
+#### File Management
+**preservim/nerdtree** - File explorer
+```vim
+,t          " Toggle NERDTree
+,nf         " Find current file in tree
+# In NERDTree:
+l           " Open file/expand folder
+h           " Close folder
+r           " Refresh folder
+R           " Refresh root
+m           " Menu (create/delete/rename)
+I           " Toggle hidden files
+```
+
+**junegunn/fzf.vim** - Fuzzy finder
+```vim
+,f          " Find files
+,F          " Find git files
+,g          " Live grep (search in files)
+,l          " Search current buffer
+,h          " Recent files
+,b          " Find buffers
+:Files      " File picker
+:Rg         " Ripgrep search
+:History    " Command history
+```
+
+#### Language Support
+**sheerun/vim-polyglot** - Language pack
+- Auto syntax highlighting for 100+ languages
+
+**dense-analysis/ale** - Linting and fixing
+```vim
+]a          " Next error
+[a          " Previous error
+:ALEFix     " Fix current file
+:ALEInfo    " Show linter info
+```
+
+#### Appearance
+**vim-airline/vim-airline** - Status line
+- Shows mode, file info, git branch, errors
+
+**morhetz/gruvbox** - Color scheme
+```vim
+:colorscheme gruvbox
+```
+
+#### Productivity
+**jiangmiao/auto-pairs** - Auto-close brackets
+```vim
+"           " Types ""| (cursor between)
+(           " Types ()| 
+{<Enter>    " Types {<newline>|<newline>}
+```
+
+**SirVer/ultisnips** - Snippets
+```vim
+<Tab>       " Expand snippet
+<C-j>       " Next placeholder
+<C-k>       " Previous placeholder
+```
+
+**mhinz/vim-startify** - Start screen
+- Shows recent files, sessions, bookmarks
+
+### Neovim Plugins (init.lua)
+
+#### File Management
+**nvim-telescope/telescope.nvim** - Fuzzy finder
+```lua
+,f          -- Find files
+,F          -- Find git files  
+,g          -- Live grep
+,l          -- Search current buffer
+,h          -- Recent files
+,b          -- Find buffers
+<C-h>       -- Help (in telescope)
+```
+
+**nvim-tree/nvim-tree.lua** - File explorer
+```lua
+,t          -- Toggle file tree
+,nf         -- Find current file in tree
+# In nvim-tree:
+l           -- Open file/expand
+h           -- Close folder
+a           -- Create file/folder
+r           -- Rename
+d           -- Delete
+c           -- Copy
+x           -- Cut
+p           -- Paste
+R           -- Refresh
+```
+
+#### Language Support
+**nvim-treesitter/nvim-treesitter** - Advanced syntax
+- Better highlighting, indentation, text objects
+- Auto-installs parsers for: lua, python, javascript, typescript, html, css, json, yaml, bash
+
+**neovim/nvim-lspconfig** - Language servers
+```lua
+gd          -- Go to definition
+gr          -- Go to references
+K           -- Hover documentation
+<leader>rn  -- Rename symbol
+<leader>ca  -- Code actions
+```
+
+**hrsh7th/nvim-cmp** - Completion engine
+```lua
+<C-Space>   -- Trigger completion
+<CR>        -- Confirm selection
+<C-b>       -- Scroll docs up
+<C-f>       -- Scroll docs down
+<C-e>       -- Abort completion
+```
+
+#### Git Integration
+**lewis6991/gitsigns.nvim** - Git signs in gutter
+- Shows added/modified/deleted lines
+- Auto-enabled
+
+#### Appearance
+**nvim-lualine/lualine.nvim** - Status line
+- Modern statusline with gruvbox theme
+
+**goolord/alpha-nvim** - Dashboard
+- Shows ASCII art and quick actions on startup
+
+#### Productivity
+**windwp/nvim-autopairs** - Auto-close brackets
+```lua
+"           -- Types ""| (cursor between)
+(           -- Types ()|
+{<Enter>    -- Types {<newline>|<newline>}
+```
+
+### Plugin Management Commands
+
+#### Vim (vim-plug)
+```vim
+:PlugInstall    " Install plugins
+:PlugUpdate     " Update plugins
+:PlugClean      " Remove unused plugins
+:PlugStatus     " Check plugin status
+```
+
+#### Neovim (lazy.nvim)
+```vim
+:Lazy           " Open plugin manager
+:Lazy install   " Install plugins
+:Lazy update    " Update plugins
+:Lazy clean     " Remove unused plugins
+:Lazy sync      " Install + update + clean
+```
+
+## 🥷 Tmux + Neovim Synergy - The Ninja's Secret Weapon
+
+### Core Philosophy: One Mind, Many Contexts
+This configuration creates a unified workspace where tmux provides **structure** and neovim provides **intelligence**, bound together by consistent vim-style navigation that becomes pure muscle memory.
+
+### 🔥 Unified Navigation System
+
+#### The Navigation Trinity
+```bash
+# System-wide vim-style movement (no cognitive switching)
+Tmux panes:     Ctrl-Space h/j/k/l  (with prefix)
+Alt shortcuts:  Alt+h/j/k/l         (no prefix, works everywhere)
+Neovim splits:  Ctrl+h/j/k/l        (no prefix, same pattern)
+
+# Result: Your fingers know exactly where to go, always
+```
+
+#### Instant Context Switching
+```bash
+# The ninja's movement pattern:
+Alt+h/j/k/l     → Navigate between tmux panes instantly  
+Alt+1/2/3       → Switch tmux windows (projects) instantly
+Tab/Shift+Tab   → Cycle neovim buffers (files) instantly
+```
+
+### 🎯 Power Workflow Patterns
+
+#### Pattern 1: The Development Trinity
+```
+┌─────────────────┬─────────────────┐
+│     NEOVIM      │    TERMINAL     │
+│   (code edit)   │  (git, build)   │
+│  ,f ,g ,t       │  g s, g push    │
+│  gd gr K        │  just status    │
+├─────────────────┴─────────────────┤
+│          TEST/DEBUG PANE          │
+│     (test runners, logs, REPL)    │
+│        npm test, pytest           │
+└───────────────────────────────────┘
+
+# Navigation flow:
+Edit code → Alt+l → Git commands → Alt+j → Check tests → Alt+h → Back to code
+```
+
+#### Pattern 2: Multi-Project Ninja
+```bash
+# Smart session management with the 't' command:
+t frontend      # Attach/create frontend project session
+t backend       # Attach/create backend project session  
+t infra         # Attach/create infrastructure session
+
+# Instant project switching:
+Alt+1          # Frontend window
+Alt+2          # Backend window  
+Alt+3          # Infrastructure window
+```
+
+### 🚀 Synergy Examples
+
+#### Example 1: Code-Test-Debug Cycle
+```bash
+# Working in neovim on main.py
+,w             # Save file (neovim)
+Alt+l          # Move to terminal pane (tmux)
+pytest tests/  # Run tests
+Alt+j          # Move to log pane (tmux)
+tail -f app.log # Watch logs
+Alt+h          # Back to neovim (tmux)
+,f             # Find failing test file (neovim telescope)
+gd             # Go to definition (neovim LSP)
+# Fix bug, repeat cycle instantly
+```
+
+#### Example 2: Git Workflow Integration
+```bash
+# Editing multiple files in neovim
+,f             # Find files (telescope)
+,g TODO        # Search for TODOs across project
+Tab            # Next buffer (neovim)
+,w             # Save current file
+Alt+l          # Switch to terminal pane
+g s            # Git status (bash alias)
+g add .        # Stage changes  
+g commit -m "fix: resolve TODO items"
+Alt+h          # Back to neovim - no interruption to flow
+```
+
+#### Example 3: Research & Implementation
+```bash
+# Window layout for complex features:
+Alt+1          # Editor window (neovim with code)
+Alt+2          # Research window (browser, man pages)
+Alt+3          # Testing window (REPL, test runner)
+
+# Flow:
+Alt+2 → Research API docs
+Alt+1 → Implement feature
+Alt+3 → Test in REPL  
+Alt+1 → Refine code
+Alt+3 → Run full test suite
+```
+
+### 🔧 Technical Integration Points
+
+#### Shared Clipboard System
+```bash
+# Seamless copy/paste across tools:
+Tmux copy mode: 'y' → system clipboard (xclip)
+Neovim:        clipboard='unnamedplus' → same clipboard
+Result:        Copy in tmux, paste in nvim (and vice versa)
+```
+
+#### Color Scheme Harmony
+```bash
+# Visual consistency eliminates cognitive load:
+Tmux:    Gruvbox color scheme in status bar and panes
+Neovim:  Same gruvbox theme for editor and UI
+Result:  No jarring visual transitions between contexts
+```
+
+#### Process Persistence & Performance
+```bash
+# Efficiency through persistence:
+Tmux sessions:    Keep processes alive across disconnects
+Neovim buffers:   Maintain undo history and LSP connections
+Result:           Zero startup time, persistent state
+```
+
+### 🎨 Advanced Workflow Techniques
+
+#### The File Management Flow
+```bash
+# Multiple ways to navigate files, choose by context:
+,f             # Quick file find (telescope) - when you know the name
+,t             # File tree (nvim-tree) - when browsing structure
+Alt+2          # Dedicated file manager window (ranger) - for operations
+```
+
+#### Session Resurrection Pattern
+```bash
+# Morning startup routine:
+t project1     # Attach to yesterday's session
+# Everything exactly as you left it:
+# - Neovim with files open, undo history intact
+# - Terminal with command history  
+# - Test pane with last output
+# Zero setup time, instant productivity
+```
+
+#### The Debugging Powerhouse
+```bash
+# Debugging layout:
+Main pane:     Neovim with code, LSP providing context
+Right pane:    Debugger (pdb, gdb, node inspect)  
+Bottom pane:   Application output/logs
+# Navigate with Alt+hjkl while maintaining all contexts
+```
+
+### ⚡ Performance Benefits
+
+#### Memory Efficiency
+- **Single tmux daemon**: Manages multiple long-running processes
+- **Persistent neovim**: No repeated startup costs
+- **Shared LSP servers**: Language intelligence stays loaded
+
+#### CPU Efficiency  
+- **Lazy plugin loading**: Neovim only loads what you need
+- **Process reuse**: Terminal tools stay warm in tmux panes
+- **Smart caching**: Telescope caches, LSP maintains project index
+
+#### I/O Efficiency
+- **Persistent connections**: Git, SSH, database connections survive
+- **File system caching**: Recently accessed files stay in buffer cache
+- **Background processing**: Tests, builds run in background panes
+
+### 🥷 The Ninja Advantage
+
+**Why this combination creates terminal mastery:**
+
+1. **Zero Friction**: Moving between contexts feels like moving within a single application
+2. **Muscle Memory**: Same navigation patterns work everywhere
+3. **Persistent State**: Never lose your place, context, or mental model
+4. **Visual Harmony**: Consistent theming reduces cognitive load
+5. **Keyboard Flow**: Hands never leave home row, no mouse needed
+6. **Scalable Complexity**: Handle multiple projects without losing focus
+
+**The result**: A development environment that feels like an extension of your mind, where technical tools disappear and you focus purely on creating.

@@ -1,12 +1,12 @@
-# Personal Dotfiles
+# 🥷 Ninja Dotfiles
 
-Configuration files for bash, git, tmux, and vim with productivity shortcuts.
+Ruthlessly optimized configuration files for bash, git, tmux, and neovim. Fast, minimal, deadly.
 
 ## Table of Contents
 - [Quick Setup](#quick-setup)
 - [Commands](#commands)
 - [Files](#files)
-- [Shortcuts](#shortcuts)
+- [Ninja Shortcuts](#ninja-shortcuts)
 - [Requirements](#requirements)
 
 ## Quick Setup
@@ -14,52 +14,74 @@ Configuration files for bash, git, tmux, and vim with productivity shortcuts.
 ```bash
 git clone https://github.com/yourusername/dotfiles.git ~/dotfiles
 cd ~/dotfiles
-make full-install
+just full-install    # Automated ninja installation
 ```
 
 ## Commands
 
 ```bash
-make install        # Install dotfiles with backup
-make full-install   # Install with dependencies
-make status         # Check installation status
-make backup         # Backup existing configs
-make update         # Update from git
+just install        # Install dotfiles with backup
+just full-install   # Install with dependencies + dev tools
+just status         # Check installation status
+just backup         # Backup existing configs
+just update         # Update from git
 ```
 
 ## Files
 
-- `.bashrc` - Shell configuration
-- `.gitconfig` - Git configuration  
-- `.tmux.conf` - Tmux setup (prefix: Ctrl-Y)
-- `init.lua` - Neovim configuration (leader: ,)
-- `Makefile` - Installation automation
+- `.bashrc` - Shell configuration with aliases and smart functions
+- `.gitconfig` - Git configuration with productivity aliases
+- `.tmux.conf` - Tmux setup (prefix: **Ctrl-Space**)
+- `init.lua` - **NINJA NEOVIM CONFIG** - Fast, minimal, deadly (leader: `,`)
+- `justfile` - Automated installation system
 
-## Shortcuts
+## 🥷 Ninja Shortcuts
 
-### Bash
-- `g` - git
-- `t` - smart tmux session
-- `ll` - ls -alF
+### Bash Aliases
+- `g` - git (shorthand)
+- `t` - smart tmux session (attach/create)
+- `ll` - detailed file listing
+- `grp pattern ext1 ext2` - multi-extension grep
 
-### Git
+### Git Shortcuts
 - `git s` - status
 - `git co` - checkout
 - `git b` - branch
 
-### Tmux (Prefix: Ctrl-Y)
-- `Ctrl-Y |` - horizontal split
-- `Ctrl-Y -` - vertical split
-- `Ctrl-Y h/j/k/l` - navigate panes
-- `Alt+1-9` - switch windows
-- `Ctrl-Y f` - zoom pane
+### Tmux (Prefix: **Ctrl-Space**)
+- `Ctrl-Space |` - horizontal split
+- `Ctrl-Space -` - vertical split
+- `Ctrl-Space h/j/k/l` - navigate panes
+- `Alt+h/j/k/l` - navigate panes (NO PREFIX)
+- `Alt+1-9` - switch windows (NO PREFIX)
+- `Ctrl-Space f` - zoom pane
 
-### Neovim (Leader: ,)
-- `,f` - find files (telescope)
-- `,g` - live grep (telescope)
-- `,t` - file tree (nvim-tree)
-- `,w` - save
-- `Ctrl+h/j/k/l` - navigate splits
+### 🔥 Neovim Ninja Keys (Leader: `,`)
+
+#### Survival Keys
+- `,w` `,q` `,x` - save, quit, save+quit
+- `,/` - clear search highlight
+
+#### Navigation (INSTANT)
+- `Ctrl+h/j/k/l` - window navigation
+- `Tab` / `Shift+Tab` - buffer cycling
+- `gd` `gr` `K` - LSP go-to-definition, references, hover
+
+#### The Ninja's Scope (Telescope)
+- `,f` - find files
+- `,g` - live grep (search all files)
+- `,b` - buffer list
+- `,h` - recent files
+
+#### File Tree & LSP Power
+- `,t` - toggle file tree
+- `,r` - LSP rename
+- `,ca` - LSP code actions
+
+#### Text Mastery
+- `gcc` - comment toggle
+- `cs"'` - surround change quotes
+- `n` / `N` - search (auto-centered)
 
 ## Requirements
 
@@ -69,12 +91,28 @@ sudo apt install git tmux neovim curl fzf ripgrep xclip
 
 For complete documentation see [CLAUDE.md](CLAUDE.md).
 
-## Modern Features
+## 🚀 Ninja Features
 
-- **Neovim with Lua**: Modern neovim configuration using Lua
-- **Telescope**: Powerful fuzzy finder for files, text, and more
-- **nvim-tree**: Modern file explorer with git integration
-- **Treesitter**: Advanced syntax highlighting and code understanding
-- **LSP**: Built-in Language Server Protocol support
-- **Auto-completion**: Intelligent code completion with nvim-cmp
-- **lazy.nvim**: Fast and modern plugin manager
+### Performance First
+- **<100ms startup** - Lazy loading everything except colorscheme
+- **316 lines** - Down from 540+ bloated lines
+- **8 plugins** - Only the deadly essentials
+- **Zero conflicts** - No duplicate functionality
+
+### Core Arsenal
+- **Gruvbox** - The ninja's dark theme
+- **Telescope** - Sniper scope for files and text
+- **LSP** - Intelligence for Lua, Python, TypeScript
+- **Treesitter** - Perfect syntax highlighting
+- **nvim-tree** - File explorer with git integration
+- **Auto-pairs** - Smart bracket completion
+- **Gitsigns** - See your changes instantly
+- **Surround** - Text object mastery
+
+### Muscle Memory Design
+- **Consistent keybindings** - Same patterns across tmux/nvim
+- **No prefix conflicts** - Alt+hjkl works everywhere
+- **Leader comma** - Easy to reach, memorable
+- **Standard LSP keys** - gd, gr, K work as expected
+
+For complete documentation see [CLAUDE.md](CLAUDE.md).
