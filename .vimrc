@@ -300,8 +300,12 @@ autocmd FocusGained * call NERDTreeRefreshIfOpen()
 
 function! NERDTreeRefreshIfOpen()
     if exists("g:NERDTree") && g:NERDTree.IsOpen() && &filetype != 'nerdtree'
-        call g:NERDTree.ForCurrentTab().getRoot().refresh()
-        call g:NERDTree.ForCurrentTab().render()
+        try
+            call g:NERDTree.ForCurrentTab().getRoot().refresh()
+            call g:NERDTree.ForCurrentTab().render()
+        catch
+            " Silently ignore NERDTree refresh errors
+        endtry
     endif
 endfunction
 
