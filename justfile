@@ -13,7 +13,6 @@ vim_dir := home_dir / '.vim'
 
 # Files to manage
 dotfiles := '.bashrc .gitconfig .tmux.conf init.lua'
-# vim_plugins := 'DisableNonCountedBasicMotions.vim'  # Removed plugin
 
 # Colors
 red := '\033[0;31m'
@@ -89,10 +88,7 @@ setup-nvim: check-nvim
     @printf "{{blue}}Setting up neovim configuration...{{nc}}\n"
     @mkdir -p "{{nvim_config_dir}}"
     @mkdir -p "{{vim_dir}}/plugin"
-    @if [ -f "{{dotfiles_dir}}/{{vim_plugins}}" ]; then \
-        printf "{{green}}Installing vim plugin: {{vim_plugins}}{{nc}}\n"; \
-        cp "{{dotfiles_dir}}/{{vim_plugins}}" "{{vim_dir}}/plugin/"; \
-    fi
+    @# Legacy vim plugin installation removed
     @printf "{{yellow}}Installing neovim plugins (this may take a moment)...{{nc}}\n"
     @nvim --headless "+Lazy! sync" +qa 2>/dev/null || printf "{{yellow}}Note: Plugins will be installed on first nvim startup{{nc}}\n"
 
@@ -190,11 +186,7 @@ status:
     else \
         printf "  {{red}}✗{{nc}} lazy.nvim not installed\n"; \
     fi
-    @if [ -f "{{vim_dir}}/plugin/{{vim_plugins}}" ]; then \
-        printf "  {{green}}✓{{nc}} {{vim_plugins}} installed\n"; \
-    else \
-        printf "  {{red}}✗{{nc}} {{vim_plugins}} not installed\n"; \
-    fi
+    @# Legacy vim plugin check removed
 
 # Clean up backup files and neovim plugins
 clean:

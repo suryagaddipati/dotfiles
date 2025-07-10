@@ -13,6 +13,7 @@ This is a personal dotfiles repository containing configuration files for bash, 
 - **Automated via justfile**: The `just` command provides comprehensive installation, backup, and management with cross-platform support
 - **Backup-first approach**: Always backs up existing configurations before installation to `~/.dotfiles_backup`
 - **Dual editor support**: Both vim (.vimrc) and neovim (init.lua) configurations maintained with shared keybindings
+- **Modern neovim focus**: Recent migration to performance-optimized "Ninja Config" with Claude Code integration
 
 ### Integration Patterns
 - **Consistent theming**: Gruvbox color scheme unified across tmux, vim, and neovim
@@ -26,6 +27,7 @@ This is a personal dotfiles repository containing configuration files for bash, 
 - **Plugin managers**: lazy.nvim (neovim), vim-plug (vim) with auto-installation
 - **Development tools**: NVM (Node.js), SDKMAN (Java), integrated package managers
 - **Cross-platform support**: Justfile detects and uses appropriate package manager (apt/brew/yum)
+- **Claude Code integration**: Official Coder plugin integrated with neovim for AI assistance
 
 ## File Structure
 
@@ -69,6 +71,8 @@ This is a personal dotfiles repository containing configuration files for bash, 
 - Built-in LSP with completion via nvim-cmp
 - Treesitter for advanced syntax highlighting
 - Auto-pairs for bracket/quote completion
+- Claude Code integration for AI assistance
+- Performance-optimized with minimal plugin set
 - Comprehensive key mappings for productivity
 
 ## Essential Commands for Development
@@ -104,6 +108,8 @@ The justfile provides a comprehensive automation layer that:
 - **Handles cross-platform** package management (apt/brew/yum)
 - **Manages neovim plugins** via lazy.nvim bootstrap
 - **Provides color-coded status** reporting
+- **Managed files**: `.bashrc`, `.gitconfig`, `.tmux.conf`, `init.lua` (symlinked to `~/.config/nvim/`)
+- **Special handling**: `init.lua` is symlinked to neovim config directory, not home directory
 
 ### Tmux Session Management
 ```bash
@@ -138,6 +144,15 @@ tm session-name [window-name]
 - `,w` - Save file
 - `,q` - Quit
 - `Ctrl+h/j/k/l` - Navigate splits
+- `,ac` - Toggle Claude Code
+- `,af` - Focus Claude Code
+- `,ab` - Add current buffer to Claude
+- `,as` - Send visual selection to Claude
+- `Ctrl+\` - Toggle terminal (global hotkey)
+- `,tt` - Toggle terminal
+- `,tf` - Float terminal
+- `,th` - Horizontal terminal
+- `,tv` - Vertical terminal
 
 ## Installation
 
@@ -354,6 +369,16 @@ grp pattern ext1 [ext2...]       # Multi-extension grep (e.g., grp TODO js ts py
 - `<leader>rn` - Rename symbol
 - `<leader>ca` - Code actions
 
+#### Claude Code Integration
+- `,ac` - Toggle Claude Code interface
+- `,af` - Focus Claude Code panel
+- `,ar` - Resume Claude Code session
+- `,aC` - Continue Claude Code conversation
+- `,ab` - Add current buffer to Claude context
+- `,as` - Send visual selection to Claude (visual mode)
+- `,aa` - Accept Claude Code diff
+- `,ad` - Deny Claude Code diff
+
 ### Language-Specific Settings
 - **Python**: 4-space indentation, flake8/pylint linting, black/isort formatting
 - **JavaScript/TypeScript**: 2-space indentation, eslint linting, prettier formatting
@@ -412,6 +437,38 @@ The repository uses actual dotfiles (.bashrc, .gitconfig, etc.) and init.lua tha
 4. **Session management**: Use `t session-name` for intelligent tmux sessions (attaches if exists, creates if not)
 5. **Code searching**: Use `grp pattern js ts py` for multi-extension searches with ripgrep
 6. **Plugin management**: Neovim plugins auto-install on first startup via lazy.nvim bootstrap
+7. **Claude Code integration**: Use `,ac` to toggle Claude Code for AI assistance directly in neovim
+
+## Current Neovim Configuration Architecture
+
+The current neovim configuration (`init.lua`) is a **"Ninja Config"** - optimized for speed, minimal bloat, and maximum productivity. Key architectural decisions:
+
+### Performance Optimizations
+- **Lazy loading**: All plugins load only when needed via lazy.nvim
+- **Minimal plugin set**: Only essential plugins for core functionality
+- **Disabled unnecessary plugins**: Removed default vim plugins that slow startup
+- **Fast boot time**: Optimized for sub-100ms startup
+- **LSP version pinning**: Uses nvim-lspconfig v0.1.7 for nvim 0.9 compatibility
+
+### Plugin Architecture
+- **lazy.nvim**: Modern plugin manager with lazy loading
+- **Telescope**: Fuzzy finder for files, buffers, grep
+- **nvim-tree**: File explorer with git integration
+- **LSP + completion**: Language servers with autocomplete
+- **Treesitter**: Advanced syntax highlighting
+- **Claude Code**: AI assistance integration
+- **Auto-pairs**: Bracket/quote completion
+- **Git signs**: Git diff visualization
+- **Comment**: Toggle comments
+- **Surround**: Text object manipulation
+- **ToggleTerm**: Terminal toggle with multiple layouts
+
+### Key Bindings Philosophy
+- **Leader key**: Comma (,) for accessibility
+- **Muscle memory**: Consistent vim-style navigation
+- **Instant access**: Critical functions on single keystrokes
+- **Visual mode**: Preserve selection for repeated operations
+- **Buffer navigation**: Tab/Shift+Tab for quick switching
 
 ## Plugin Documentation
 
@@ -521,18 +578,14 @@ I           " Toggle hidden files
 **nvim-telescope/telescope.nvim** - Fuzzy finder
 ```lua
 ,f          -- Find files
-,F          -- Find git files  
 ,g          -- Live grep
-,l          -- Search current buffer
-,h          -- Recent files
 ,b          -- Find buffers
-<C-h>       -- Help (in telescope)
+,h          -- Recent files
 ```
 
 **nvim-tree/nvim-tree.lua** - File explorer
 ```lua
 ,t          -- Toggle file tree
-,nf         -- Find current file in tree
 # In nvim-tree:
 l           -- Open file/expand
 h           -- Close folder
@@ -545,28 +598,61 @@ p           -- Paste
 R           -- Refresh
 ```
 
+#### AI Integration
+**coder/claudecode.nvim** - Claude Code integration
+```lua
+,ac         -- Toggle Claude Code
+,af         -- Focus Claude Code
+,ar         -- Resume Claude session
+,aC         -- Continue Claude conversation
+,ab         -- Add current buffer to Claude
+,as         -- Send visual selection to Claude
+,aa         -- Accept Claude diff
+,ad         -- Deny Claude diff
+```
+
+#### Terminal Management
+**akinsho/toggleterm.nvim** - Terminal toggle
+```lua
+<C-\>       -- Toggle terminal (global)
+,tt         -- Toggle terminal
+,tf         -- Float terminal
+,th         -- Horizontal terminal
+,tv         -- Vertical terminal
+```
+
+Terminal mode keybindings:
+```lua
+<Esc>       -- Exit terminal mode
+jk          -- Exit terminal mode (alternative)
+<C-h/j/k/l> -- Navigate splits from terminal
+```
+
 #### Language Support
 **nvim-treesitter/nvim-treesitter** - Advanced syntax
 - Better highlighting, indentation, text objects
 - Auto-installs parsers for: lua, python, javascript, typescript, html, css, json, yaml, bash
 
-**neovim/nvim-lspconfig** - Language servers
+**neovim/nvim-lspconfig** - Language servers (v0.1.7 - nvim 0.9 compatible)
 ```lua
 gd          -- Go to definition
 gr          -- Go to references
 K           -- Hover documentation
-<leader>rn  -- Rename symbol
-<leader>ca  -- Code actions
+,r          -- Rename symbol
+,ca         -- Code actions
 ```
 
 **hrsh7th/nvim-cmp** - Completion engine
 ```lua
 <C-Space>   -- Trigger completion
 <CR>        -- Confirm selection
-<C-b>       -- Scroll docs up
-<C-f>       -- Scroll docs down
 <C-e>       -- Abort completion
 ```
+
+Common LSP servers configured:
+- **lua_ls** - Lua language server
+- **pyright** - Python language server
+- **ts_ls** - TypeScript/JavaScript language server
 
 #### Git Integration
 **lewis6991/gitsigns.nvim** - Git signs in gutter
