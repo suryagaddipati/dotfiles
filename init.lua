@@ -263,6 +263,7 @@ require('lazy').setup({
   {
     'akinsho/toggleterm.nvim',
     version = '*',
+    cmd = { 'ToggleTerm', 'TermExec' },
     keys = {
       { '<C-\\>', '<cmd>ToggleTerm<cr>', desc = 'Toggle terminal' },
       { '<leader>tt', '<cmd>ToggleTerm<cr>', desc = 'Toggle terminal' },
@@ -319,6 +320,7 @@ require('lazy').setup({
     'coder/claudecode.nvim',
     dependencies = { 'folke/snacks.nvim' },
     config = true,
+    cmd = { 'ClaudeCode', 'ClaudeCodeFocus', 'ClaudeCodeAdd', 'ClaudeCodeSend', 'ClaudeCodeTreeAdd', 'ClaudeCodeDiffAccept', 'ClaudeCodeDiffDeny' },
     keys = {
       { '<leader>a', nil, desc = 'AI/Claude Code' },
       { '<leader>ac', '<cmd>ClaudeCode<cr>', desc = 'Toggle Claude' },
