@@ -98,6 +98,9 @@ alias g='git'
 # tmux shortcuts
 alias t='tmux_smart_session'
 
+# claude alias
+alias claude='/home/surya/.claude/local/claude'
+
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
