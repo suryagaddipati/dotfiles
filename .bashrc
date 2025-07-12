@@ -179,3 +179,5 @@ grp() {
     | xargs -d '\n' grep --color=auto -n "$pattern" 2>/dev/null
 }
 
+
+alias claude="/home/surya/.claude/local/claude"

@@ -8,7 +8,6 @@ vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.cursorline = true
 vim.opt.signcolumn = 'yes'
-vim.opt.colorcolumn = '80'
 
 -- Search
 vim.opt.hlsearch = true
@@ -181,8 +180,8 @@ require('lazy').setup({
         vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, opts)
       end
 
-      -- Setup common LSPs with current names
-      local servers = { 'lua_ls', 'pyright', 'ts_ls' }
+      -- Setup common LSPs (using tsserver for nvim 0.9 compatibility)
+      local servers = { 'lua_ls', 'pyright', 'tsserver' }
       for _, lsp in ipairs(servers) do
         lspconfig[lsp].setup({
           on_attach = on_attach,
@@ -319,7 +318,14 @@ require('lazy').setup({
   {
     'coder/claudecode.nvim',
     dependencies = { 'folke/snacks.nvim' },
-    config = true,
+    config = function()
+      require('claudecode').setup({
+        diff = {
+          unique_buffers = true,  -- Ensure unique buffer names to prevent conflicts
+          cleanup_on_exit = true, -- Clean up diff buffers when exiting
+        }
+      })
+    end,
     cmd = { 'ClaudeCode', 'ClaudeCodeFocus', 'ClaudeCodeAdd', 'ClaudeCodeSend', 'ClaudeCodeTreeAdd', 'ClaudeCodeDiffAccept', 'ClaudeCodeDiffDeny' },
     keys = {
       { '<leader>a', nil, desc = 'AI/Claude Code' },
