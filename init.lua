@@ -73,6 +73,21 @@ vim.keymap.set('n', 'N', 'Nzzzv')
 vim.keymap.set('v', '<', '<gv')
 vim.keymap.set('v', '>', '>gv')
 
+-- Markdown preview with glow
+vim.keymap.set('n', '<leader>m', function()
+  local file = vim.fn.expand('%')
+  if vim.bo.filetype == 'markdown' then
+    require('toggleterm.terminal').Terminal:new({
+      cmd = 'glow ' .. file,
+      direction = 'vertical',
+      size = 80,
+      close_on_exit = false,
+    }):toggle()
+  else
+    print('Not a markdown file')
+  end
+end, { desc = 'Preview markdown' })
+
 -- =============================================================================
 -- PLUGINS - Only the deadly ones
 -- =============================================================================
@@ -314,45 +329,6 @@ require('lazy').setup({
     end,
   },
 
-  -- Markdown preview in browser
-  {
-    'iamcco/markdown-preview.nvim',
-    cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-    ft = { "markdown" },
-    build = function() vim.fn["mkdp#util#install"]() end,
-    keys = {
-      { '<leader>p', '<cmd>MarkdownPreviewToggle<cr>', desc = 'Markdown preview' },
-    },
-    config = function()
-      vim.g.mkdp_auto_start = 0
-      vim.g.mkdp_auto_close = 1
-      vim.g.mkdp_refresh_slow = 0
-      vim.g.mkdp_command_for_global = 0
-      vim.g.mkdp_open_to_the_world = 0
-      vim.g.mkdp_open_ip = ''
-      vim.g.mkdp_browser = ''
-      vim.g.mkdp_echo_preview_url = 0
-      vim.g.mkdp_browserfunc = ''
-      vim.g.mkdp_preview_options = {
-        mkit = {},
-        katex = {},
-        uml = {},
-        maid = {},
-        disable_sync_scroll = 0,
-        sync_scroll_type = 'middle',
-        hide_yaml_meta = 1,
-        sequence_diagrams = {},
-        flowchart_diagrams = {},
-        content_editable = false,
-        disable_filename = 0
-      }
-      vim.g.mkdp_markdown_css = ''
-      vim.g.mkdp_highlight_css = ''
-      vim.g.mkdp_port = ''
-      vim.g.mkdp_page_title = '「${name}」'
-      vim.g.mkdp_filetypes = {'markdown'}
-    end,
-  },
 
   -- Claude Code integration (official Coder plugin)
   {
@@ -364,7 +340,7 @@ require('lazy').setup({
           unique_buffers = true,  -- Ensure unique buffer names to prevent conflicts
           cleanup_on_exit = true, -- Clean up diff buffers when exiting
         },
-        claude_command = '/home/surya/.claude/local/claude', -- Full path to claude binary
+        claude_command = 'claude', -- Use claude from PATH
         mouse = false, -- Disable mouse capture to allow terminal scrolling
       })
     end,
