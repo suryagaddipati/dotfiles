@@ -160,6 +160,9 @@ export PATH="$HOME/.local/bin:$PATH"
 
 # Set vi mode
 set -o vi
+
+# Remap Caps Lock to Ctrl (fallback for X11 sessions)
+setxkbmap -option caps:ctrl_modifier 2>/dev/null || true
 grp() {
   if [ "$#" -lt 2 ]; then
     echo "Usage: grp <pattern> <ext1> [<ext2> ...]"
