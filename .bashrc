@@ -180,4 +180,3 @@ grp() {
 }
 
 
-alias claude="/home/surya/.claude/local/claude"
