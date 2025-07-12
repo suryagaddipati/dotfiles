@@ -323,7 +323,9 @@ require('lazy').setup({
         diff = {
           unique_buffers = true,  -- Ensure unique buffer names to prevent conflicts
           cleanup_on_exit = true, -- Clean up diff buffers when exiting
-        }
+        },
+        claude_command = '/home/surya/.claude/local/claude', -- Full path to claude binary
+        mouse = false, -- Disable mouse capture to allow terminal scrolling
       })
     end,
     cmd = { 'ClaudeCode', 'ClaudeCodeFocus', 'ClaudeCodeAdd', 'ClaudeCodeSend', 'ClaudeCodeTreeAdd', 'ClaudeCodeDiffAccept', 'ClaudeCodeDiffDeny' },

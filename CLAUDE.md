@@ -25,7 +25,7 @@ This is a personal dotfiles repository containing configuration files for bash, 
 - **Tmux prefix**: Ctrl-Space instead of default Ctrl-B (critical for avoiding conflicts)
 - **Neovim leader**: Comma (,) for all custom mappings
 - **Plugin managers**: lazy.nvim (neovim), vim-plug (vim) with auto-installation
-- **Development tools**: NVM (Node.js), SDKMAN (Java), integrated package managers
+- **Development tools**: NVM (Node.js), SDKMAN (Java), Cargo (Rust), Bun (JavaScript runtime), integrated package managers
 - **Cross-platform support**: Justfile detects and uses appropriate package manager (apt/brew/yum)
 - **Claude Code integration**: Official Coder plugin integrated with neovim for AI assistance
 
@@ -45,7 +45,12 @@ This is a personal dotfiles repository containing configuration files for bash, 
 - `t` alias maps to `tmux_smart_session` function for intelligent tmux session management
 - NVM and SDKMAN integration for Node.js and Java development
 - Custom `tmux_smart_session()` function for automated session attachment/creation
-- `grp()` function for multi-extension grep searches (e.g., `grp TODO js ts py`)
+- `grp()` function for multi-extension grep searches using git ls-files (e.g., `grp TODO js ts py`)
+- Vi mode enabled for bash command line editing (`set -o vi`)
+- Claude CLI integration via PATH (`~/.local/bin/claude` symlink)
+- Cargo/Rust environment setup
+- Bun JavaScript runtime integration
+- Extended PATH with `~/.local/bin` for user-installed tools (including `just`)
 
 ### Git Configuration
 - Email: meowlicious99@gmail.com, Name: Surya G  
@@ -115,6 +120,8 @@ The justfile provides a comprehensive automation layer that:
 ```bash
 # Smart session function (available as alias 't')
 tmux_smart_session [session-name]
+# - No arguments: Attach to existing session or create 'main'
+# - With session name: Attach if exists, create if not
 
 # Tmux wrapper function
 tm session-name [window-name]
@@ -130,8 +137,8 @@ tm session-name [window-name]
 ```
 
 ### Key Tmux Bindings (Prefix: Ctrl-Space)
-- `Ctrl-Space |` - Split horizontally
-- `Ctrl-Space -` - Split vertically  
+- `Ctrl-Space s` - Split horizontally
+- `Ctrl-Space v` - Split vertically
 - `Ctrl-Space h/j/k/l` - Navigate panes
 - `Alt+h/j/k/l` - Navigate panes (no prefix)
 - `Alt+1-9` - Switch to window 1-9
@@ -232,16 +239,16 @@ tmux_smart_session [name]        # Attach to existing or create new session
 tm session-name [window-name]    # Advanced tmux session wrapper
 
 # Search functions
-grp pattern ext1 [ext2...]       # Multi-extension grep (e.g., grp TODO js ts py)
+grp pattern ext1 [ext2...]       # Multi-extension grep using git ls-files (e.g., grp TODO js ts py)
 ```
 
 ### Tmux Key Bindings (Prefix: Ctrl-Space)
 
 #### Session Management
-- `Ctrl-Space s` - List sessions
 - `Ctrl-Space S` - Create new session (prompted for name)
 - `Ctrl-Space R` - Rename session
 - `Ctrl-Space N` - New session in current directory
+- `Alt+s` - Choose session (quick session switcher)
 
 #### Window Management
 - `Ctrl-Space c` - Create new window
@@ -256,8 +263,10 @@ grp pattern ext1 [ext2...]       # Multi-extension grep (e.g., grp TODO js ts py
 - `Alt+1-9` - Switch to window 1-9 (no prefix needed)
 
 #### Pane Management
-- `Ctrl-Space |` or `Ctrl-Space \` - Split horizontally
-- `Ctrl-Space -` or `Ctrl-Space _` - Split vertically
+- `Ctrl-Space s` - Split horizontally (primary)
+- `Ctrl-Space v` - Split vertically (primary)
+- `Ctrl-Space |` or `Ctrl-Space \` - Split horizontally (alternative)
+- `Ctrl-Space -` or `Ctrl-Space _` - Split vertically (alternative)
 - `Ctrl-Space h/j/k/l` - Navigate panes (vim-style)
 - `Alt+h/j/k/l` - Navigate panes (no prefix needed)
 - `Ctrl-Space H/J/K/L` - Resize panes
@@ -422,20 +431,21 @@ The repository uses actual dotfiles (.bashrc, .gitconfig, etc.) and init.lua tha
 - **Check installation status first**: Run `just status` before making changes to verify setup
 - **Respect the symlink architecture**: Edit files in the repository, not in home directory (changes reflect immediately)
 - **Use the smart session function**: `t session-name` for tmux management
-- **Leverage the grp function**: `grp pattern ext1 ext2` for efficient code searching across file types
+- **Leverage the grp function**: `grp pattern ext1 ext2` for efficient code searching across file types (uses git ls-files for performance)
 
 ### Critical System Details
 - **Tmux prefix**: Ctrl-Space - not Ctrl-B or backtick (this is a key difference from defaults)
 - **Neovim leader**: Comma (,) for all custom mappings
 - **Alt+h/j/k/l**: Navigate tmux panes without prefix (works system-wide)
 - **Alt+1-9**: Switch tmux windows without prefix (instant window switching)
+- **Bash vi mode**: Enabled with `set -o vi` for vim-style command line editing
 
 ### Common Workflow Patterns
 1. **Installation**: `just install` (handles backup automatically, safe to run)
 2. **Status check**: `just status` (shows detailed installation health and symlink status)
 3. **Config editing**: Edit files in repository, changes reflect immediately via symlinks
 4. **Session management**: Use `t session-name` for intelligent tmux sessions (attaches if exists, creates if not)
-5. **Code searching**: Use `grp pattern js ts py` for multi-extension searches with ripgrep
+5. **Code searching**: Use `grp pattern js ts py` for multi-extension searches with git ls-files and grep
 6. **Plugin management**: Neovim plugins auto-install on first startup via lazy.nvim bootstrap
 7. **Claude Code integration**: Use `,ac` to toggle Claude Code for AI assistance directly in neovim
 
