@@ -1,6 +1,6 @@
-# Dotfiles Cheatsheet
+# Dotfiles Philosophy
 
-Optimized configuration for bash, git, tmux, and neovim.
+Optimized configuration for bash, git, tmux, and neovim based on systematic design principles.
 
 ## Quick Setup
 
@@ -9,6 +9,72 @@ git clone https://github.com/yourusername/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 just full-install    # Complete setup with dependencies
 ```
+
+## Shortcut Philosophy
+
+Instead of memorizing individual shortcuts, understand the underlying system:
+
+### **Spatial Logic**
+Everything uses **vim-style directional movement**:
+- `h` = left
+- `j` = down  
+- `k` = up
+- `l` = right
+
+This works the same in tmux panes, neovim splits, and bash vi-mode.
+
+### **Immediacy Principle**
+More frequent actions = fewer keystrokes:
+```
+Alt+key         # Instant (no prefix) - most frequent
+Ctrl+key        # Common operations  
+,key            # Editor actions (leader comma)
+Prefix+key      # Complex operations (Ctrl-Space in tmux)
+```
+
+### **Four Mental Models**
+
+#### **1. Navigate** (Move between contexts)
+```
+Alt+h/j/k/l     # Tmux panes (instant)
+Ctrl+h/j/k/l    # Neovim splits
+Alt+1-9         # Tmux windows (instant)
+Tab/Shift+Tab   # Neovim buffers
+```
+
+#### **2. Manipulate** (Create/change/destroy)
+```
+# Split contexts:
+Ctrl-Space s/v  # Tmux split horizontal/vertical
+# Manage contexts:
+Ctrl-Space x    # Kill tmux pane
+,bd             # Delete neovim buffer
+```
+
+#### **3. Find** (Search and discover)
+```
+,f              # Find files
+,g              # Grep text
+,b              # Find buffers
+,h              # Recent files
+grp pattern ext # Multi-extension search (bash)
+```
+
+#### **4. Execute** (Run actions)
+```
+,w              # Save
+,q              # Quit
+t session       # Smart tmux session
+g status        # Git status
+```
+
+### **Pattern Recognition**
+
+Once you understand the patterns, you can predict shortcuts:
+- **Alt+** = "I want this NOW" (no prefix needed)
+- **h/j/k/l** = "directional movement" (works everywhere)  
+- **,** = "editor action" (only in neovim)
+- **Ctrl-Space** = "complex tmux operation"
 
 ## Essential Commands
 
@@ -19,139 +85,31 @@ just backup         # Backup existing configs
 just update         # Update from git
 ```
 
-## 🖥️ Terminal/Bash Shortcuts
+## Core Tools Integration
 
+### **Terminal (Bash)**
 ```bash
-# Aliases
 g                   # git
-t [session]         # smart tmux session (attach/create)
-ll                  # detailed file listing
-
-# Functions  
-grp pattern ext1 ext2    # multi-extension grep (e.g., grp TODO js py)
-tmux_smart_session       # intelligent session management
-
-# Git aliases
-git s               # status
-git co              # checkout  
-git b               # branch
-git push            # push -u origin HEAD
+t [session]         # smart tmux session
+ll                  # detailed listing
+grp pattern ext     # multi-extension search
 ```
 
-## 🪟 Tmux Shortcuts
-
-**Prefix: Ctrl-Space**
-
-### Panes
+### **Session Manager (Tmux)**
 ```bash
-Ctrl-Space s        # Split horizontal
-Ctrl-Space v        # Split vertical
-Ctrl-Space h/j/k/l  # Navigate panes
-Alt+h/j/k/l         # Navigate panes (NO PREFIX)
-Ctrl-Space f        # Zoom pane
-Ctrl-Space x        # Kill pane
+# Prefix: Ctrl-Space
+# Navigate: Alt+h/j/k/l (instant)
+# Windows: Alt+1-9 (instant)
+# Sessions: Alt+s (instant)
 ```
 
-### Windows
+### **Editor (Neovim)**
 ```bash
-Ctrl-Space c        # Create window
-Ctrl-Space n/p      # Next/previous window
-Alt+1-9             # Switch to window 1-9 (NO PREFIX)
-Ctrl-Space ,        # Rename window
-```
-
-### Sessions
-```bash
-Ctrl-Space S        # Create new session
-Alt+s               # Choose session (NO PREFIX)
-Ctrl-Space R        # Rename session
-```
-
-### Copy/Paste
-```bash
-Ctrl-Space Enter    # Enter copy mode
-v                   # Begin selection (in copy mode)
-y                   # Copy to clipboard
-Ctrl-Space P        # Paste
-```
-
-### Config
-```bash
-Ctrl-Space r        # Reload config
-```
-
-## ⚡ Neovim Shortcuts
-
-**Leader: ,**
-
-### File Operations
-```bash
-,w                  # Save
-,q                  # Quit
-,x                  # Save and quit
-,/                  # Clear search highlight
-```
-
-### Navigation
-```bash
-Ctrl+h/j/k/l        # Navigate splits
-Tab / Shift+Tab     # Next/previous buffer
-,bd                 # Delete buffer
-j/k                 # Move by visual lines
-n/N                 # Next/previous search (centered)
-```
-
-### File Management
-```bash
-,f                  # Find files (Telescope)
-,g                  # Live grep (search in files)
-,b                  # Buffer list
-,h                  # Recent files
-,t                  # Toggle file tree
-```
-
-### LSP (Language Server)
-```bash
-gd                  # Go to definition
-gr                  # Go to references  
-K                   # Hover documentation
-,r                  # Rename symbol
-,ca                 # Code actions
-```
-
-### Editing
-```bash
-gcc                 # Toggle comment (line)
-gc                  # Toggle comment (visual selection)
-cs"'                # Change surrounding quotes
-ds"                 # Delete surrounding quotes
-ysiw]               # Surround word with brackets
-< / >               # Indent/unindent (keeps selection)
-```
-
-### Terminal
-```bash
-Ctrl+\              # Toggle terminal
-,tt                 # Toggle terminal
-,tf                 # Float terminal
-,th                 # Horizontal terminal
-,tv                 # Vertical terminal
-```
-
-### Claude Code (AI)
-```bash
-,ac                 # Toggle Claude Code
-,af                 # Focus Claude Code
-,ab                 # Add current buffer to Claude
-,as                 # Send selection to Claude (visual mode)
-,aa                 # Accept Claude diff
-,ad                 # Deny Claude diff
-```
-
-### Plugin Management
-```bash
-:Lazy               # Open plugin manager
-:Lazy sync          # Install/update/clean plugins
+# Leader: ,
+# Navigate: Ctrl+h/j/k/l
+# Buffers: Tab/Shift+Tab
+# Files: ,f ,g ,b ,h ,t
+# Actions: ,w ,q ,ac
 ```
 
 ## Requirements
@@ -160,4 +118,4 @@ Ctrl+\              # Toggle terminal
 sudo apt install git tmux neovim curl fzf ripgrep xclip
 ```
 
-For complete documentation see [CLAUDE.md](CLAUDE.md).
+For implementation details see [CLAUDE.md](CLAUDE.md).
