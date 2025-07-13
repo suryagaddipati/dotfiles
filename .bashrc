@@ -125,9 +125,6 @@ if ! shopt -oq posix; then
   fi
 fi
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # tmux smart session function
 tmux_smart_session() {
@@ -149,9 +146,13 @@ tmux_smart_session() {
     fi
 }
 
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="$HOME/.sdkman"
-[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+# Lazy-load SDKMAN for faster startup
+sdk() {
+    unset -f sdk
+    export SDKMAN_DIR="$HOME/.sdkman"
+    [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+    sdk "$@"
+}
 . "$HOME/.cargo/env"
 
 # bun
@@ -164,8 +165,10 @@ export PATH="$HOME/.local/bin:$PATH"
 # Set vi mode
 set -o vi
 
-# Remap Caps Lock to Ctrl (fallback for X11 sessions)
-setxkbmap -option caps:ctrl_modifier 2>/dev/null || true
+# Remap Caps Lock to Ctrl (lazy-loaded for X11 sessions)
+caps_ctrl() {
+    setxkbmap -option caps:ctrl_modifier 2>/dev/null || true
+}
 grp() {
   if [ "$#" -lt 2 ]; then
     echo "Usage: grp <pattern> <ext1> [<ext2> ...]"
