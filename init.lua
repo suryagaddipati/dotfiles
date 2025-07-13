@@ -51,6 +51,7 @@ vim.keymap.set('n', '<leader>w', '<cmd>w<cr>')
 vim.keymap.set('n', '<leader>q', '<cmd>q<cr>')
 vim.keymap.set('n', '<leader>x', '<cmd>x<cr>')
 vim.keymap.set('n', '<leader>/', '<cmd>noh<cr>')
+vim.keymap.set('n', '<leader>h', '<cmd>noh<cr>')
 
 -- Window navigation - INSTANT
 vim.keymap.set('n', '<C-h>', '<C-w>h')
@@ -122,7 +123,7 @@ require('lazy').setup({
       { '<leader>f', '<cmd>Telescope find_files<cr>', desc = 'Find files' },
       { '<leader>g', '<cmd>Telescope live_grep<cr>', desc = 'Grep' },
       { '<leader>b', '<cmd>Telescope buffers<cr>', desc = 'Buffers' },
-      { '<leader>h', '<cmd>Telescope oldfiles<cr>', desc = 'Recent files' },
+      { '<leader>hr', '<cmd>Telescope oldfiles<cr>', desc = 'Recent files' },
     },
     config = function()
       require('telescope').setup({
@@ -312,7 +313,7 @@ require('lazy').setup({
           enabled = false,
         },
       })
-      
+
       -- Terminal mode keymaps
       function _G.set_terminal_keymaps()
         local opts = {buffer = 0}
@@ -324,7 +325,7 @@ require('lazy').setup({
         vim.keymap.set('t', '<C-l>', [[<Cmd>wincmd l<CR>]], opts)
         vim.keymap.set('t', '<C-w>', [[<C-\><C-n><C-w>]], opts)
       end
-      
+
       vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
     end,
   },
@@ -332,10 +333,16 @@ require('lazy').setup({
 
   -- Claude Code integration (official Coder plugin)
   {
-    'coder/claudecode.nvim',
+    dir = '/home/surya/code/claudecode.nvim',
     dependencies = { 'folke/snacks.nvim' },
     config = function()
       require('claudecode').setup({
+      opts = {
+        terminal = {
+          provider = "native", -- Use native instead of snacks
+          -- or create custom terminal_cmd that uses toggleterm
+        }},
+
         diff = {
           unique_buffers = true,  -- Ensure unique buffer names to prevent conflicts
           cleanup_on_exit = true, -- Clean up diff buffers when exiting
@@ -354,7 +361,7 @@ require('lazy').setup({
       { '<leader>ab', '<cmd>ClaudeCodeAdd %<cr>', desc = 'Add current buffer' },
       { '<leader>as', '<cmd>ClaudeCodeSend<cr>', mode = 'v', desc = 'Send to Claude' },
       {
-        '<leader>as',
+        '<leader>at',
         '<cmd>ClaudeCodeTreeAdd<cr>',
         desc = 'Add file',
         ft = { 'NvimTree', 'neo-tree', 'oil' },
