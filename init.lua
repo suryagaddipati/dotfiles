@@ -1,80 +1,55 @@
--- =============================================================================
--- NINJA NEOVIM CONFIG - Fast, Minimal, Deadly
--- =============================================================================
-
--- Core Settings - Only the essentials
 vim.g.mapleader = ' '
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.cursorline = true
 vim.opt.signcolumn = 'yes'
-
--- Search
 vim.opt.hlsearch = true
 vim.opt.incsearch = true
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
-
--- Indentation
 vim.opt.expandtab = true
 vim.opt.shiftwidth = 2
 vim.opt.tabstop = 2
 vim.opt.smartindent = true
-
--- Performance
 vim.opt.updatetime = 50
 vim.opt.timeoutlen = 300
 vim.opt.lazyredraw = true
 vim.opt.synmaxcol = 200
-
--- Interface
 vim.opt.termguicolors = true
 vim.opt.scrolloff = 8
 vim.opt.sidescrolloff = 8
 vim.opt.wrap = false
 vim.opt.mouse = 'a'
 vim.opt.clipboard = 'unnamedplus'
-
--- Files
 vim.opt.autoread = true
 vim.opt.hidden = true
 vim.opt.undofile = true
 vim.opt.swapfile = false
 vim.opt.backup = false
 
--- =============================================================================
--- NINJA KEYBINDINGS - Muscle Memory First
--- =============================================================================
-
--- Essential survival keys
 vim.keymap.set('n', '<leader>w', '<cmd>w<cr>')
 vim.keymap.set('n', '<leader>q', '<cmd>q<cr>')
 vim.keymap.set('n', '<leader>x', '<cmd>x<cr>')
 vim.keymap.set('n', '<leader>/', '<cmd>noh<cr>')
 vim.keymap.set('n', '<leader>h', '<cmd>noh<cr>')
 
--- Window navigation - INSTANT
 vim.keymap.set('n', '<C-h>', '<C-w>h')
 vim.keymap.set('n', '<C-j>', '<C-w>j')
 vim.keymap.set('n', '<C-k>', '<C-w>k')
 vim.keymap.set('n', '<C-l>', '<C-w>l')
 
--- Buffer navigation - FAST
 vim.keymap.set('n', '<Tab>', '<cmd>bnext<cr>')
 vim.keymap.set('n', '<S-Tab>', '<cmd>bprev<cr>')
 vim.keymap.set('n', '<leader>bd', '<cmd>bd<cr>')
 
--- Movement mastery
 vim.keymap.set('n', 'j', 'gj')
 vim.keymap.set('n', 'k', 'gk')
 vim.keymap.set('n', 'n', 'nzzzv')
 vim.keymap.set('n', 'N', 'Nzzzv')
 
--- Visual mode flow
 vim.keymap.set('v', '<', '<gv')
 vim.keymap.set('v', '>', '>gv')
 
--- Markdown preview with glow
 vim.keymap.set('n', '<leader>m', function()
   local file = vim.fn.expand('%')
   if vim.bo.filetype == 'markdown' then
@@ -89,10 +64,6 @@ vim.keymap.set('n', '<leader>m', function()
   end
 end, { desc = 'Preview markdown' })
 
--- =============================================================================
--- PLUGINS - Only the deadly ones
--- =============================================================================
-
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -104,7 +75,6 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
-  -- Theme - Gruvbox is king
   {
     'morhetz/gruvbox',
     lazy = false,
@@ -115,7 +85,6 @@ require('lazy').setup({
     end,
   },
 
-  -- Fuzzy finder - The ninja's scope
   {
     'nvim-telescope/telescope.nvim',
     cmd = 'Telescope',
@@ -138,7 +107,6 @@ require('lazy').setup({
     end,
   },
 
-  -- File tree - When you need the big picture
   {
     'nvim-tree/nvim-tree.lua',
     cmd = { 'NvimTreeToggle', 'NvimTreeFocus' },
@@ -156,10 +124,9 @@ require('lazy').setup({
     end,
   },
 
-  -- LSP - The ninja's intelligence (nvim 0.9 compatible)
   {
     'neovim/nvim-lspconfig',
-    version = 'v0.1.7', -- Last version compatible with nvim 0.9
+    version = 'v0.1.7',
     event = { 'BufReadPre', 'BufNewFile' },
     dependencies = {
       'hrsh7th/nvim-cmp',
@@ -168,7 +135,6 @@ require('lazy').setup({
       'hrsh7th/cmp-path',
     },
     config = function()
-      -- Completion
       local cmp = require('cmp')
       cmp.setup({
         sources = {
@@ -183,11 +149,9 @@ require('lazy').setup({
         }),
       })
 
-      -- LSP
       local lspconfig = require('lspconfig')
       local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-      -- LSP keybindings (nvim 0.9 compatible)
       local on_attach = function(client, bufnr)
         local opts = { buffer = bufnr, silent = true }
         vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
@@ -197,7 +161,6 @@ require('lazy').setup({
         vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, opts)
       end
 
-      -- Setup common LSPs (using tsserver for nvim 0.9 compatibility)
       local servers = { 'lua_ls', 'pyright', 'tsserver' }
       for _, lsp in ipairs(servers) do
         lspconfig[lsp].setup({
@@ -213,7 +176,6 @@ require('lazy').setup({
     end,
   },
 
-  -- Treesitter - Syntax ninja
   {
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
@@ -228,7 +190,6 @@ require('lazy').setup({
     end,
   },
 
-  -- Auto-pairs - Clean and simple
   {
     'windwp/nvim-autopairs',
     event = 'InsertEnter',
@@ -240,7 +201,6 @@ require('lazy').setup({
     end,
   },
 
-  -- Git signs - See the diff
   {
     'lewis6991/gitsigns.nvim',
     event = { 'BufReadPre', 'BufNewFile' },
@@ -257,7 +217,6 @@ require('lazy').setup({
     end,
   },
 
-  -- Comment ninja
   {
     'numToStr/Comment.nvim',
     keys = {
@@ -269,13 +228,11 @@ require('lazy').setup({
     end,
   },
 
-  -- Surround master
   {
     'tpope/vim-surround',
     event = 'VeryLazy',
   },
 
-  -- Terminal toggle - The ninja's command center
   {
     'akinsho/toggleterm.nvim',
     version = '*',
@@ -315,7 +272,6 @@ require('lazy').setup({
         },
       })
 
-      -- Terminal mode keymaps
       function _G.set_terminal_keymaps()
         local opts = {buffer = 0}
         vim.keymap.set('t', '<esc>', [[<C-\><C-n>]], opts)
@@ -331,8 +287,6 @@ require('lazy').setup({
     end,
   },
 
-
-  -- Which-key - Show key bindings
   {
     'folke/which-key.nvim',
     event = 'VeryLazy',
@@ -344,7 +298,6 @@ require('lazy').setup({
     end,
   },
 
-  -- Claude Code integration (official Coder plugin)
   {
     dir = '/home/surya/code/claudecode.nvim',
     dependencies = { 'folke/snacks.nvim' },
@@ -352,16 +305,15 @@ require('lazy').setup({
       require('claudecode').setup({
       opts = {
         terminal = {
-          provider = "native", -- Use native instead of snacks
-          -- or create custom terminal_cmd that uses toggleterm
+          provider = "native",
         }},
 
         diff = {
-          unique_buffers = true,  -- Ensure unique buffer names to prevent conflicts
-          cleanup_on_exit = true, -- Clean up diff buffers when exiting
+          unique_buffers = true,
+          cleanup_on_exit = true,
         },
-        claude_command = 'claude', -- Use claude from PATH
-        mouse = false, -- Disable mouse capture to allow terminal scrolling
+        claude_command = 'claude',
+        mouse = false,
       })
     end,
     cmd = { 'ClaudeCode', 'ClaudeCodeFocus', 'ClaudeCodeAdd', 'ClaudeCodeSend', 'ClaudeCodeTreeAdd', 'ClaudeCodeDiffAccept', 'ClaudeCodeDiffDeny' },
@@ -379,7 +331,6 @@ require('lazy').setup({
         desc = 'Add file',
         ft = { 'NvimTree', 'neo-tree', 'oil' },
       },
-      -- Diff management
       { '<leader>aa', '<cmd>ClaudeCodeDiffAccept<cr>', desc = 'Accept diff' },
       { '<leader>ad', '<cmd>ClaudeCodeDiffDeny<cr>', desc = 'Deny diff' },
     },
@@ -401,13 +352,8 @@ require('lazy').setup({
   },
 })
 
--- =============================================================================
--- AUTOCMDS - Minimal automation
--- =============================================================================
-
 local augroup = vim.api.nvim_create_augroup('NinjaConfig', {})
 
--- Return to last position
 vim.api.nvim_create_autocmd('BufReadPost', {
   group = augroup,
   pattern = '*',
@@ -419,14 +365,12 @@ vim.api.nvim_create_autocmd('BufReadPost', {
   end,
 })
 
--- Trim whitespace
 vim.api.nvim_create_autocmd('BufWritePre', {
   group = augroup,
   pattern = '*',
   command = '%s/\\s\\+$//e',
 })
 
--- Language-specific settings
 vim.api.nvim_create_autocmd('FileType', {
   group = augroup,
   pattern = 'python',
@@ -435,7 +379,3 @@ vim.api.nvim_create_autocmd('FileType', {
     vim.opt_local.tabstop = 4
   end,
 })
-
--- =============================================================================
--- NINJA COMPLETE - Fast boot, deadly accurate
--- =============================================================================
