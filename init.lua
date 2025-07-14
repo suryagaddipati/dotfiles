@@ -3,7 +3,7 @@
 -- =============================================================================
 
 -- Core Settings - Only the essentials
-vim.g.mapleader = ','
+vim.g.mapleader = ' '
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.cursorline = true
@@ -331,6 +331,18 @@ require('lazy').setup({
     end,
   },
 
+
+  -- Which-key - Show key bindings
+  {
+    'folke/which-key.nvim',
+    event = 'VeryLazy',
+    config = function()
+      require('which-key').setup({
+        preset = 'modern',
+        delay = 300,
+      })
+    end,
+  },
 
   -- Claude Code integration (official Coder plugin)
   {
