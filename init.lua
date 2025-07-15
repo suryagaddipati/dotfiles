@@ -1,7 +1,6 @@
 vim.g.mapleader = ' '
 vim.opt.number = true
 vim.opt.relativenumber = true
-vim.opt.cursorline = true
 vim.opt.signcolumn = 'yes'
 vim.opt.hlsearch = true
 vim.opt.incsearch = true
@@ -81,6 +80,7 @@ require('lazy').setup({
     priority = 1000,
     config = function()
       vim.g.gruvbox_contrast_dark = 'hard'
+      vim.g.gruvbox_bold = 1
       vim.cmd.colorscheme('gruvbox')
     end,
   },
@@ -111,7 +111,7 @@ require('lazy').setup({
     'nvim-tree/nvim-tree.lua',
     cmd = { 'NvimTreeToggle', 'NvimTreeFocus' },
     keys = {
-      { '<leader>t', '<cmd>NvimTreeToggle<cr>', desc = 'Toggle tree' },
+      { '<leader>e', '<cmd>NvimTreeToggle<cr>', desc = 'Toggle tree' },
     },
     config = function()
       require('nvim-tree').setup({

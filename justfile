@@ -10,9 +10,11 @@ home_dir := env_var('HOME')
 backup_dir := home_dir / '.dotfiles_backup'
 nvim_config_dir := home_dir / '.config/nvim'
 vim_dir := home_dir / '.vim'
+alacritty_config_dir := home_dir / '.config/alacritty'
 
 # Files to manage
 dotfiles := '.bashrc .gitconfig .tmux.conf init.lua'
+config_files := '.config/alacritty/alacritty.yml'
 
 # Colors
 red := '\033[0;31m'
@@ -31,6 +33,7 @@ default:
 install: backup setup-nvim
     @printf "{{blue}}Installing dotfiles...{{nc}}\n"
     @mkdir -p "{{nvim_config_dir}}"
+    @mkdir -p "{{alacritty_config_dir}}"
     @for file in {{dotfiles}}; do \
         if [ -f "{{dotfiles_dir}}/$file" ]; then \
             if [ "$file" = "init.lua" ]; then \
@@ -40,6 +43,14 @@ install: backup setup-nvim
                 printf "{{green}}Linking $file{{nc}}\n"; \
                 ln -sf "{{dotfiles_dir}}/$file" "{{home_dir}}/$file"; \
             fi \
+        else \
+            printf "{{yellow}}Warning: $file not found{{nc}}\n"; \
+        fi \
+    done
+    @for file in {{config_files}}; do \
+        if [ -f "{{dotfiles_dir}}/$file" ]; then \
+            printf "{{green}}Linking $file{{nc}}\n"; \
+            ln -sf "{{dotfiles_dir}}/$file" "{{home_dir}}/$file"; \
         else \
             printf "{{yellow}}Warning: $file not found{{nc}}\n"; \
         fi \
@@ -59,6 +70,14 @@ backup:
         fi; \
         if [ -f "$target_file" ] && [ ! -L "$target_file" ]; then \
             printf "{{yellow}}Backing up $file{{nc}}\n"; \
+            cp "$target_file" "{{backup_dir}}/$file.backup"; \
+        fi \
+    done
+    @for file in {{config_files}}; do \
+        target_file="{{home_dir}}/$file"; \
+        if [ -f "$target_file" ] && [ ! -L "$target_file" ]; then \
+            printf "{{yellow}}Backing up $file{{nc}}\n"; \
+            mkdir -p "{{backup_dir}}/$(dirname "$file")"; \
             cp "$target_file" "{{backup_dir}}/$file.backup"; \
         fi \
     done
@@ -145,6 +164,13 @@ uninstall:
             rm "$target_file"; \
         fi \
     done
+    @for file in {{config_files}}; do \
+        target_file="{{home_dir}}/$file"; \
+        if [ -L "$target_file" ]; then \
+            printf "{{yellow}}Removing symlink: $file{{nc}}\n"; \
+            rm "$target_file"; \
+        fi \
+    done
     @printf "{{green}}Dotfiles uninstalled{{nc}}\n"
     @printf "{{yellow}}Backups preserved in {{backup_dir}}{{nc}}\n"
 
@@ -161,6 +187,21 @@ status:
         if [ "$file" = "init.lua" ]; then \
             target_file="{{nvim_config_dir}}/$file"; \
         fi; \
+        if [ -L "$target_file" ]; then \
+            link_target=$(readlink "$target_file"); \
+            if [ "$link_target" = "{{dotfiles_dir}}/$file" ]; then \
+                printf "  {{green}}✓{{nc}} $file → {{dotfiles_dir}}/$file\n"; \
+            else \
+                printf "  {{yellow}}⚠{{nc}} $file → $link_target (wrong target)\n"; \
+            fi; \
+        elif [ -f "$target_file" ]; then \
+            printf "  {{red}}✗{{nc}} $file (regular file, not symlinked)\n"; \
+        else \
+            printf "  {{red}}✗{{nc}} $file (not found)\n"; \
+        fi; \
+    done
+    @for file in {{config_files}}; do \
+        target_file="{{home_dir}}/$file"; \
         if [ -L "$target_file" ]; then \
             link_target=$(readlink "$target_file"); \
             if [ "$link_target" = "{{dotfiles_dir}}/$file" ]; then \
