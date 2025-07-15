@@ -300,23 +300,12 @@ require('lazy').setup({
 
   {
     dir = '/home/surya/code/claudecode.nvim',
-    dependencies = { 'folke/snacks.nvim' },
+    dependencies = {'akinsho/toggleterm.nvim'},
     config = function()
       require('claudecode').setup({
-      opts = {
-        terminal = {
-          provider = "native",
-        }},
-
-        diff = {
-          unique_buffers = true,
-          cleanup_on_exit = true,
-        },
-        claude_command = 'claude',
-        mouse = false,
+        terminal_cmd = '/home/surya/.claude/local/claude',
       })
     end,
-    cmd = { 'ClaudeCode', 'ClaudeCodeFocus', 'ClaudeCodeAdd', 'ClaudeCodeSend', 'ClaudeCodeTreeAdd', 'ClaudeCodeDiffAccept', 'ClaudeCodeDiffDeny' },
     keys = {
       { '<leader>a', nil, desc = 'AI/Claude Code' },
       { '<leader>ac', '<cmd>ClaudeCode<cr>', desc = 'Toggle Claude' },
@@ -335,6 +324,7 @@ require('lazy').setup({
       { '<leader>ad', '<cmd>ClaudeCodeDiffDeny<cr>', desc = 'Deny diff' },
     },
   },
+
 }, {
   performance = {
     rtp = {
