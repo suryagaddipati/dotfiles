@@ -11,6 +11,12 @@ keymap('n', '<C-j>', '<C-w>j')
 keymap('n', '<C-k>', '<C-w>k')
 keymap('n', '<C-l>', '<C-w>l')
 
+-- Window resizing
+keymap('n', '<leader>+', '<cmd>resize +4<cr>')
+keymap('n', '<leader>-', '<cmd>resize -4<cr>')
+keymap('n', '<leader>>', '<cmd>vertical resize +4<cr>')
+keymap('n', '<leader><', '<cmd>vertical resize -4<cr>')
+
 keymap('n', '<Tab>', '<cmd>bnext<cr>')
 keymap('n', '<S-Tab>', '<cmd>bprev<cr>')
 keymap('n', '<leader>bd', '<cmd>bd<cr>')
