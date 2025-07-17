@@ -32,3 +32,7 @@ vim.opt.hidden = true
 vim.opt.undofile = true
 vim.opt.swapfile = false
 vim.opt.backup = false
+
+vim.opt.syntax = 'on'
+vim.opt.filetype = 'on'
+
