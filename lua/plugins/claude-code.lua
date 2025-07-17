@@ -3,7 +3,7 @@ return {
   dependencies = {'akinsho/toggleterm.nvim'},
   config = function()
     require('claudecode').setup({
-      terminal_cmd = '/home/surya/.claude/local/claude',
+      terminal_cmd = '/home/surya/.claude/local/claude --dangerously-skip-permissions',
     })
   end,
   keys = {
