@@ -16,3 +16,5 @@
 	b = branch
 [init]
 	defaultBranch = main
+[core]
+	editor = vim
