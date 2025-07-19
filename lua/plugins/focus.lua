@@ -6,7 +6,7 @@ return {
       enable = true,
       commands = true,
       autoresize = {
-        enable = true,
+        enable = false,
         width = 0,
         height = 0,
         minwidth = 0,
