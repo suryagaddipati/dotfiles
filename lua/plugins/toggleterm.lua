@@ -1,7 +1,6 @@
 return {
   'akinsho/toggleterm.nvim',
   version = '*',
-  cmd = { 'ToggleTerm', 'TermExec' },
   keys = {
     { '<C-\\>', '<cmd>ToggleTerm<cr>', desc = 'Toggle terminal' },
     { '<leader>tt', '<cmd>ToggleTerm<cr>', desc = 'Toggle terminal' },
