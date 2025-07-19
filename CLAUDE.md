@@ -23,7 +23,7 @@ This is a personal dotfiles repository containing configuration files for bash, 
 
 ### Key Technical Details
 - **Tmux prefix**: Ctrl-Space instead of default Ctrl-B (critical for avoiding conflicts)
-- **Neovim leader**: Comma (,) for all custom mappings
+- **Neovim leader**: Space for all custom mappings
 - **Plugin managers**: lazy.nvim (neovim), vim-plug (vim) with auto-installation
 - **Development tools**: NVM (Node.js), SDKMAN (Java), Cargo (Rust), Bun (JavaScript runtime), integrated package managers
 - **Cross-platform support**: Justfile detects and uses appropriate package manager (apt/brew/yum)
@@ -37,6 +37,7 @@ This is a personal dotfiles repository containing configuration files for bash, 
 - `init.lua` - Modern neovim configuration with lua-based plugins and custom mappings
 - `tmux.bash` - Tmux session management wrapper function
 - `justfile` - Automated installation and management system
+- `.claude/` - Claude Code configuration directory with hooks and settings
 
 ## Key Configuration Details
 
@@ -145,21 +146,21 @@ tm session-name [window-name]
 - `Ctrl-Space r` - Reload config
 
 ### Key Neovim Bindings (Leader: ,)
-- `,t` - Toggle nvim-tree
-- `,f` - Find files (Telescope)
-- `,g` - Live grep (Telescope)
-- `,w` - Save file
-- `,q` - Quit
+- `<Space>t` - Toggle nvim-tree
+- `<Space>f` - Find files (Telescope)
+- `<Space>g` - Live grep (Telescope)
+- `<Space>w` - Save file
+- `<Space>q` - Quit
 - `Ctrl+h/j/k/l` - Navigate splits
-- `,ac` - Toggle Claude Code
-- `,af` - Focus Claude Code
-- `,ab` - Add current buffer to Claude
-- `,as` - Send visual selection to Claude
+- `<Space>ac` - Toggle Claude Code
+- `<Space>af` - Focus Claude Code
+- `<Space>ab` - Add current buffer to Claude
+- `<Space>as` - Send visual selection to Claude
 - `Ctrl+\` - Toggle terminal (global hotkey)
-- `,tt` - Toggle terminal
-- `,tf` - Float terminal
-- `,th` - Horizontal terminal
-- `,tv` - Vertical terminal
+- `<Space>tt` - Toggle terminal
+- `<Space>tf` - Float terminal
+- `<Space>th` - Horizontal terminal
+- `<Space>tv` - Vertical terminal
 
 ## Installation
 
@@ -298,70 +299,70 @@ grp pattern ext1 [ext2...]       # Multi-extension grep using git ls-files (e.g.
 ### Neovim Key Bindings (Leader: ,)
 
 #### File Operations
-- `,w` - Save file
-- `,q` - Quit
-- `,x` - Save and quit
-- `,Q` - Force quit without saving
-- `,ev` - Edit init.lua
-- `,sv` - Source/reload init.lua
+- `<Space>w` - Save file
+- `<Space>q` - Quit
+- `<Space>x` - Save and quit
+- `<Space>Q` - Force quit without saving
+- `<Space>ev` - Edit init.lua
+- `<Space>sv` - Source/reload init.lua
 
 #### File Explorer (nvim-tree)
-- `,t` - Toggle nvim-tree
-- `,nf` - Find current file in nvim-tree
+- `<Space>t` - Toggle nvim-tree
+- `<Space>nf` - Find current file in nvim-tree
 - `l` - Open file/expand directory (in nvim-tree)
 - `h` - Close directory (in nvim-tree)
 
 #### File Finding (Telescope)
-- `,f` - Find files in project
-- `,F` - Find git files
-- `,g` - Live grep (search text in files)
-- `,l` - Search current buffer
-- `,h` - Recent files history
-- `,hf` - Command history
-- `,hs` - Search history
-- `,b` - Find buffers
+- `<Space>f` - Find files in project
+- `<Space>F` - Find git files
+- `<Space>g` - Live grep (search text in files)
+- `<Space>l` - Search current buffer
+- `<Space>h` - Recent files history
+- `<Space>hf` - Command history
+- `<Space>hs` - Search history
+- `<Space>b` - Find buffers
 
 #### Navigation
 - `Ctrl+h/j/k/l` - Move between splits
-- `,e` - File explorer (netrw fallback)
+- `<Space>e` - File explorer (netrw fallback)
 - `j/k` - Move by visual lines (not actual lines)
 - `n/N` - Next/previous search result (centered)
 
 #### Window and Split Management
-- `,+/-` - Resize window vertically
-- `,>/<` - Resize window horizontally
+- `<Space>+/-` - Resize window vertically
+- `<Space>>/<` - Resize window horizontally
 
 #### Buffer Management
-- `,b` - List buffers
-- `,bn` - Next buffer
-- `,bp` - Previous buffer
-- `,bd` - Delete buffer (smart - keeps window open)
+- `<Space>b` - List buffers
+- `<Space>bn` - Next buffer
+- `<Space>bp` - Previous buffer
+- `<Space>bd` - Delete buffer (smart - keeps window open)
 - `Tab` - Next buffer
 - `Shift+Tab` - Previous buffer
 
 #### Tab Management
-- `,tn` - New tab
-- `,tc` - Close tab
-- `,to` - Close other tabs
-- `,tm` - Move tab (prompted for position)
+- `<Space>tn` - New tab
+- `<Space>tc` - Close tab
+- `<Space>to` - Close other tabs
+- `<Space>tm` - Move tab (prompted for position)
 
 #### Toggles and Display
-- `,n` - Toggle line numbers
-- `,r` - Toggle relative line numbers
-- `,p` - Toggle paste mode
-- `,/` - Clear search highlighting
+- `<Space>n` - Toggle line numbers
+- `<Space>r` - Toggle relative line numbers
+- `<Space>p` - Toggle paste mode
+- `<Space>/` - Clear search highlighting
 
 #### Editing and Text Manipulation
 - `Space` - Toggle fold
 - `</> (visual mode)` - Indent/unindent and keep selection
-- `,S` - Find and replace word under cursor
-- `,nf` - Create new file in current directory
+- `<Space>S` - Find and replace word under cursor
+- `<Space>nf` - Create new file in current directory
 
 #### Quick Fix and Location List
-- `,co` - Open quickfix list
-- `,cc` - Close quickfix list
-- `,cn` - Next quickfix item
-- `,cp` - Previous quickfix item
+- `<Space>co` - Open quickfix list
+- `<Space>cc` - Close quickfix list
+- `<Space>cn` - Next quickfix item
+- `<Space>cp` - Previous quickfix item
 
 #### Auto-pairs (Insert Mode)
 - `"` - Inserts `""|` (cursor between quotes)
@@ -379,14 +380,14 @@ grp pattern ext1 [ext2...]       # Multi-extension grep using git ls-files (e.g.
 - `<leader>ca` - Code actions
 
 #### Claude Code Integration
-- `,ac` - Toggle Claude Code interface
-- `,af` - Focus Claude Code panel
-- `,ar` - Resume Claude Code session
-- `,aC` - Continue Claude Code conversation
-- `,ab` - Add current buffer to Claude context
-- `,as` - Send visual selection to Claude (visual mode)
-- `,aa` - Accept Claude Code diff
-- `,ad` - Deny Claude Code diff
+- `<Space>ac` - Toggle Claude Code interface
+- `<Space>af` - Focus Claude Code panel
+- `<Space>ar` - Resume Claude Code session
+- `<Space>aC` - Continue Claude Code conversation
+- `<Space>ab` - Add current buffer to Claude context
+- `<Space>as` - Send visual selection to Claude (visual mode)
+- `<Space>aa` - Accept Claude Code diff
+- `<Space>ad` - Deny Claude Code diff
 
 ### Language-Specific Settings
 - **Python**: 4-space indentation, flake8/pylint linting, black/isort formatting
@@ -432,13 +433,20 @@ The repository uses actual dotfiles (.bashrc, .gitconfig, etc.) and init.lua tha
 - **Respect the symlink architecture**: Edit files in the repository, not in home directory (changes reflect immediately)
 - **Use the smart session function**: `t session-name` for tmux management
 - **Leverage the grp function**: `grp pattern ext1 ext2` for efficient code searching across file types (uses git ls-files for performance)
+- **NEVER include Claude Code attribution in commit messages**: Do not add "Generated with Claude Code" or similar attribution to any commits
 
 ### Critical System Details
 - **Tmux prefix**: Ctrl-Space - not Ctrl-B or backtick (this is a key difference from defaults)
-- **Neovim leader**: Comma (,) for all custom mappings
+- **Neovim leader**: Space for all custom mappings
 - **Alt+h/j/k/l**: Navigate tmux panes without prefix (works system-wide)
 - **Alt+1-9**: Switch tmux windows without prefix (instant window switching)
 - **Bash vi mode**: Enabled with `set -o vi` for vim-style command line editing
+
+### Claude Code Configuration
+- **Hooks configuration**: `hooks.json` provides IDE integration for automatic buffer reloading
+- **Permissions**: `settings.local.json` contains allowed bash commands for security
+- **Auto-reload**: PostToolUse hooks automatically reload IDE buffers after file edits
+- **Managed files**: hooks.json and settings.local.json (sensitive files like .credentials.json excluded)
 
 ### Common Workflow Patterns
 1. **Installation**: `just install` (handles backup automatically, safe to run)
@@ -447,7 +455,7 @@ The repository uses actual dotfiles (.bashrc, .gitconfig, etc.) and init.lua tha
 4. **Session management**: Use `t session-name` for intelligent tmux sessions (attaches if exists, creates if not)
 5. **Code searching**: Use `grp pattern js ts py` for multi-extension searches with git ls-files and grep
 6. **Plugin management**: Neovim plugins auto-install on first startup via lazy.nvim bootstrap
-7. **Claude Code integration**: Use `,ac` to toggle Claude Code for AI assistance directly in neovim
+7. **Claude Code integration**: Use `<Space>ac` to toggle Claude Code for AI assistance directly in neovim
 
 ## Current Neovim Configuration Architecture
 
