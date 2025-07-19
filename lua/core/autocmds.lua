@@ -26,19 +26,3 @@ vim.api.nvim_create_autocmd('FileType', {
   end,
 })
 
--- Window focus highlighting (enhanced with focus.nvim)
-vim.api.nvim_create_autocmd('WinEnter', {
-  group = augroup,
-  pattern = '*',
-  callback = function()
-    vim.wo.cursorline = true
-  end,
-})
-
-vim.api.nvim_create_autocmd('WinLeave', {
-  group = augroup,
-  pattern = '*',
-  callback = function()
-    vim.wo.cursorline = false
-  end,
-})

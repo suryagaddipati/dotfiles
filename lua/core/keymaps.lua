@@ -42,3 +42,7 @@ keymap('n', '<leader>m', function()
     print('Not a markdown file')
   end
 end, { desc = 'Preview markdown' })
+
+keymap('n', '<leader>gc', ':ToggleTerm direction=float<CR>git commit<CR>', { desc = 'Git Commit' })
+
+
