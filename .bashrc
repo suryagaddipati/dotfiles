@@ -195,3 +195,4 @@ grp() {
 }
 
 
+eval "$(/home/surya/.local/bin/mise activate bash)"
