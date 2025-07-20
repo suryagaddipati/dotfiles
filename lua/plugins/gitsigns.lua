@@ -6,7 +6,22 @@ return {
     { '<leader>gp', '<cmd>Gitsigns preview_hunk<cr>', desc = 'Preview git hunk' },
     { '<leader>gr', '<cmd>Gitsigns reset_hunk<cr>', desc = 'Reset git hunk' },
     { '<leader>gs', '<cmd>Gitsigns stage_hunk<cr>', desc = 'Stage git hunk' },
-    { '<leader>gS', '<cmd>Gitsigns stage_buffer<cr>', desc = 'Stage entire buffer' },
+    { '<leader>gS', function()
+        local gitsigns = require('gitsigns')
+        local bufnr = vim.api.nvim_get_current_buf()
+        local filepath = vim.api.nvim_buf_get_name(bufnr)
+        
+        -- Check if file is new/untracked
+        vim.fn.system('git ls-files --error-unmatch ' .. vim.fn.shellescape(filepath))
+        if vim.v.shell_error ~= 0 then
+          -- File is untracked, add it first
+          vim.fn.system('git add ' .. vim.fn.shellescape(filepath))
+          print('Added and staged: ' .. vim.fn.fnamemodify(filepath, ':t'))
+        else
+          -- File is tracked, use gitsigns
+          gitsigns.stage_buffer()
+        end
+      end, desc = 'Stage entire buffer (handles new files)' },
     { '<leader>gu', '<cmd>Gitsigns undo_stage_hunk<cr>', desc = 'Undo stage hunk' },
     { '<leader>gR', '<cmd>Gitsigns reset_buffer<cr>', desc = 'Reset entire buffer' },
     { ']c', '<cmd>Gitsigns next_hunk<cr>', desc = 'Next git hunk' },
