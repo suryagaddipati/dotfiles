@@ -11,11 +11,12 @@ backup_dir := home_dir / '.dotfiles_backup'
 nvim_config_dir := home_dir / '.config/nvim'
 vim_dir := home_dir / '.vim'
 alacritty_config_dir := home_dir / '.config/alacritty'
+mise_config_dir := home_dir / '.config/mise'
 claude_config_dir := home_dir / '.claude'
 
 # Files to manage
 dotfiles := '.bashrc .gitconfig .tmux.conf init.lua'
-config_files := '.config/alacritty/alacritty.yml'
+config_files := '.config/alacritty/alacritty.yml .config/mise/config.toml'
 claude_files := '.claude/hooks.json .claude/settings.local.json'
 
 # Colors
@@ -36,6 +37,7 @@ install: backup setup-nvim
     @printf "{{blue}}Installing dotfiles...{{nc}}\n"
     @mkdir -p "{{nvim_config_dir}}"
     @mkdir -p "{{alacritty_config_dir}}"
+    @mkdir -p "{{mise_config_dir}}"
     @mkdir -p "{{claude_config_dir}}"
     @for file in {{dotfiles}}; do \
         if [ -f "{{dotfiles_dir}}/$file" ]; then \
