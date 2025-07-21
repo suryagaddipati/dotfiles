@@ -4,6 +4,8 @@ return {
   keys = {
     { '<leader>gb', '<cmd>Gitsigns blame_line<cr>', desc = 'Git blame line' },
     { '<leader>gp', '<cmd>Gitsigns preview_hunk<cr>', desc = 'Preview git hunk' },
+    { '<leader>gn', '<cmd>Gitsigns nav_hunk next preview=true<cr>', desc = 'Preview next hunk' },
+    { '<leader>gN', '<cmd>Gitsigns nav_hunk prev preview=true<cr>', desc = 'Preview previous hunk' },
     { '<leader>gr', '<cmd>Gitsigns reset_hunk<cr>', desc = 'Reset git hunk' },
     { '<leader>gs', '<cmd>Gitsigns stage_hunk<cr>', desc = 'Stage git hunk' },
     { '<leader>gS', function()
@@ -24,9 +26,6 @@ return {
       end, desc = 'Stage entire buffer (handles new files)' },
     { '<leader>gu', '<cmd>Gitsigns undo_stage_hunk<cr>', desc = 'Undo stage hunk' },
     { '<leader>gR', '<cmd>Gitsigns reset_buffer<cr>', desc = 'Reset entire buffer' },
-    { ']c', '<cmd>Gitsigns next_hunk<cr>', desc = 'Next git hunk' },
-    { '[c', '<cmd>Gitsigns prev_hunk<cr>', desc = 'Previous git hunk' },
-    -- Visual mode mappings
     { '<leader>gs', ':Gitsigns stage_hunk<CR>', mode = 'v', desc = 'Stage selected hunk' },
     { '<leader>gr', ':Gitsigns reset_hunk<CR>', mode = 'v', desc = 'Reset selected hunk' },
   },
