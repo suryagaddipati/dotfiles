@@ -6,7 +6,7 @@ return {
     { '<leader>gp', '<cmd>Gitsigns preview_hunk<cr>', desc = 'Preview git hunk' },
     { '<leader>gn', '<cmd>Gitsigns nav_hunk next preview=true<cr>', desc = 'Preview next hunk' },
     { '<leader>gN', '<cmd>Gitsigns nav_hunk prev preview=true<cr>', desc = 'Preview previous hunk' },
-    { '<leader>gr', '<cmd>Gitsigns reset_hunk<cr>', desc = 'Reset git hunk' },
+    { '<leader>gd', '<cmd>Gitsigns reset_hunk<cr>', desc = 'Reset git hunk' },
     { '<leader>gs', '<cmd>Gitsigns stage_hunk<cr>', desc = 'Stage git hunk' },
     { '<leader>gS', function()
         local gitsigns = require('gitsigns')
