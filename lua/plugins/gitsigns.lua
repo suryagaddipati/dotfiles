@@ -26,7 +26,24 @@ return {
       end, desc = 'Stage entire buffer (handles new files)' },
     { '<leader>gu', '<cmd>Gitsigns undo_stage_hunk<cr>', desc = 'Undo stage hunk' },
     { '<leader>gR', '<cmd>Gitsigns reset_buffer<cr>', desc = 'Reset entire buffer' },
-    { '<leader>gc', '<cmd>!git auto-commit<cr>', desc = 'Auto-commit with AI message' },
+    { '<leader>gc', function()
+        vim.notify('Generating commit message...', vim.log.levels.INFO, { title = 'Git Auto-Commit' })
+        
+        vim.fn.jobstart('./git-auto-commit.sh', {
+          on_exit = function(_, exit_code)
+            if exit_code == 0 then
+              vim.notify('Commit created successfully!', vim.log.levels.INFO, { title = 'Git Auto-Commit' })
+            else
+              vim.notify('Failed to create commit (exit code: ' .. exit_code .. ')', vim.log.levels.ERROR, { title = 'Git Auto-Commit' })
+            end
+          end,
+          on_stderr = function(_, data)
+            if data and #data > 0 and data[1] ~= '' then
+              vim.notify('Error: ' .. table.concat(data, '\n'), vim.log.levels.ERROR, { title = 'Git Auto-Commit' })
+            end
+          end
+        })
+      end, desc = 'Auto-commit with AI message (async)' },
     { '<leader>gs', ':Gitsigns stage_hunk<CR>', mode = 'v', desc = 'Stage selected hunk' },
     { '<leader>gr', ':Gitsigns reset_hunk<CR>', mode = 'v', desc = 'Reset selected hunk' },
   },
