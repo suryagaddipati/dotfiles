@@ -13,6 +13,7 @@ return {
     { '<leader>cr', '<cmd>ClaudeCode --resume<cr>', desc = 'Resume Claude' },
     { '<leader>cC', '<cmd>ClaudeCode --continue<cr>', desc = 'Continue Claude' },
     { '<leader>cb', '<cmd>ClaudeCodeAdd %<cr>', desc = 'Add current buffer' },
+    { '<leader>ch', '<cmd>ClaudeCodeSendHunk <cr>', desc = 'Send current hunk' },
     { '<leader>cs', '<cmd>ClaudeCodeSend<cr>', mode = 'v', desc = 'Send to Claude' },
     {
       '<leader>ct',
