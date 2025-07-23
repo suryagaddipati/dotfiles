@@ -296,73 +296,40 @@ grp pattern ext1 [ext2...]       # Multi-extension grep using git ls-files (e.g.
 - `Ctrl-Space /` - Search in copy mode
 - `F12` - Toggle nested tmux mode (for SSH sessions)
 
-### Neovim Key Bindings (Leader: ,)
+### Neovim Key Bindings (Leader: Space)
 
 #### File Operations
-- `<Space>w` - Save file
-- `<Space>q` - Quit
-- `<Space>x` - Save and quit
-- `<Space>Q` - Force quit without saving
-- `<Space>ev` - Edit init.lua
-- `<Space>sv` - Source/reload init.lua
+- `<leader>w` - Save file
+- `<leader>q` - Quit
+- `<leader>x` - Save and quit
+- `<leader>/` or `<leader>h` - Clear search highlighting
 
 #### File Explorer (nvim-tree)
-- `<Space>t` - Toggle nvim-tree
-- `<Space>nf` - Find current file in nvim-tree
-- `l` - Open file/expand directory (in nvim-tree)
-- `h` - Close directory (in nvim-tree)
+- `<leader>e` - Toggle nvim-tree
 
 #### File Finding (Telescope)
-- `<Space>f` - Find files in project
-- `<Space>F` - Find git files
-- `<Space>g` - Live grep (search text in files)
-- `<Space>l` - Search current buffer
-- `<Space>h` - Recent files history
-- `<Space>hf` - Command history
-- `<Space>hs` - Search history
-- `<Space>b` - Find buffers
+- `<leader>p` - Find files in project
+- `<leader>f` - Live grep (search text in files)
+- `<leader>b` - Find buffers
+- `<leader>hr` - Recent files history
 
 #### Navigation
 - `Ctrl+h/j/k/l` - Move between splits
-- `<Space>e` - File explorer (netrw fallback)
 - `j/k` - Move by visual lines (not actual lines)
 - `n/N` - Next/previous search result (centered)
 
 #### Window and Split Management
-- `<Space>+/-` - Resize window vertically
-- `<Space>>/<` - Resize window horizontally
+- `<leader>+/-` - Resize window vertically
+- `<leader>>/<` - Resize window horizontally
+- `<leader>z` - Toggle maximize split
 
 #### Buffer Management
-- `<Space>b` - List buffers
-- `<Space>bn` - Next buffer
-- `<Space>bp` - Previous buffer
-- `<Space>bd` - Delete buffer (smart - keeps window open)
+- `<leader>bd` - Delete buffer
 - `Tab` - Next buffer
 - `Shift+Tab` - Previous buffer
 
-#### Tab Management
-- `<Space>tn` - New tab
-- `<Space>tc` - Close tab
-- `<Space>to` - Close other tabs
-- `<Space>tm` - Move tab (prompted for position)
-
-#### Toggles and Display
-- `<Space>n` - Toggle line numbers
-- `<Space>r` - Toggle relative line numbers
-- `<Space>p` - Toggle paste mode
-- `<Space>/` - Clear search highlighting
-
 #### Editing and Text Manipulation
-- `Space` - Toggle fold
 - `</> (visual mode)` - Indent/unindent and keep selection
-- `<Space>S` - Find and replace word under cursor
-- `<Space>nf` - Create new file in current directory
-
-#### Quick Fix and Location List
-- `<Space>co` - Open quickfix list
-- `<Space>cc` - Close quickfix list
-- `<Space>cn` - Next quickfix item
-- `<Space>cp` - Previous quickfix item
 
 #### Auto-pairs (Insert Mode)
 - `"` - Inserts `""|` (cursor between quotes)
@@ -376,18 +343,60 @@ grp pattern ext1 [ext2...]       # Multi-extension grep using git ls-files (e.g.
 - `gd` - Go to definition
 - `gr` - Go to references
 - `K` - Hover documentation
-- `<leader>rn` - Rename symbol
-- `<leader>ca` - Code actions
+- `<leader>r` - Rename symbol
+
+#### Git Integration (Gitsigns)
+- `<leader>gb` - Git blame line
+- `<leader>gp` - Preview git hunk
+- `<leader>gn` - Preview next hunk
+- `<leader>gN` - Preview previous hunk
+- `<leader>gd` - Reset git hunk
+- `<leader>gs` - Stage git hunk
+- `<leader>gS` - Stage entire buffer (handles new files)
+- `<leader>gu` - Undo stage hunk
+- `<leader>gR` - Reset entire buffer
+- `<leader>gc` - Auto-commit with AI message (async)
+- `<leader>gs` (visual mode) - Stage selected hunk
+- `<leader>gr` (visual mode) - Reset selected hunk
+
+#### Diffview Integration
+- `<leader>dd` - Toggle diffview
+- `<leader>dh` - File history
+- `<leader>df` - Toggle diffview files
+
+#### Terminal Management (ToggleTerm)
+- `<C-\>` - Toggle terminal (global)
+- `<leader>tt` - Toggle terminal
+- `<leader>tf` - Float terminal
+- `<leader>th` - Horizontal terminal
+- `<leader>tv` - Vertical terminal
+- `<leader>t1` to `<leader>t9` - Access terminal 1-9
+
+Terminal mode keybindings:
+- `<Esc>` or `jk` - Exit terminal mode
+- `<C-h/j/k/l>` - Navigate splits from terminal
+
+#### Comment Toggle
+- `gcc` - Comment/uncomment current line
+- `gc` - Comment selection (visual mode)
+
+#### Markdown Preview
+- `<leader>m` - Preview markdown file (if current file is markdown)
+
+#### Git Commands in Terminal
+- `<leader>gc` - Open floating terminal with git commit
 
 #### Claude Code Integration
-- `<Space>ac` - Toggle Claude Code interface
-- `<Space>af` - Focus Claude Code panel
-- `<Space>ar` - Resume Claude Code session
-- `<Space>aC` - Continue Claude Code conversation
-- `<Space>ab` - Add current buffer to Claude context
-- `<Space>as` - Send visual selection to Claude (visual mode)
-- `<Space>aa` - Accept Claude Code diff
-- `<Space>ad` - Deny Claude Code diff
+- `<leader>cc` - Toggle Claude Code interface
+- `<leader>cf` - Focus Claude Code panel
+- `<leader>cr` - Resume Claude Code session
+- `<leader>cC` - Continue Claude Code conversation
+- `<leader>cb` - Add current buffer to Claude context
+- `<leader>ch` - Send current hunk to Claude
+- `<leader>cs` - Send visual selection to Claude (visual mode)
+- `<leader>ct` - Add file to Claude (in nvim-tree)
+- `<leader>ca` - Accept Claude Code diff
+- `<leader>cd` - Deny Claude Code diff
 
 ### Language-Specific Settings
 - **Python**: 4-space indentation, flake8/pylint linting, black/isort formatting
@@ -455,7 +464,7 @@ The repository uses actual dotfiles (.bashrc, .gitconfig, etc.) and init.lua tha
 4. **Session management**: Use `t session-name` for intelligent tmux sessions (attaches if exists, creates if not)
 5. **Code searching**: Use `grp pattern js ts py` for multi-extension searches with git ls-files and grep
 6. **Plugin management**: Neovim plugins auto-install on first startup via lazy.nvim bootstrap
-7. **Claude Code integration**: Use `<Space>ac` to toggle Claude Code for AI assistance directly in neovim
+7. **Claude Code integration**: Use `<leader>cc` to toggle Claude Code for AI assistance directly in neovim
 
 ## Current Neovim Configuration Architecture
 
@@ -482,7 +491,7 @@ The current neovim configuration (`init.lua`) is a **"Ninja Config"** - optimize
 - **ToggleTerm**: Terminal toggle with multiple layouts
 
 ### Key Bindings Philosophy
-- **Leader key**: Comma (,) for accessibility
+- **Leader key**: Space for accessibility and ergonomics
 - **Muscle memory**: Consistent vim-style navigation
 - **Instant access**: Critical functions on single keystrokes
 - **Visual mode**: Preserve selection for repeated operations
@@ -773,13 +782,13 @@ Alt+3          # Infrastructure window
 #### Example 1: Code-Test-Debug Cycle
 ```bash
 # Working in neovim on main.py
-,w             # Save file (neovim)
+<leader>w      # Save file (neovim)
 Alt+l          # Move to terminal pane (tmux)
 pytest tests/  # Run tests
 Alt+j          # Move to log pane (tmux)
 tail -f app.log # Watch logs
 Alt+h          # Back to neovim (tmux)
-,f             # Find failing test file (neovim telescope)
+<leader>p      # Find failing test file (neovim telescope)
 gd             # Go to definition (neovim LSP)
 # Fix bug, repeat cycle instantly
 ```
@@ -787,10 +796,10 @@ gd             # Go to definition (neovim LSP)
 #### Example 2: Git Workflow Integration
 ```bash
 # Editing multiple files in neovim
-,f             # Find files (telescope)
-,g TODO        # Search for TODOs across project
+<leader>p      # Find files (telescope)
+<leader>f TODO # Search for TODOs across project (live grep)
 Tab            # Next buffer (neovim)
-,w             # Save current file
+<leader>w      # Save current file
 Alt+l          # Switch to terminal pane
 g s            # Git status (bash alias)
 g add .        # Stage changes  
@@ -844,8 +853,9 @@ Result:           Zero startup time, persistent state
 #### The File Management Flow
 ```bash
 # Multiple ways to navigate files, choose by context:
-,f             # Quick file find (telescope) - when you know the name
-,t             # File tree (nvim-tree) - when browsing structure
+<leader>p      # Find files (telescope) - when you know the name
+<leader>f      # Live grep (telescope) - when searching content
+<leader>e      # File tree (nvim-tree) - when browsing structure
 Alt+2          # Dedicated file manager window (ranger) - for operations
 ```
 
