@@ -29,7 +29,7 @@ return {
     { '<leader>gc', function()
         vim.notify('Generating commit message...', vim.log.levels.INFO, { title = 'Git Auto-Commit' })
         
-        vim.fn.jobstart('./git-auto-commit.sh', {
+        vim.fn.jobstart('git auto-commit', {
           on_exit = function(_, exit_code)
             if exit_code == 0 then
               vim.notify('Commit created successfully!', vim.log.levels.INFO, { title = 'Git Auto-Commit' })
