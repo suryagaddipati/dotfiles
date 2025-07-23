@@ -18,6 +18,7 @@ claude_config_dir := home_dir / '.claude'
 dotfiles := '.bashrc .gitconfig .tmux.conf init.lua'
 config_files := '.config/alacritty/alacritty.yml .config/mise/config.toml'
 claude_files := '.claude/hooks.json .claude/settings.local.json'
+git_commands := 'git-auto-commit.sh'
 
 # Colors
 red := '\033[0;31m'
@@ -39,6 +40,7 @@ install: backup setup-nvim
     @mkdir -p "{{alacritty_config_dir}}"
     @mkdir -p "{{mise_config_dir}}"
     @mkdir -p "{{claude_config_dir}}"
+    @mkdir -p "{{home_dir}}/.local/bin"
     @for file in {{dotfiles}}; do \
         if [ -f "{{dotfiles_dir}}/$file" ]; then \
             if [ "$file" = "init.lua" ]; then \
@@ -64,6 +66,16 @@ install: backup setup-nvim
         if [ -f "{{dotfiles_dir}}/$file" ]; then \
             printf "{{green}}Linking $file{{nc}}\n"; \
             ln -sf "{{dotfiles_dir}}/$file" "{{home_dir}}/$file"; \
+        else \
+            printf "{{yellow}}Warning: $file not found{{nc}}\n"; \
+        fi \
+    done
+    @for file in {{git_commands}}; do \
+        if [ -f "{{dotfiles_dir}}/$file" ]; then \
+            target_name=$(echo "$file" | sed 's/\.sh$//'); \
+            printf "{{green}}Installing git command: $target_name{{nc}}\n"; \
+            ln -sf "{{dotfiles_dir}}/$file" "{{home_dir}}/.local/bin/$target_name"; \
+            chmod +x "{{home_dir}}/.local/bin/$target_name"; \
         else \
             printf "{{yellow}}Warning: $file not found{{nc}}\n"; \
         fi \
@@ -199,6 +211,14 @@ uninstall:
             rm "$target_file"; \
         fi \
     done
+    @for file in {{git_commands}}; do \
+        target_name=$(echo "$file" | sed 's/\.sh$//'); \
+        target_file="{{home_dir}}/.local/bin/$target_name"; \
+        if [ -L "$target_file" ]; then \
+            printf "{{yellow}}Removing git command: $target_name{{nc}}\n"; \
+            rm "$target_file"; \
+        fi \
+    done
     @printf "{{green}}Dotfiles uninstalled{{nc}}\n"
     @printf "{{yellow}}Backups preserved in {{backup_dir}}{{nc}}\n"
 
@@ -256,6 +276,24 @@ status:
             printf "  {{red}}✗{{nc}} $file (regular file, not symlinked)\n"; \
         else \
             printf "  {{red}}✗{{nc}} $file (not found)\n"; \
+        fi; \
+    done
+    @printf "\n"
+    @printf "{{yellow}}Git Commands:{{nc}}\n"
+    @for file in {{git_commands}}; do \
+        target_name=$(echo "$file" | sed 's/\.sh$//'); \
+        target_file="{{home_dir}}/.local/bin/$target_name"; \
+        if [ -L "$target_file" ]; then \
+            link_target=$(readlink "$target_file"); \
+            if [ "$link_target" = "{{dotfiles_dir}}/$file" ]; then \
+                printf "  {{green}}✓{{nc}} $target_name → {{dotfiles_dir}}/$file\n"; \
+            else \
+                printf "  {{yellow}}⚠{{nc}} $target_name → $link_target (wrong target)\n"; \
+            fi; \
+        elif [ -f "$target_file" ]; then \
+            printf "  {{red}}✗{{nc}} $target_name (regular file, not symlinked)\n"; \
+        else \
+            printf "  {{red}}✗{{nc}} $target_name (not found)\n"; \
         fi; \
     done
     @printf "\n"
