@@ -44,6 +44,24 @@ return {
           end
         })
       end, desc = 'Auto-commit with AI message (async)' },
+    { '<leader>gC', function()
+        vim.notify('Running Claude commit with preview...', vim.log.levels.INFO, { title = 'Claude Commit' })
+        
+        vim.fn.jobstart(vim.fn.expand('~/.claude/local/claude') .. ' commit -p', {
+          on_exit = function(_, exit_code)
+            if exit_code == 0 then
+              vim.notify('Claude commit completed successfully!', vim.log.levels.INFO, { title = 'Claude Commit' })
+            else
+              vim.notify('Claude commit failed (exit code: ' .. exit_code .. ')', vim.log.levels.ERROR, { title = 'Claude Commit' })
+            end
+          end,
+          on_stderr = function(_, data)
+            if data and #data > 0 and data[1] ~= '' then
+              vim.notify('Error: ' .. table.concat(data, '\n'), vim.log.levels.ERROR, { title = 'Claude Commit' })
+            end
+          end
+        })
+      end, desc = 'Claude commit with preview (async)' },
     { '<leader>gs', ':Gitsigns stage_hunk<CR>', mode = 'v', desc = 'Stage selected hunk' },
     { '<leader>gr', ':Gitsigns reset_hunk<CR>', mode = 'v', desc = 'Reset selected hunk' },
   },
