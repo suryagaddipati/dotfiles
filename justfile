@@ -33,8 +33,35 @@ default:
     @printf "\n"
     @just --list --unsorted
 
+# Check if all prerequisites are installed
+check-prereqs:
+    @printf "{{blue}}Checking prerequisites...{{nc}}\n"
+    @printf "=========================\n"
+    @missing=0; \
+    for cmd in git tmux nvim curl rg xclip; do \
+        if command -v "$cmd" > /dev/null 2>&1; then \
+            printf "{{green}}✓{{nc}} $cmd found\n"; \
+        else \
+            printf "{{red}}✗{{nc}} $cmd not found\n"; \
+            missing=1; \
+        fi; \
+    done; \
+    if command -v gcc > /dev/null 2>&1 || command -v clang > /dev/null 2>&1; then \
+        printf "{{green}}✓{{nc}} build tools found\n"; \
+    else \
+        printf "{{red}}✗{{nc}} build tools (gcc/clang) not found\n"; \
+        missing=1; \
+    fi; \
+    if [ "$missing" -eq 1 ]; then \
+        printf "\n{{yellow}}Missing prerequisites detected.{{nc}}\n"; \
+        printf "{{yellow}}Run 'just install-deps' to install missing tools.{{nc}}\n"; \
+        exit 1; \
+    else \
+        printf "\n{{green}}All prerequisites satisfied!{{nc}}\n"; \
+    fi
+
 # Install all dotfiles (with backup)
-install: backup setup-nvim
+install: check-prereqs backup setup-nvim
     @printf "{{blue}}Installing dotfiles...{{nc}}\n"
     @mkdir -p "{{nvim_config_dir}}"
     @mkdir -p "{{alacritty_config_dir}}"

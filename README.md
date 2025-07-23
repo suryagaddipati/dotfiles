@@ -1,6 +1,6 @@
-# Dotfiles Philosophy
+# Dotfiles
 
-Optimized configuration for bash, git, tmux, and neovim based on systematic design principles.
+Optimized configuration for bash, git, tmux, and neovim with vim-style navigation and productivity shortcuts.
 
 ## Quick Setup
 
@@ -9,72 +9,6 @@ git clone https://github.com/yourusername/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 just full-install    # Complete setup with dependencies
 ```
-
-## Shortcut Philosophy
-
-Instead of memorizing individual shortcuts, understand the underlying system:
-
-### **Spatial Logic**
-Everything uses **vim-style directional movement**:
-- `h` = left
-- `j` = down  
-- `k` = up
-- `l` = right
-
-This works the same in tmux panes, neovim splits, and bash vi-mode.
-
-### **Immediacy Principle**
-More frequent actions = fewer keystrokes:
-```
-Alt+key         # Instant (no prefix) - most frequent
-Ctrl+key        # Common operations  
-,key            # Editor actions (leader comma)
-Prefix+key      # Complex operations (Ctrl-Space in tmux)
-```
-
-### **Four Mental Models**
-
-#### **1. Navigate** (Move between contexts)
-```
-Alt+h/j/k/l     # Tmux panes (instant)
-Ctrl+h/j/k/l    # Neovim splits
-Alt+1-9         # Tmux windows (instant)
-Tab/Shift+Tab   # Neovim buffers
-```
-
-#### **2. Manipulate** (Create/change/destroy)
-```
-# Split contexts:
-Ctrl-Space s/v  # Tmux split horizontal/vertical
-# Manage contexts:
-Ctrl-Space x    # Kill tmux pane
-,bd             # Delete neovim buffer
-```
-
-#### **3. Find** (Search and discover)
-```
-,f              # Find files
-,g              # Grep text
-,b              # Find buffers
-,h              # Recent files
-grp pattern ext # Multi-extension search (bash)
-```
-
-#### **4. Execute** (Run actions)
-```
-,w              # Save
-,q              # Quit
-t session       # Smart tmux session
-g status        # Git status
-```
-
-### **Pattern Recognition**
-
-Once you understand the patterns, you can predict shortcuts:
-- **Alt+** = "I want this NOW" (no prefix needed)
-- **h/j/k/l** = "directional movement" (works everywhere)  
-- **,** = "editor action" (only in neovim)
-- **Ctrl-Space** = "complex tmux operation"
 
 ## Essential Commands
 
@@ -85,37 +19,163 @@ just backup         # Backup existing configs
 just update         # Update from git
 ```
 
-## Core Tools Integration
+## Core Shortcuts
 
-### **Terminal (Bash)**
+### Navigation (Works Everywhere)
 ```bash
-g                   # git
-t [session]         # smart tmux session
-ll                  # detailed listing
-grp pattern ext     # multi-extension search
+Alt+h/j/k/l         # Navigate tmux panes (instant)
+Ctrl+h/j/k/l        # Navigate neovim splits
+Alt+1-9             # Switch tmux windows (instant)
+Tab/Shift+Tab       # Cycle neovim buffers
 ```
 
-### **Session Manager (Tmux)**
+### Terminal (Bash)
 ```bash
-# Prefix: Ctrl-Space
-# Navigate: Alt+h/j/k/l (instant)
-# Windows: Alt+1-9 (instant)
-# Sessions: Alt+s (instant)
+g                   # git alias
+t [session]         # smart tmux session manager
+ll                  # detailed file listing
+grp pattern ext     # multi-extension search (e.g., grp TODO js py)
 ```
 
-### **Editor (Neovim)**
+### Tmux (Prefix: Ctrl-Space)
 ```bash
-# Leader: ,
-# Navigate: Ctrl+h/j/k/l
-# Buffers: Tab/Shift+Tab
-# Files: ,f ,g ,b ,h ,t
-# Actions: ,w ,q ,ac
+# Panes
+Ctrl-Space s        # Split horizontal
+Ctrl-Space v        # Split vertical
+Ctrl-Space x        # Kill pane
+Alt+h/j/k/l         # Navigate panes (no prefix)
+
+# Windows  
+Alt+1-9             # Switch to window 1-9 (no prefix)
+Ctrl-Space c        # New window
+Ctrl-Space ,        # Rename window
+
+# Sessions
+Alt+s               # Choose session (no prefix)
+Ctrl-Space S        # New session
 ```
 
-## Requirements
+## Neovim Shortcuts (Leader: Space)
 
-```bash
-sudo apt install git tmux neovim curl fzf ripgrep xclip
+### File Operations
+```vim
+<Space>w            " Save file
+<Space>q            " Quit
+<Space>x            " Save and quit
+<Space>Q            " Force quit without saving
 ```
 
-For implementation details see [CLAUDE.md](CLAUDE.md).
+### File Management
+```vim
+<Space>f            " Find files in project
+<Space>F            " Find git files
+<Space>g            " Live grep (search text in files)
+<Space>b            " Find buffers
+<Space>h            " Recent files history
+<Space>t            " Toggle file tree
+<Space>nf           " Find current file in tree
+```
+
+### Navigation & Movement
+```vim
+Ctrl+h/j/k/l        " Move between splits
+j/k                 " Move by visual lines
+n/N                 " Next/previous search result (centered)
+gd                  " Go to definition (LSP)
+gr                  " Go to references (LSP) 
+K                   " Hover documentation (LSP)
+```
+
+### Buffer Management
+```vim
+Tab                 " Next buffer
+Shift+Tab           " Previous buffer
+<Space>bd           " Delete buffer (smart)
+<Space>bn           " Next buffer
+<Space>bp           " Previous buffer
+```
+
+### Tab Management
+```vim
+<Space>tn           " New tab
+<Space>tc           " Close tab
+<Space>to           " Close other tabs
+<Space>tm           " Move tab
+```
+
+### Window Management
+```vim
+<Space>+/-          " Resize window vertically
+<Space>>/<          " Resize window horizontally
+```
+
+### Editing & Text
+```vim
+<Space>S            " Find and replace word under cursor
+<Space>/            " Clear search highlighting
+<Space>n            " Toggle line numbers
+<Space>r            " Toggle relative line numbers
+Space               " Toggle fold
+< >                 " Indent/unindent (visual mode, keeps selection)
+```
+
+### Auto-pairs (Insert Mode)
+```vim
+"                   " Inserts ""| (cursor between)
+'                   " Inserts ''|
+(                   " Inserts ()|
+[                   " Inserts []|
+{                   " Inserts {}|
+{<CR>               " Inserts block with proper indentation
+```
+
+### Claude Code Integration
+```vim
+<Space>ac           " Toggle Claude Code interface
+<Space>af           " Focus Claude Code panel
+<Space>ar           " Resume Claude Code session
+<Space>aC           " Continue Claude Code conversation
+<Space>ab           " Add current buffer to Claude context
+<Space>as           " Send visual selection to Claude (visual mode)
+<Space>aa           " Accept Claude Code diff
+<Space>ad           " Deny Claude Code diff
+```
+
+### Terminal Integration
+```vim
+Ctrl+\              " Toggle terminal (global)
+<Space>tt           " Toggle terminal
+<Space>tf           " Float terminal
+<Space>th           " Horizontal terminal
+<Space>tv           " Vertical terminal
+```
+
+### Quick Fix & Lists
+```vim
+<Space>co           " Open quickfix list
+<Space>cc           " Close quickfix list
+<Space>cn           " Next quickfix item
+<Space>cp           " Previous quickfix item
+```
+
+### LSP Features
+```vim
+gd                  " Go to definition
+gr                  " Go to references
+K                   " Hover documentation
+<Space>rn           " Rename symbol
+<Space>ca           " Code actions
+```
+
+## Prerequisites
+
+- **git** - Version control and repository management
+- **tmux** - Terminal multiplexer for session management
+- **neovim** - Text editor (>= 0.9 required)
+- **curl** - Download tools and scripts
+- **build-essential** - Compilation tools
+- **ripgrep** - Fast text search
+- **xclip** - Clipboard integration
+- **just** - Task runner for automated setup
+
+For detailed configuration see [CLAUDE.md](CLAUDE.md).
