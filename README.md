@@ -59,21 +59,19 @@ Ctrl-Space S        # New session
 
 ### File Operations
 ```vim
-<Space>w            " Save file
-<Space>q            " Quit
-<Space>x            " Save and quit
-<Space>Q            " Force quit without saving
+<leader>w           " Save file
+<leader>q           " Quit
+<leader>x           " Save and quit
+<leader>/           " Clear search highlighting
 ```
 
 ### File Management
 ```vim
-<Space>f            " Find files in project
-<Space>F            " Find git files
-<Space>g            " Live grep (search text in files)
-<Space>b            " Find buffers
-<Space>h            " Recent files history
-<Space>t            " Toggle file tree
-<Space>nf           " Find current file in tree
+<leader>p           " Find files in project
+<leader>f           " Live grep (search text in files)
+<leader>b           " Find buffers
+<leader>hr          " Recent files history
+<leader>e           " Toggle file tree
 ```
 
 ### Navigation & Movement
@@ -90,33 +88,21 @@ K                   " Hover documentation (LSP)
 ```vim
 Tab                 " Next buffer
 Shift+Tab           " Previous buffer
-<Space>bd           " Delete buffer (smart)
-<Space>bn           " Next buffer
-<Space>bp           " Previous buffer
-```
-
-### Tab Management
-```vim
-<Space>tn           " New tab
-<Space>tc           " Close tab
-<Space>to           " Close other tabs
-<Space>tm           " Move tab
+<leader>bd          " Delete buffer (smart)
 ```
 
 ### Window Management
 ```vim
-<Space>+/-          " Resize window vertically
-<Space>>/<          " Resize window horizontally
+<leader>+/-         " Resize window vertically
+<leader>>/<         " Resize window horizontally
+<leader>z           " Toggle maximize split
 ```
 
 ### Editing & Text
 ```vim
-<Space>S            " Find and replace word under cursor
-<Space>/            " Clear search highlighting
-<Space>n            " Toggle line numbers
-<Space>r            " Toggle relative line numbers
-Space               " Toggle fold
 < >                 " Indent/unindent (visual mode, keeps selection)
+gcc                 " Comment/uncomment current line
+gc                  " Comment selection (visual mode)
 ```
 
 ### Auto-pairs (Insert Mode)
@@ -129,33 +115,49 @@ Space               " Toggle fold
 {<CR>               " Inserts block with proper indentation
 ```
 
+### Git Integration (Gitsigns)
+```vim
+<leader>gb          " Git blame line
+<leader>gp          " Preview git hunk
+<leader>gn          " Preview next hunk
+<leader>gN          " Preview previous hunk
+<leader>gs          " Stage git hunk
+<leader>gS          " Stage entire buffer
+<leader>gu          " Undo stage hunk
+<leader>gd          " Reset git hunk
+<leader>gR          " Reset entire buffer
+<leader>gc          " Auto-commit with AI message
+<leader>gC          " Claude commit with preview
+```
+
+### Diffview Integration
+```vim
+<leader>dd          " Toggle diffview
+<leader>dh          " File history
+<leader>df          " Toggle diffview files
+```
+
 ### Claude Code Integration
 ```vim
-<Space>ac           " Toggle Claude Code interface
-<Space>af           " Focus Claude Code panel
-<Space>ar           " Resume Claude Code session
-<Space>aC           " Continue Claude Code conversation
-<Space>ab           " Add current buffer to Claude context
-<Space>as           " Send visual selection to Claude (visual mode)
-<Space>aa           " Accept Claude Code diff
-<Space>ad           " Deny Claude Code diff
+<leader>cc          " Toggle Claude Code interface
+<leader>cf          " Focus Claude Code panel
+<leader>cr          " Resume Claude Code session
+<leader>cC          " Continue Claude Code conversation
+<leader>cb          " Add current buffer to Claude context
+<leader>cs          " Send visual selection to Claude (visual mode)
+<leader>ca          " Accept Claude Code diff
+<leader>cd          " Deny Claude Code diff
 ```
 
 ### Terminal Integration
 ```vim
 Ctrl+\              " Toggle terminal (global)
-<Space>tt           " Toggle terminal
-<Space>tf           " Float terminal
-<Space>th           " Horizontal terminal
-<Space>tv           " Vertical terminal
-```
-
-### Quick Fix & Lists
-```vim
-<Space>co           " Open quickfix list
-<Space>cc           " Close quickfix list
-<Space>cn           " Next quickfix item
-<Space>cp           " Previous quickfix item
+<leader>tt          " Toggle terminal
+<leader>tf          " Float terminal
+<leader>th          " Horizontal terminal
+<leader>tv          " Vertical terminal
+<leader>t1-t9       " Access terminal 1-9
+<Esc> or jk         " Exit terminal mode
 ```
 
 ### LSP Features
@@ -163,8 +165,7 @@ Ctrl+\              " Toggle terminal (global)
 gd                  " Go to definition
 gr                  " Go to references
 K                   " Hover documentation
-<Space>rn           " Rename symbol
-<Space>ca           " Code actions
+<leader>r           " Rename symbol
 ```
 
 ## Prerequisites

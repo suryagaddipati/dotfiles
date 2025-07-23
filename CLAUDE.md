@@ -356,6 +356,7 @@ grp pattern ext1 [ext2...]       # Multi-extension grep using git ls-files (e.g.
 - `<leader>gu` - Undo stage hunk
 - `<leader>gR` - Reset entire buffer
 - `<leader>gc` - Auto-commit with AI message (async)
+- `<leader>gC` - Claude commit with preview (async)
 - `<leader>gs` (visual mode) - Stage selected hunk
 - `<leader>gr` (visual mode) - Reset selected hunk
 
