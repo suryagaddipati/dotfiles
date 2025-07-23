@@ -26,6 +26,7 @@ return {
       end, desc = 'Stage entire buffer (handles new files)' },
     { '<leader>gu', '<cmd>Gitsigns undo_stage_hunk<cr>', desc = 'Undo stage hunk' },
     { '<leader>gR', '<cmd>Gitsigns reset_buffer<cr>', desc = 'Reset entire buffer' },
+    { '<leader>gc', '<cmd>!git auto-commit<cr>', desc = 'Auto-commit with AI message' },
     { '<leader>gs', ':Gitsigns stage_hunk<CR>', mode = 'v', desc = 'Stage selected hunk' },
     { '<leader>gr', ':Gitsigns reset_hunk<CR>', mode = 'v', desc = 'Reset selected hunk' },
   },
