@@ -25,7 +25,7 @@ This is a personal dotfiles repository containing configuration files for bash, 
 - **Tmux prefix**: Ctrl-Space instead of default Ctrl-B (critical for avoiding conflicts)
 - **Neovim leader**: Space for all custom mappings
 - **Plugin managers**: lazy.nvim (neovim), vim-plug (vim) with auto-installation
-- **Development tools**: NVM (Node.js), SDKMAN (Java), Cargo (Rust), Bun (JavaScript runtime), integrated package managers
+- **Development tools**: mise (unified tool manager for Node.js, Python, Go, Rust, etc.), replacing NVM/SDKMAN/etc.
 - **Cross-platform support**: Justfile detects and uses appropriate package manager (apt/brew/yum)
 - **Claude Code integration**: Official Coder plugin integrated with neovim for AI assistance
 
@@ -44,13 +44,12 @@ This is a personal dotfiles repository containing configuration files for bash, 
 ### Bash Configuration
 - Uses `g` alias for git commands
 - `t` alias maps to `tmux_smart_session` function for intelligent tmux session management
-- NVM and SDKMAN integration for Node.js and Java development
+- mise integration for unified tool version management (Node.js, Python, Go, Rust, etc.)
 - Custom `tmux_smart_session()` function for automated session attachment/creation
 - `grp()` function for multi-extension grep searches using git ls-files (e.g., `grp TODO js ts py`)
 - Vi mode enabled for bash command line editing (`set -o vi`)
 - Claude CLI integration via PATH (`~/.local/bin/claude` symlink)
-- Cargo/Rust environment setup
-- Bun JavaScript runtime integration
+- mise tool version management for all development languages
 - Extended PATH with `~/.local/bin` for user-installed tools (including `just`)
 
 ### Git Configuration
@@ -81,6 +80,64 @@ This is a personal dotfiles repository containing configuration files for bash, 
 - Performance-optimized with minimal plugin set
 - Comprehensive key mappings for productivity
 
+## mise Configuration
+
+### What is mise?
+mise is a unified tool version manager that replaces multiple version managers like NVM (Node.js), SDKMAN (Java), rbenv (Ruby), pyenv (Python), etc. It provides a single interface to manage all your development tool versions.
+
+### Configuration File
+The mise configuration is stored in `.config/mise/config.toml`:
+```toml
+[tools]
+# Development languages
+node = "20"
+python = "3.11"
+go = "1.21"
+rust = "1.75"
+
+# Core development tools (cross-platform)
+neovim = "latest"
+tmux = "latest"
+
+# CLI utilities
+ripgrep = "latest"
+fzf = "latest"
+```
+
+### Common mise Commands
+```bash
+# Install all tools from config.toml
+mise install
+
+# Install a specific tool
+mise install node@20
+
+# List available versions
+mise list-remote node
+
+# Show current versions
+mise current
+
+# Update all tools to latest versions
+mise upgrade
+
+# Switch to different version temporarily
+mise shell node@18
+
+# Set global version
+mise global node@20
+```
+
+### Available Tools
+mise supports hundreds of tools including:
+- **Languages**: node, python, go, rust, java, ruby, php, etc.
+- **Databases**: postgres, mysql, redis, etc.  
+- **Build tools**: gradle, maven, cmake, etc.
+- **Cloud tools**: terraform, kubectl, aws-cli, etc.
+
+### Integration with Shell
+mise automatically activates the correct tool versions when you enter a project directory, similar to how conda environments work but for all development tools.
+
 ## Essential Commands for Development
 
 ### Installation and Management (using justfile)
@@ -91,8 +148,10 @@ just full-install      # Complete setup: dependencies + dotfiles + dev tools
 just quick-install     # Same as 'just install' (backup + install)
 
 # Dependency management
-just install-deps      # Install system dependencies (git, tmux, neovim, etc.)
-just install-dev       # Install development tools (NVM, SDKMAN)
+just install-deps      # Install minimal system deps + mise + all tools (cross-platform)
+just install-mise      # Install mise tool manager specifically
+just install-mise-tools # Install neovim, tmux, CLI tools via mise (cross-platform)
+just install-dev       # Install development languages using mise
 
 # Status and maintenance
 just status            # Show detailed installation status and health check
@@ -166,14 +225,14 @@ tm session-name [window-name]
 
 ### Prerequisites
 ```bash
-# Essential tools
-sudo apt update && sudo apt install -y git tmux neovim curl build-essential
+# Only minimal system dependencies needed (cross-platform)
+# Linux (apt)
+sudo apt update && sudo apt install -y git curl build-essential xclip
 
-# For neovim fuzzy finding and features
-sudo apt install -y fzf ripgrep xclip
+# macOS (brew)
+brew install git curl
 
-# For better terminal experience
-sudo apt install -y xclip  # clipboard integration
+# Everything else (neovim, tmux, fzf, ripgrep) installed via mise
 ```
 
 ### Setup Instructions
