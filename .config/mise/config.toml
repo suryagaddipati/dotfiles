@@ -1,2 +1,14 @@
 [tools]
+# Development languages
 node = "20"
+python = "3.11"
+go = "1.21"
+rust = "1.75"
+
+# Core development tools
+neovim = "latest"
+tmux = "latest"
+
+# CLI utilities
+ripgrep = "latest"
+fzf = "latest"

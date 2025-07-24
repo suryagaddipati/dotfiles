@@ -38,12 +38,19 @@ check-prereqs:
     @printf "{{blue}}Checking prerequisites...{{nc}}\n"
     @printf "=========================\n"
     @missing=0; \
-    for cmd in git tmux nvim curl rg xclip; do \
+    for cmd in git curl; do \
         if command -v "$cmd" > /dev/null 2>&1; then \
             printf "{{green}}✓{{nc}} $cmd found\n"; \
         else \
             printf "{{red}}✗{{nc}} $cmd not found\n"; \
             missing=1; \
+        fi; \
+    done; \
+    for cmd in mise tmux nvim rg fzf; do \
+        if command -v "$cmd" > /dev/null 2>&1; then \
+            printf "{{green}}✓{{nc}} $cmd found\n"; \
+        else \
+            printf "{{yellow}}!{{nc}} $cmd not found (will be installed via mise)\n"; \
         fi; \
     done; \
     if command -v gcc > /dev/null 2>&1 || command -v clang > /dev/null 2>&1; then \
@@ -61,7 +68,7 @@ check-prereqs:
     fi
 
 # Install all dotfiles (with backup)
-install: check-prereqs backup setup-nvim
+install: backup setup-nvim
     @printf "{{blue}}Installing dotfiles...{{nc}}\n"
     @mkdir -p "{{nvim_config_dir}}"
     @mkdir -p "{{alacritty_config_dir}}"
@@ -180,36 +187,58 @@ install-deps:
     @printf "{{blue}}Installing system dependencies...{{nc}}\n"
     @if command -v apt > /dev/null; then \
         printf "{{yellow}}Using apt package manager...{{nc}}\n"; \
-        sudo apt update && sudo apt install -y git tmux neovim curl build-essential fzf ripgrep xclip; \
+        sudo apt update && sudo apt install -y git curl build-essential xclip; \
     elif command -v brew > /dev/null; then \
         printf "{{yellow}}Using homebrew package manager...{{nc}}\n"; \
-        brew install git tmux neovim curl fzf ripgrep; \
+        brew install git curl; \
     elif command -v yum > /dev/null; then \
         printf "{{yellow}}Using yum package manager...{{nc}}\n"; \
-        sudo yum install -y git tmux neovim curl fzf ripgrep xclip; \
+        sudo yum install -y git curl xclip; \
     else \
         printf "{{red}}No supported package manager found. Please install dependencies manually:{{nc}}\n"; \
-        printf "  git tmux neovim curl build-essential fzf ripgrep xclip\n"; \
+        printf "  git curl build-essential xclip\n"; \
         exit 1; \
     fi
+    @just install-mise
+    @just install-mise-tools
     @printf "{{green}}Dependencies installed!{{nc}}\n"
 
-# Install development tools (NVM, SDKMAN)
+# Install mise (replaces NVM, SDKMAN, etc.)
+install-mise:
+    @printf "{{blue}}Installing mise...{{nc}}\n"
+    @if command -v mise > /dev/null 2>&1; then \
+        printf "{{green}}mise already installed{{nc}}\n"; \
+    else \
+        printf "{{yellow}}Installing mise...{{nc}}\n"; \
+        curl https://mise.run | sh; \
+        printf "{{yellow}}Adding mise to PATH...{{nc}}\n"; \
+        echo 'export PATH="$$HOME/.local/bin:$$PATH"' >> ~/.bashrc; \
+        export PATH="$$HOME/.local/bin:$$PATH"; \
+    fi
+
+# Install tools via mise (cross-platform)
+install-mise-tools:
+    @printf "{{blue}}Installing tools via mise...{{nc}}\n"
+    @if command -v mise > /dev/null 2>&1; then \
+        printf "{{yellow}}Installing neovim, tmux, and CLI utilities...{{nc}}\n"; \
+        mise install; \
+        printf "{{green}}Tools installed via mise!{{nc}}\n"; \
+    else \
+        printf "{{red}}mise not found. Run 'just install-mise' first.{{nc}}\n"; \
+        exit 1; \
+    fi
+
+# Install development tools using mise
 install-dev: install-deps
-    @printf "{{blue}}Installing development tools...{{nc}}\n"
-    @if [ ! -d "{{home_dir}}/.nvm" ]; then \
-        printf "{{yellow}}Installing NVM...{{nc}}\n"; \
-        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash; \
+    @printf "{{blue}}Installing development tools with mise...{{nc}}\n"
+    @if command -v mise > /dev/null 2>&1; then \
+        printf "{{yellow}}Installing tools from mise config...{{nc}}\n"; \
+        mise install; \
+        printf "{{green}}Development tools installed via mise!{{nc}}\n"; \
     else \
-        printf "{{green}}NVM already installed{{nc}}\n"; \
+        printf "{{red}}mise not found. Run 'just install-mise' first.{{nc}}\n"; \
+        exit 1; \
     fi
-    @if [ ! -d "{{home_dir}}/.sdkman" ]; then \
-        printf "{{yellow}}Installing SDKMAN...{{nc}}\n"; \
-        curl -s "https://get.sdkman.io" | bash; \
-    else \
-        printf "{{green}}SDKMAN already installed{{nc}}\n"; \
-    fi
-    @printf "{{green}}Development tools installed!{{nc}}\n"
 
 # Remove dotfile symlinks (keeps backups)
 uninstall:
