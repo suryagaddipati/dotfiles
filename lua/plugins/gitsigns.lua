@@ -43,7 +43,7 @@ return {
             end
           end
         })
-      end, desc = 'Auto-commit with AI message (async)' },
+      end, desc = 'Commit staged changes' },
     { '<leader>gC', function()
         vim.notify('Running Claude commit ...', vim.log.levels.INFO, { title = 'Claude Commit' })
 
@@ -66,7 +66,7 @@ return {
             end
           end
         })
-      end, desc = 'Claude commit with AI message' },
+      end, desc = 'Commit all changes' },
     { '<leader>gs', ':Gitsigns stage_hunk<CR>', mode = 'v', desc = 'Stage selected hunk' },
     { '<leader>gr', ':Gitsigns reset_hunk<CR>', mode = 'v', desc = 'Reset selected hunk' },
   },
