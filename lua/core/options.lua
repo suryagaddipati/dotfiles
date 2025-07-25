@@ -43,7 +43,7 @@ vim.opt.guicursor = {
 }
 
 -- Better visual feedback
-vim.opt.laststatus = 3  -- Global status line
+vim.opt.laststatus = 0  -- No status line
 vim.opt.showcmd = true
 vim.opt.showmode = false  -- Let lualine handle mode display
 
