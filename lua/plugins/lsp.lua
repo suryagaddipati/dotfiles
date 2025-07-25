@@ -1,6 +1,5 @@
 return {
   'neovim/nvim-lspconfig',
-  version = 'v0.1.7',
   event = { 'BufReadPre', 'BufNewFile' },
   dependencies = {
     'hrsh7th/nvim-cmp',
@@ -75,7 +74,7 @@ return {
       vim.keymap.set('n', '<leader>ll', vim.diagnostic.setloclist, opts)
     end
 
-    local servers = { 'lua_ls', 'pyright', 'tsserver', 'rust_analyzer', 'gopls', 'bashls', 'jsonls', 'yamlls' }
+    local servers = { 'lua_ls', 'pyright', 'ts_ls', 'rust_analyzer', 'gopls', 'bashls', 'jsonls', 'yamlls' }
     for _, lsp in ipairs(servers) do
       lspconfig[lsp].setup({
         on_attach = on_attach,
