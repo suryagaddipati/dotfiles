@@ -2,7 +2,7 @@ local keymap = vim.keymap.set
 
 keymap('n', '<leader>w', '<cmd>w<cr>')
 keymap('n', '<leader>q', '<cmd>q<cr>')
-keymap('n', '<leader>x', '<cmd>x<cr>')
+keymap('n', '<leader>x', '<cmd>wa<cr><cmd>qa!<cr>')
 keymap('n', '<leader>/', '<cmd>noh<cr>')
 keymap('n', '<leader>h', '<cmd>noh<cr>')
 
