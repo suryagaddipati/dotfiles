@@ -1,8 +1,0 @@
-shell:
-    program: /bin/bash
-font:
-    size: 20.0
-    normal:
-      family: Hack Nerd Font
-      style: Regular
-
