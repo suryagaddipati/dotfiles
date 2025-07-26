@@ -1,7 +1,7 @@
 return {
   'nvim-tree/nvim-tree.lua',
   keys = {
-    { '<leader>e', '<cmd>NvimTreeToggle<cr>', desc = 'Toggle tree' },
+    { '<leader>p', '<cmd>NvimTreeToggle<cr>', desc = 'Toggle tree' },
   },
   config = function()
     require('nvim-tree').setup({
