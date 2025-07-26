@@ -1,0 +1,11 @@
+# Alacritty Configuration (TOML format)
+
+[shell]
+program = "/bin/bash"
+
+[font]
+size = 20.0
+
+[font.normal]
+family = "Hack Nerd Font"
+style = "Regular"
