@@ -19,7 +19,7 @@ config.font = wezterm.font_with_fallback({
   "JetBrains Mono",   -- Built-in fallback
   "monospace",        -- System fallback
 })
-config.font_size = 20.0
+config.font_size = 15.0
 
 -- Color scheme
 config.color_scheme = 'Gruvbox dark, medium (base16)'
@@ -42,8 +42,8 @@ config.tab_bar_at_bottom = false
 
 -- Cursor configuration
 config.default_cursor_style = 'BlinkingBlock'
-config.cursor_blink_rate = 0  -- Disable blinking completely
-config.cursor_thickness = 2   -- Make cursor more visible
+config.cursor_blink_rate = 0 -- Disable blinking completely
+config.cursor_thickness = 2  -- Make cursor more visible
 
 -- Scrollback
 config.scrollback_lines = 10000
@@ -57,10 +57,10 @@ config.max_fps = 60
 -- Key bindings (minimal since tmux handles most)
 config.keys = {
   -- Font size adjustment
-  { key = '=', mods = 'CTRL', action = wezterm.action.IncreaseFontSize },
-  { key = '-', mods = 'CTRL', action = wezterm.action.DecreaseFontSize },
-  { key = '0', mods = 'CTRL', action = wezterm.action.ResetFontSize },
-  
+  { key = '=', mods = 'CTRL',       action = wezterm.action.IncreaseFontSize },
+  { key = '-', mods = 'CTRL',       action = wezterm.action.DecreaseFontSize },
+  { key = '0', mods = 'CTRL',       action = wezterm.action.ResetFontSize },
+
   -- Copy/paste
   { key = 'c', mods = 'CTRL|SHIFT', action = wezterm.action.CopyTo 'Clipboard' },
   { key = 'v', mods = 'CTRL|SHIFT', action = wezterm.action.PasteFrom 'Clipboard' },
@@ -70,3 +70,4 @@ config.keys = {
 config.disable_default_key_bindings = false
 
 return config
+
