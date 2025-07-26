@@ -18,6 +18,7 @@ claude_config_dir := home_dir / '.claude'
 dotfiles := '.bashrc .gitconfig .tmux.conf init.lua'
 config_files := '.config/alacritty/alacritty.toml .config/wezterm/wezterm.lua .config/mise/config.toml'
 claude_files := '.claude/hooks.json .claude/settings.local.json'
+claude_dirs := '.claude/agents'
 git_commands := 'git-auto-commit.sh'
 
 # Colors
@@ -102,6 +103,14 @@ install: backup setup-nvim
             ln -sf "{{dotfiles_dir}}/$file" "{{home_dir}}/$file"; \
         else \
             printf "{{yellow}}Warning: $file not found{{nc}}\n"; \
+        fi \
+    done
+    @for dir in {{claude_dirs}}; do \
+        if [ -d "{{dotfiles_dir}}/$dir" ]; then \
+            printf "{{green}}Linking $dir{{nc}}\n"; \
+            ln -sf "{{dotfiles_dir}}/$dir" "{{home_dir}}/$dir"; \
+        else \
+            printf "{{yellow}}Warning: $dir not found{{nc}}\n"; \
         fi \
     done
     @for file in {{git_commands}}; do \
@@ -267,6 +276,13 @@ uninstall:
             rm "$target_file"; \
         fi \
     done
+    @for dir in {{claude_dirs}}; do \
+        target_dir="{{home_dir}}/$dir"; \
+        if [ -L "$target_dir" ]; then \
+            printf "{{yellow}}Removing symlink: $dir{{nc}}\n"; \
+            rm "$target_dir"; \
+        fi \
+    done
     @for file in {{git_commands}}; do \
         target_name=$(echo "$file" | sed 's/\.sh$//'); \
         target_file="{{home_dir}}/.local/bin/$target_name"; \
@@ -332,6 +348,21 @@ status:
             printf "  {{red}}✗{{nc}} $file (regular file, not symlinked)\n"; \
         else \
             printf "  {{red}}✗{{nc}} $file (not found)\n"; \
+        fi; \
+    done
+    @for dir in {{claude_dirs}}; do \
+        target_dir="{{home_dir}}/$dir"; \
+        if [ -L "$target_dir" ]; then \
+            link_target=$(readlink "$target_dir"); \
+            if [ "$link_target" = "{{dotfiles_dir}}/$dir" ]; then \
+                printf "  {{green}}✓{{nc}} $dir → {{dotfiles_dir}}/$dir\n"; \
+            else \
+                printf "  {{yellow}}⚠{{nc}} $dir → $link_target (wrong target)\n"; \
+            fi; \
+        elif [ -d "$target_dir" ]; then \
+            printf "  {{red}}✗{{nc}} $dir (regular directory, not symlinked)\n"; \
+        else \
+            printf "  {{red}}✗{{nc}} $dir (not found)\n"; \
         fi; \
     done
     @printf "\n"

@@ -82,10 +82,14 @@ return {
     end
     
     for _, lsp in ipairs(servers) do
-      lspconfig[lsp].setup({
+      local config = {
         on_attach = on_attach,
         capabilities = capabilities,
-        settings = lsp == 'lua_ls' and {
+      }
+      
+      -- Server-specific configurations
+      if lsp == 'lua_ls' then
+        config.settings = {
           Lua = {
             diagnostics = { globals = {'vim'} },
             workspace = {
@@ -94,12 +98,17 @@ return {
             },
             telemetry = { enable = false },
           }
-        } or lsp == 'jsonls' and {
+        }
+      elseif lsp == 'jsonls' then
+        config.cmd = { 'vscode-json-languageserver', '--stdio' }
+        config.settings = {
           json = {
             schemas = require('schemastore').json.schemas(),
             validate = { enable = true },
           }
-        } or lsp == 'yamlls' and {
+        }
+      elseif lsp == 'yamlls' then
+        config.settings = {
           yaml = {
             schemaStore = {
               enable = false,
@@ -107,8 +116,10 @@ return {
             },
             schemas = require('schemastore').yaml.schemas(),
           }
-        } or nil,
-      })
+        }
+      end
+      
+      lspconfig[lsp].setup(config)
     end
   end,
 }
