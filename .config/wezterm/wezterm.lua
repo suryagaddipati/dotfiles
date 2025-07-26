@@ -24,6 +24,11 @@ config.font_size = 15.0
 -- Color scheme
 config.color_scheme = 'Gruvbox dark, medium (base16)'
 
+-- Custom color overrides
+config.colors = {
+  background = "#000000"  -- Pure black background
+}
+
 -- Window configuration
 config.window_decorations = "RESIZE"
 config.window_padding = {
