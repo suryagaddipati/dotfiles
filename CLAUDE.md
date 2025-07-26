@@ -13,7 +13,7 @@ This is a personal dotfiles repository containing configuration files for bash, 
 - **Automated via justfile**: The `just` command provides comprehensive installation, backup, and management with cross-platform support
 - **Backup-first approach**: Always backs up existing configurations before installation to `~/.dotfiles_backup`
 - **Dual editor support**: Both vim (.vimrc) and neovim (init.lua) configurations maintained with shared keybindings
-- **Modern neovim focus**: Recent migration to performance-optimized "Ninja Config" with Claude Code integration
+- **Modern neovim focus**: Recent migration to performance-optimized configuration with Claude Code integration
 
 ### Integration Patterns
 - **Consistent theming**: Gruvbox color scheme unified across tmux, vim, and neovim
@@ -528,7 +528,7 @@ The repository uses actual dotfiles (.bashrc, .gitconfig, etc.) and init.lua tha
 
 ## Current Neovim Configuration Architecture
 
-The current neovim configuration (`init.lua`) is a **"Ninja Config"** - optimized for speed, minimal bloat, and maximum productivity. Key architectural decisions:
+The current neovim configuration (`init.lua`) is optimized for speed, minimal bloat, and maximum productivity. Key architectural decisions:
 
 ### Performance Optimizations
 - **Lazy loading**: All plugins load only when needed via lazy.nvim
@@ -780,7 +780,7 @@ Common LSP servers configured:
 :Lazy sync      " Install + update + clean
 ```
 
-## 🥷 Tmux + Neovim Synergy - The Ninja's Secret Weapon
+## Tmux + Neovim Synergy - The Developer's Secret Weapon
 
 ### Core Philosophy: One Mind, Many Contexts
 This configuration creates a unified workspace where tmux provides **structure** and neovim provides **intelligence**, bound together by consistent vim-style navigation that becomes pure muscle memory.
@@ -799,7 +799,7 @@ Neovim splits:  Ctrl+h/j/k/l        (no prefix, same pattern)
 
 #### Instant Context Switching
 ```bash
-# The ninja's movement pattern:
+# The developer's movement pattern:
 Alt+h/j/k/l     → Navigate between tmux panes instantly  
 Alt+1/2/3       → Switch tmux windows (projects) instantly
 Tab/Shift+Tab   → Cycle neovim buffers (files) instantly
@@ -824,7 +824,7 @@ Tab/Shift+Tab   → Cycle neovim buffers (files) instantly
 Edit code → Alt+l → Git commands → Alt+j → Check tests → Alt+h → Back to code
 ```
 
-#### Pattern 2: Multi-Project Ninja
+#### Pattern 2: Multi-Project Development
 ```bash
 # Smart session management with the 't' command:
 t frontend      # Attach/create frontend project session
@@ -956,7 +956,7 @@ Bottom pane:   Application output/logs
 - **File system caching**: Recently accessed files stay in buffer cache
 - **Background processing**: Tests, builds run in background panes
 
-### 🥷 The Ninja Advantage
+### The Developer Advantage
 
 **Why this combination creates terminal mastery:**
 

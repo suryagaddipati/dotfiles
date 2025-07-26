@@ -1,6 +1,6 @@
-# 🥷 Neovim Ninja Configuration
+# Neovim Developer Configuration
 
-A performance-optimized Neovim configuration designed for maximum productivity with minimal bloat. This "Ninja Config" focuses on speed, consistency, and essential functionality for modern development.
+A performance-optimized Neovim configuration designed for maximum productivity with minimal bloat. This configuration focuses on speed, consistency, and essential functionality for modern development.
 
 ## 🚀 Quick Start
 
@@ -473,4 +473,4 @@ gd                   # Go to definition of symbol
 
 ---
 
-*This configuration prioritizes developer productivity through consistent keybindings, intelligent defaults, and modern tooling integration. The "Ninja" philosophy emphasizes speed, efficiency, and minimal cognitive overhead.*
+*This configuration prioritizes developer productivity through consistent keybindings, intelligent defaults, and modern tooling integration. The philosophy emphasizes speed, efficiency, and minimal cognitive overhead.*
