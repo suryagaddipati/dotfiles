@@ -152,6 +152,7 @@ just install-deps      # Install minimal system deps + mise + all tools (cross-p
 just install-mise      # Install mise tool manager specifically
 just install-mise-tools # Install neovim, tmux, CLI tools via mise (cross-platform)
 just install-dev       # Install development languages using mise
+just install-mcp       # Install MCP servers for Claude Code integration
 
 # Status and maintenance
 just status            # Show detailed installation status and health check
@@ -249,7 +250,8 @@ just full-install     # Installs deps + dotfiles + dev tools + backups existing 
 # Or step-by-step installation
 just install-deps     # Install system dependencies
 just install          # Install dotfiles with automatic backup
-just install-dev      # Install development tools (NVM, SDKMAN)
+just install-dev      # Install development tools via mise
+just install-mcp      # Install MCP servers for Claude Code
 ```
 
 **Manual installation** (if justfile unavailable):
@@ -514,8 +516,9 @@ The repository uses actual dotfiles (.bashrc, .gitconfig, etc.) and init.lua tha
 ### Claude Code Configuration
 - **Hooks configuration**: `hooks.json` provides IDE integration for automatic buffer reloading
 - **Permissions**: `settings.local.json` contains allowed bash commands for security
+- **MCP integration**: `.mcp.json` configures Model Context Protocol servers for enhanced functionality
 - **Auto-reload**: PostToolUse hooks automatically reload IDE buffers after file edits
-- **Managed files**: hooks.json and settings.local.json (sensitive files like .credentials.json excluded)
+- **Managed files**: hooks.json, settings.local.json, .mcp.json, and mcp-install.sh
 
 ### Common Workflow Patterns
 1. **Installation**: `just install` (handles backup automatically, safe to run)
@@ -525,6 +528,142 @@ The repository uses actual dotfiles (.bashrc, .gitconfig, etc.) and init.lua tha
 5. **Code searching**: Use `grp pattern js ts py` for multi-extension searches with git ls-files and grep
 6. **Plugin management**: Neovim plugins auto-install on first startup via lazy.nvim bootstrap
 7. **Claude Code integration**: Use `<leader>cc` to toggle Claude Code for AI assistance directly in neovim
+
+## Claude MCP (Model Context Protocol) Integration
+
+This dotfiles repository includes comprehensive MCP server configuration for enhanced Claude Code functionality.
+
+### What is MCP?
+MCP (Model Context Protocol) is an open protocol that enables LLMs to access external tools and data sources securely. It provides Claude Code with enhanced capabilities for filesystem operations, git management, database access, and more.
+
+### Available MCP Servers
+
+#### Core Development Servers
+- **filesystem**: Access local files and directories within `/home/surya/code`
+- **git**: Git repository operations for the dotfiles repository
+- **bash**: Execute bash commands safely within the development environment
+- **sqlite**: SQLite database operations and queries
+- **postgres**: PostgreSQL database management
+
+#### Integration Servers (API keys required)
+- **brave-search**: Web search capabilities via Brave API
+- **github**: GitHub repository operations via GitHub API
+- **slack**: Slack workspace integration
+
+#### Browser Automation
+- **playwright**: Browser automation and web interaction with accessibility snapshots
+
+### Installation and Setup
+
+#### Automatic Installation
+```bash
+# Install MCP servers via justfile
+just install-mcp       # Installs all MCP servers via npm
+
+# Or as part of full setup
+just full-install      # Includes MCP installation
+```
+
+#### Manual Installation
+```bash
+# Run the MCP installation script directly
+~/.claude/mcp-install.sh
+```
+
+### Configuration Files
+
+#### `.claude/.mcp.json`
+Main MCP server configuration defining available servers and their parameters:
+```json
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-filesystem", "/home/surya/code"]
+    },
+    "git": {
+      "command": "npx", 
+      "args": ["@modelcontextprotocol/server-git", "--repository", "/home/surya/code/dotfiles"]
+    }
+  }
+}
+```
+
+#### API Key Configuration
+For servers requiring authentication, update the environment variables in `.mcp.json`:
+```bash
+# Edit the configuration
+nvim ~/.claude/.mcp.json
+
+# Add your API keys:
+"BRAVE_API_KEY": "your_actual_brave_api_key"
+"GITHUB_PERSONAL_ACCESS_TOKEN": "your_github_token"
+```
+
+### Usage Examples
+
+#### Filesystem Operations
+```bash
+# In Claude Code, reference files with:
+@filesystem:/home/surya/code/project/file.js
+
+# Or use MCP filesystem commands for operations
+```
+
+#### Git Operations
+```bash
+# Access git repository data via MCP
+@git:repository:///commits
+@git:repository:///branches
+```
+
+#### Database Access
+```bash
+# SQLite operations
+@sqlite:database.db///tables
+@sqlite:database.db///query/SELECT * FROM users
+```
+
+#### Browser Automation
+```bash
+# Playwright operations for web interaction
+@playwright:navigate:https://example.com
+@playwright:screenshot
+@playwright:click:button[data-test="submit"]
+@playwright:fill:input[name="email"]:user@example.com
+```
+
+### Security Considerations
+- **Filesystem access**: Limited to `/home/surya/code` directory
+- **Git operations**: Restricted to the dotfiles repository 
+- **API keys**: Store securely and rotate regularly
+- **Bash commands**: Executed within the MCP security context
+
+### Troubleshooting MCP
+
+#### Check MCP Server Status
+```bash
+# List available MCP servers
+claude mcp list
+
+# Test MCP connectivity
+claude mcp test filesystem
+```
+
+#### Common Issues
+1. **Missing npm packages**: Run `just install-mcp` to reinstall
+2. **API key errors**: Verify keys in `.mcp.json` are valid
+3. **Permission issues**: Check file permissions on MCP scripts
+4. **Playwright browser issues**: Install system dependencies with `sudo npx playwright install-deps`
+
+#### Debug MCP Configuration
+```bash
+# Verify MCP configuration
+cat ~/.claude/.mcp.json
+
+# Check MCP server logs
+claude mcp logs filesystem
+```
 
 ## Current Neovim Configuration Architecture
 

@@ -17,8 +17,9 @@ claude_config_dir := home_dir / '.claude'
 # Files to manage
 dotfiles := '.bashrc .gitconfig .tmux.conf init.lua'
 config_files := '.config/alacritty/alacritty.toml .config/wezterm/wezterm.lua .config/mise/config.toml'
-claude_files := '.claude/hooks.json .claude/settings.local.json'
+claude_files := '.claude/hooks.json .claude/settings.local.json .claude/.mcp.json'
 claude_dirs := '.claude/agents .claude/commands'
+claude_scripts := '.claude/mcp-install.sh'
 git_commands := 'git-auto-commit.sh'
 
 # Colors
@@ -119,6 +120,15 @@ install: backup setup-nvim
             printf "{{green}}Installing git command: $target_name{{nc}}\n"; \
             ln -sf "{{dotfiles_dir}}/$file" "{{home_dir}}/.local/bin/$target_name"; \
             chmod +x "{{home_dir}}/.local/bin/$target_name"; \
+        else \
+            printf "{{yellow}}Warning: $file not found{{nc}}\n"; \
+        fi \
+    done
+    @for file in {{claude_scripts}}; do \
+        if [ -f "{{dotfiles_dir}}/$file" ]; then \
+            printf "{{green}}Linking $file{{nc}}\n"; \
+            ln -sf "{{dotfiles_dir}}/$file" "{{home_dir}}/$file"; \
+            chmod +x "{{home_dir}}/$file"; \
         else \
             printf "{{yellow}}Warning: $file not found{{nc}}\n"; \
         fi \
@@ -246,6 +256,17 @@ install-dev: install-deps
         printf "{{green}}Development tools installed via mise!{{nc}}\n"; \
     else \
         printf "{{red}}mise not found. Run 'just install-mise' first.{{nc}}\n"; \
+        exit 1; \
+    fi
+
+# Install MCP servers for Claude Code
+install-mcp:
+    @printf "{{blue}}Installing MCP servers for Claude Code...{{nc}}\n"
+    @if [ -f "{{home_dir}}/.claude/mcp-install.sh" ]; then \
+        chmod +x "{{home_dir}}/.claude/mcp-install.sh"; \
+        "{{home_dir}}/.claude/mcp-install.sh"; \
+    else \
+        printf "{{red}}MCP install script not found. Run 'just install' first.{{nc}}\n"; \
         exit 1; \
     fi
 
@@ -425,6 +446,7 @@ full-install: install-deps install install-dev
     @printf "  1. Restart your terminal or run: source ~/.bashrc\n"
     @printf "  2. Start tmux: tmux or t\n"
     @printf "  3. Open neovim: nvim (plugins will install automatically)\n"
+    @printf "  4. Install MCP servers: just install-mcp\n"
 
 # Update dotfiles from git repository
 update:

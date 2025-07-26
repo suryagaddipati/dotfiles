@@ -1,0 +1,53 @@
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "@modelcontextprotocol/server-filesystem",
+        "/home/surya/code"
+      ],
+      "env": {}
+    },
+    "git": {
+      "command": "npx",
+      "args": [
+        "@modelcontextprotocol/server-git",
+        "--repository",
+        "/home/surya/code/dotfiles"
+      ],
+      "env": {}
+    },
+    "bash": {
+      "command": "npx",
+      "args": [
+        "@modelcontextprotocol/server-bash"
+      ],
+      "env": {}
+    },
+    "brave-search": {
+      "command": "npx",
+      "args": [
+        "@modelcontextprotocol/server-brave-search"
+      ],
+      "env": {
+        "BRAVE_API_KEY": "your_brave_api_key_here"
+      }
+    },
+    "github": {
+      "command": "npx",
+      "args": [
+        "@modelcontextprotocol/server-github"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "your_github_token_here"
+      }
+    },
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "@playwright/mcp"
+      ],
+      "env": {}
+    }
+  }
+}
