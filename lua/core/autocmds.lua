@@ -1,4 +1,4 @@
-local augroup = vim.api.nvim_create_augroup('NinjaConfig', {})
+local augroup = vim.api.nvim_create_augroup('DevConfig', {})
 
 vim.api.nvim_create_autocmd('BufReadPost', {
   group = augroup,

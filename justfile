@@ -18,7 +18,7 @@ claude_config_dir := home_dir / '.claude'
 dotfiles := '.bashrc .gitconfig .tmux.conf init.lua'
 config_files := '.config/alacritty/alacritty.toml .config/wezterm/wezterm.lua .config/mise/config.toml'
 claude_files := '.claude/hooks.json .claude/settings.local.json'
-claude_dirs := '.claude/agents'
+claude_dirs := '.claude/agents .claude/commands'
 git_commands := 'git-auto-commit.sh'
 
 # Colors
