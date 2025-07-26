@@ -22,7 +22,7 @@ return {
         relativenumber = false,
         hybridnumber = false,
         absolutenumber_unfocussed = false,
-        cursorline = true,
+        cursorline = false,
         cursorcolumn = false,
         colorcolumn = {
           enable = false,

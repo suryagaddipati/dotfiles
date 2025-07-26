@@ -74,7 +74,13 @@ return {
       vim.keymap.set('n', '<leader>ll', vim.diagnostic.setloclist, opts)
     end
 
-    local servers = { 'lua_ls', 'pyright', 'ts_ls', 'rust_analyzer', 'gopls', 'bashls', 'jsonls', 'yamlls' }
+    local servers = { 'lua_ls', 'pyright', 'rust_analyzer', 'gopls', 'bashls', 'jsonls', 'yamlls' }
+    
+    -- Only add ts_ls if TypeScript is available
+    if vim.fn.executable('tsc') == 1 or vim.fn.executable('typescript') == 1 then
+      table.insert(servers, 'ts_ls')
+    end
+    
     for _, lsp in ipairs(servers) do
       lspconfig[lsp].setup({
         on_attach = on_attach,
