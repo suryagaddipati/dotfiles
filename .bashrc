@@ -174,6 +174,10 @@ export PATH="$HOME/.local/bin:$PATH"
 # Set vi mode
 set -o vi
 
+# Set default editor to neovim
+export EDITOR="nvim"
+export VISUAL="nvim"
+
 # Remap Caps Lock to Ctrl (lazy-loaded for X11 sessions)
 caps_ctrl() {
     setxkbmap -option caps:ctrl_modifier 2>/dev/null || true
