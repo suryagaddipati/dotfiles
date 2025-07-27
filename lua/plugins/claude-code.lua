@@ -7,13 +7,13 @@ return {
     })
   end,
   keys = {
+    -- Core Claude Code operations
     { '<leader>c', nil, desc = 'Claude Code' },
     { '<leader>cc', '<cmd>ClaudeCode<cr>', desc = 'Toggle Claude' },
     { '<leader>cf', '<cmd>ClaudeCodeFocus<cr>', desc = 'Focus Claude' },
     { '<leader>cr', '<cmd>ClaudeCode --resume<cr>', desc = 'Resume Claude' },
     { '<leader>cC', '<cmd>ClaudeCode --continue<cr>', desc = 'Continue Claude' },
     { '<leader>cb', '<cmd>ClaudeCodeAdd %<cr>', desc = 'Add current buffer' },
-    { '<leader>ch', '<cmd>ClaudeCodeSendHunk <cr>', desc = 'Send current hunk' },
     { '<leader>cs', '<cmd>ClaudeCodeSend<cr>', mode = 'v', desc = 'Send to Claude' },
     {
       '<leader>ct',
@@ -23,5 +23,15 @@ return {
     },
     { '<leader>ca', '<cmd>ClaudeCodeDiffAccept<cr>', desc = 'Accept diff' },
     { '<leader>cd', '<cmd>ClaudeCodeDiffDeny<cr>', desc = 'Deny diff' },
+    
+    -- Git + Claude Integration (moved to <leader>g* namespace)
+    { '<leader>ga', '<cmd>ClaudeCodeSendHunk<cr>', desc = 'Git: Add hunk to Claude' },
+    { '<leader>gA', '<cmd>ClaudeCodeAdd %<cr>', desc = 'Git: Add buffer to Claude' },
+    { '<leader>gi', '<cmd>ClaudeCodeSendHunk<cr>', desc = 'Git: Send hunk info to Claude' },
+    { '<leader>gI', function()
+        -- Send entire diff to Claude for review
+        vim.cmd('ClaudeCodeAdd %')
+        vim.notify('Buffer added to Claude for diff review', vim.log.levels.INFO)
+      end, desc = 'Git: Send diff to Claude for review' },
   },
 }

@@ -45,6 +45,13 @@ return {
         })
       end, desc = 'Commit staged changes' },
     { '<leader>gC', function()
+        -- Interactive commit - opens terminal for manual commit message
+        vim.cmd('ToggleTerm direction=float')
+        vim.defer_fn(function()
+          vim.api.nvim_feedkeys('git commit\r', 'n', false)
+        end, 100)
+      end, desc = 'Interactive commit' },
+    { '<leader>gm', function()
         vim.notify('Running Claude commit ...', vim.log.levels.INFO, { title = 'Claude Commit' })
 
         vim.fn.jobstart('~/.claude/local/claude commit -p --dangerously-skip-permissions ', {
@@ -66,7 +73,7 @@ return {
             end
           end
         })
-      end, desc = 'Commit all changes' },
+      end, desc = 'Commit with Claude message' },
     { '<leader>gs', ':Gitsigns stage_hunk<CR>', mode = 'v', desc = 'Stage selected hunk' },
     { '<leader>gr', ':Gitsigns reset_hunk<CR>', mode = 'v', desc = 'Reset selected hunk' },
   },

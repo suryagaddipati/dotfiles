@@ -115,26 +115,67 @@ gc                  " Comment selection (visual mode)
 {<CR>               " Inserts block with proper indentation
 ```
 
-### Git Integration (Gitsigns)
+## 🔥 Unified Git Workflow Cheatsheet
+
+All git operations unified under `<leader>g*` for seamless workflow progression:
+
+### 🔍 Git Inspection & Navigation
 ```vim
-<leader>gb          " Git blame line
-<leader>gp          " Preview git hunk
-<leader>gn          " Preview next hunk
-<leader>gN          " Preview previous hunk
-<leader>gs          " Stage git hunk
-<leader>gS          " Stage entire buffer
-<leader>gu          " Undo stage hunk
-<leader>gd          " Reset git hunk
-<leader>gR          " Reset entire buffer
-<leader>gc          " Auto-commit with AI message
-<leader>gC          " Claude commit with preview
+<leader>gg          " Git status overview (diffview)
+<leader>gh          " Git file history
+<leader>gf          " Git files panel
+<leader>gb          " Git blame current line
+<leader>gp          " Preview current hunk
+<leader>gn          " Next hunk with preview
+<leader>gN          " Previous hunk with preview
 ```
 
-### Diffview Integration
+### ⚡ Git Actions
 ```vim
-<leader>dd          " Toggle diffview
-<leader>dh          " File history
-<leader>df          " Toggle diffview files
+<leader>gs          " Stage current hunk
+<leader>gS          " Stage entire buffer
+<leader>gu          " Unstage/undo hunk
+<leader>gr          " Reset/discard hunk
+<leader>gR          " Reset entire buffer
+```
+
+### 💬 Git Commits (3 Methods)
+```vim
+<leader>gc          " Quick commit (auto-generated message)
+<leader>gC          " Interactive commit (manual message)
+<leader>gm          " Commit with Claude-generated message
+```
+
+### 🤖 Git + Claude AI Integration
+```vim
+<leader>ga          " Add current hunk to Claude context
+<leader>gA          " Add entire buffer to Claude context
+<leader>gi          " Send hunk to Claude for explanation
+<leader>gI          " Send entire diff to Claude for review
+```
+
+### 🚀 Example Workflow
+```bash
+# 1. Inspect your changes
+<leader>gg          # Open git overview
+<leader>gp          # Preview current hunk
+<leader>gn          # Navigate to next hunk
+
+# 2. Get AI assistance (optional)
+<leader>ga          # Add hunk to Claude for review
+<leader>gi          # Ask Claude to explain changes
+
+# 3. Stage your changes
+<leader>gs          # Stage current hunk
+# OR
+<leader>gS          # Stage entire buffer
+
+# 4. Commit (choose your method)
+<leader>gc          # Quick auto-commit
+# OR
+<leader>gC          # Interactive commit with custom message
+# OR
+<leader>gm          # Let Claude write your commit message
 ```
 
 ### Claude Code Integration
@@ -166,6 +207,126 @@ gd                  " Go to definition
 gr                  " Go to references
 K                   " Hover documentation
 <leader>r           " Rename symbol
+```
+
+## 📚 Complete Keybinding Reference
+
+### Core Navigation
+```vim
+Ctrl+h/j/k/l        " Navigate between splits
+Alt+h/j/k/l         " Navigate tmux panes (no prefix)
+Alt+1-9             " Switch tmux windows (no prefix)
+Tab/Shift+Tab       " Next/previous buffer
+```
+
+### File Operations
+```vim
+<leader>w           " Save file
+<leader>q           " Quit
+<leader>x           " Save and quit
+<leader>/           " Clear search highlighting
+```
+
+### File Management
+```vim
+<leader>f           " Find files in project (Telescope)
+<leader>e           " Live grep (search text in files)
+<leader>b           " Find buffers
+<leader>hr          " Recent files history
+<leader>p           " Toggle file tree (nvim-tree)
+```
+
+### Window Management
+```vim
+<leader>+/-         " Resize window vertically
+<leader>>/<         " Resize window horizontally
+<leader>z           " Toggle maximize split
+```
+
+### Editing & Text Manipulation
+```vim
+< >                 " Indent/unindent (visual mode, keeps selection)
+gcc                 " Comment/uncomment current line
+gc                  " Comment selection (visual mode)
+<leader>sr          " Search and replace word under cursor
+```
+
+### Terminal Integration
+```vim
+Ctrl+\              " Toggle terminal (global)
+<leader>tt          " Toggle terminal
+<leader>tf          " Float terminal
+<leader>th          " Horizontal terminal
+<leader>tv          " Vertical terminal
+<leader>t1-t9       " Access terminal 1-9
+<Esc> or jk         " Exit terminal mode
+```
+
+## 🎯 Common Workflow Examples
+
+### 🔄 Daily Development Flow
+```bash
+# Start your day
+t project           # Smart tmux session (attach or create)
+<leader>p           # Open file tree to explore
+<leader>f           # Find specific file to work on
+
+# While coding
+<leader>e TODO      # Search for TODOs across project
+gd                  # Go to definition
+<leader>w           # Save frequently
+```
+
+### 🚀 Git Review & Commit Flow
+```bash
+# Review your changes
+<leader>gg          # Open git status overview
+<leader>gp          # Preview current hunk
+<leader>gn          # Navigate through hunks
+
+# Get AI assistance
+<leader>ga          # Add hunk to Claude for review
+<leader>gi          # Ask Claude to explain changes
+
+# Stage and commit
+<leader>gs          # Stage current hunk
+<leader>gm          # Let Claude write commit message
+```
+
+### 🧪 Testing & Debugging Flow
+```bash
+# Setup workspace
+<leader>th          # Open horizontal terminal for tests
+<leader>tv          # Open vertical terminal for logs
+Alt+h               # Navigate back to editor
+
+# Run tests and debug
+Alt+j               # Switch to test terminal
+npm test            # Run your tests
+Alt+k               # Switch to log terminal  
+tail -f app.log     # Watch logs
+Alt+h               # Back to editor to fix issues
+```
+
+### 🔍 Code Exploration Flow
+```bash
+# Explore unfamiliar codebase
+<leader>e className # Search for class usage
+gd                  # Go to definition
+gr                  # See all references
+<leader>f test      # Find related test files
+<leader>b           # Switch between open files
+```
+
+### 🤖 AI-Assisted Development
+```bash
+# Get help with complex changes
+<leader>ga          # Add current hunk to Claude
+<leader>cc          # Open Claude interface
+# Describe what you want to implement
+<leader>ca          # Accept Claude's suggestions
+<leader>gS          # Stage the improved code
+<leader>gm          # Commit with Claude-generated message
 ```
 
 ## Prerequisites
