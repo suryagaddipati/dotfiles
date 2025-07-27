@@ -406,25 +406,55 @@ grp pattern ext1 [ext2...]       # Multi-extension grep using git ls-files (e.g.
 - `K` - Hover documentation
 - `<leader>r` - Rename symbol
 
-#### Git Integration (Gitsigns)
-- `<leader>gb` - Git blame line
-- `<leader>gp` - Preview git hunk
-- `<leader>gn` - Preview next hunk
-- `<leader>gN` - Preview previous hunk
-- `<leader>gd` - Reset git hunk
-- `<leader>gs` - Stage git hunk
-- `<leader>gS` - Stage entire buffer (handles new files)
-- `<leader>gu` - Undo stage hunk
-- `<leader>gR` - Reset entire buffer
-- `<leader>gc` - Auto-commit with AI message (async)
-- `<leader>gC` - Claude commit with preview (async)
-- `<leader>gs` (visual mode) - Stage selected hunk
-- `<leader>gr` (visual mode) - Reset selected hunk
+#### Unified Git Workflow (All under `<leader>g*`)
 
-#### Diffview Integration
-- `<leader>dd` - Toggle diffview
-- `<leader>dh` - File history
-- `<leader>df` - Toggle diffview files
+**Git Inspection & Navigation**
+- `<leader>gg` - Git status (diffview)
+- `<leader>gh` - Git file history 
+- `<leader>gf` - Git files panel
+- `<leader>gb` - Git blame current line
+- `<leader>gp` - Preview git hunk
+- `<leader>gn` - Next hunk with preview
+- `<leader>gN` - Previous hunk with preview
+
+**Git Actions**
+- `<leader>gs` - Stage current hunk
+- `<leader>gS` - Stage entire buffer
+- `<leader>gu` - Unstage/undo hunk
+- `<leader>gr` - Reset/discard hunk  
+- `<leader>gR` - Reset entire buffer
+
+**Git Commits**
+- `<leader>gc` - Quick commit (auto-generated message)
+- `<leader>gC` - Interactive commit (manual message)
+- `<leader>gm` - Commit with Claude-generated message
+
+**Git + Claude Integration**
+- `<leader>ga` - Add current hunk to Claude context
+- `<leader>gA` - Add entire buffer to Claude context
+- `<leader>gi` - Send hunk to Claude for explanation
+- `<leader>gI` - Send entire diff to Claude for review
+
+**Example Unified Git Workflow:**
+```bash
+# 1. Inspect changes
+<leader>gg          # Open git status overview
+<leader>gp          # Preview current hunk
+<leader>gn          # Navigate to next hunk
+
+# 2. Get AI assistance
+<leader>ga          # Add hunk to Claude for review
+<leader>gi          # Ask Claude to explain/improve hunk
+
+# 3. Stage changes
+<leader>gs          # Stage current hunk
+<leader>gS          # Stage entire buffer
+
+# 4. Commit with appropriate method
+<leader>gc          # Quick auto-commit
+<leader>gC          # Interactive manual commit  
+<leader>gm          # Claude-generated commit message
+```
 
 #### Terminal Management (ToggleTerm)
 - `<C-\>` - Toggle terminal (global)
@@ -513,12 +543,24 @@ The repository uses actual dotfiles (.bashrc, .gitconfig, etc.) and init.lua tha
 - **Alt+1-9**: Switch tmux windows without prefix (instant window switching)
 - **Bash vi mode**: Enabled with `set -o vi` for vim-style command line editing
 
-### Claude Code Configuration
-- **Hooks configuration**: `hooks.json` provides IDE integration for automatic buffer reloading
-- **Permissions**: `settings.local.json` contains allowed bash commands for security
-- **MCP integration**: `.mcp.json` configures Model Context Protocol servers for enhanced functionality
-- **Auto-reload**: PostToolUse hooks automatically reload IDE buffers after file edits
-- **Managed files**: hooks.json, settings.local.json, .mcp.json, and mcp-install.sh
+### Claude Code Configuration Files
+
+#### Core Configuration Files
+- **`hooks.json`**: IDE integration with automated buffer reloading after file operations
+- **`settings.local.json`**: Security permissions framework for allowed tools and commands
+- **`.mcp.json`**: Model Context Protocol server configurations for external tool access
+
+#### Extended Configuration
+- **`mcp-install.sh`**: Automated installation script for all MCP servers and dependencies
+- **`agents/vim-expert.md`**: Specialized vim expert agent for advanced editor guidance
+- **`commands/catch-me-up.md`**: Repository analysis slash command for project overviews
+
+#### Security & Permissions
+The `settings.local.json` file provides granular control over:
+- **Allowed bash commands**: Specific command patterns with argument restrictions
+- **Web access**: Domain-restricted fetching for documentation and resources
+- **Tool permissions**: Fine-grained access control for development tools
+- **IDE integration**: MCP server permissions for editor functionality
 
 ### Common Workflow Patterns
 1. **Installation**: `just install` (handles backup automatically, safe to run)
@@ -529,11 +571,44 @@ The repository uses actual dotfiles (.bashrc, .gitconfig, etc.) and init.lua tha
 6. **Plugin management**: Neovim plugins auto-install on first startup via lazy.nvim bootstrap
 7. **Claude Code integration**: Use `<leader>cc` to toggle Claude Code for AI assistance directly in neovim
 
+## Claude Code Integration Architecture
+
+This dotfiles repository provides a complete Claude Code integration environment with advanced configuration for AI-assisted development. The setup includes hooks, permissions, MCP servers, custom agents, and slash commands for a seamless development experience.
+
+### Architecture Overview
+
+The Claude Code integration consists of four main components:
+
+#### 1. **Core Configuration** (Security & Automation)
+- **Hooks System**: Automated IDE integration and buffer reloading
+- **Permissions Framework**: Granular security controls for tool access
+- **Auto-reload System**: Real-time synchronization with development environment
+
+#### 2. **MCP (Model Context Protocol) Servers** (External Tool Access)
+- **Filesystem Operations**: Secure file and directory access within `/home/surya/code`
+- **Git Integration**: Repository operations and version control
+- **Database Connectivity**: SQLite and PostgreSQL database operations
+- **Browser Automation**: Playwright for web interaction and testing
+- **API Integrations**: GitHub, Slack, and web search capabilities
+
+#### 3. **Custom Agents** (Specialized AI Assistants)
+- **vim-expert**: Advanced vim/neovim guidance with expert-level optimization advice
+- **Extensible Framework**: Easy addition of domain-specific AI assistants
+
+#### 4. **Slash Commands** (Quick AI Tasks)
+- **catch-me-up**: Comprehensive repository analysis and project overview
+- **Custom Commands**: Project-specific AI workflows and automation
+
+### Configuration Philosophy
+
+The Claude Code setup follows three core principles:
+
+1. **Security First**: Granular permissions and scoped access prevent unauthorized operations
+2. **Development Efficiency**: Automated workflows reduce context switching and manual tasks  
+3. **Extensibility**: Modular architecture allows easy addition of new capabilities
+
 ## Claude MCP (Model Context Protocol) Integration
 
-This dotfiles repository includes comprehensive MCP server configuration for enhanced Claude Code functionality.
-
-### What is MCP?
 MCP (Model Context Protocol) is an open protocol that enables LLMs to access external tools and data sources securely. It provides Claude Code with enhanced capabilities for filesystem operations, git management, database access, and more.
 
 ### Available MCP Servers
@@ -664,6 +739,144 @@ cat ~/.claude/.mcp.json
 # Check MCP server logs
 claude mcp logs filesystem
 ```
+
+## Complete Claude Configuration Reference
+
+### Configuration File Details
+
+#### `hooks.json` - IDE Integration Automation
+Provides seamless integration between Claude Code and your development environment:
+
+```json
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": { "tool_name": "Edit" },
+        "hooks": [{ 
+          "type": "command",
+          "command": "curl IDE reload endpoint...",
+          "timeout": 5000
+        }]
+      }
+    ]
+  }
+}
+```
+
+**Purpose**: Automatically reloads IDE buffers after file edits, ensuring real-time synchronization.
+
+#### `settings.local.json` - Security Framework
+Granular permissions controlling Claude Code's access to system tools:
+
+```json
+{
+  "includeCoAuthoredBy": false,
+  "permissions": {
+    "allow": [
+      "Bash(git add:*)",
+      "Bash(npm install:*)", 
+      "Bash(just status:*)",
+      "WebFetch(domain:github.com)",
+      "mcp__ide__getDiagnostics"
+    ],
+    "deny": []
+  }
+}
+```
+
+**Security Benefits**:
+- Command pattern matching prevents unauthorized operations
+- Domain restrictions for web access
+- MCP server permissions for specific functionality
+- Explicit allow/deny lists for fine-grained control
+
+#### `.mcp.json` - External Tool Access
+Configures Model Context Protocol servers for enhanced AI capabilities:
+
+```json
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-filesystem", "/home/surya/code"],
+      "env": {}
+    },
+    "playwright": {
+      "command": "npx", 
+      "args": ["@playwright/mcp"],
+      "env": {}
+    }
+  }
+}
+```
+
+**Capabilities Enabled**:
+- File system operations within scoped directories
+- Git repository management and version control
+- Database connectivity for development tasks
+- Browser automation for testing and interaction
+- API integrations for external services
+
+### Agent System
+
+#### `agents/vim-expert.md` - Specialized AI Assistant
+A domain-specific agent embodying advanced vim expertise:
+
+**Agent Characteristics**:
+- **Philosophy**: Keyboard efficiency and minimal mouse usage
+- **Expertise**: Advanced motions, text objects, plugin evaluation
+- **Teaching Style**: Progressive skill building with practice exercises
+- **Focus Areas**: Performance optimization, workflow patterns, LSP integration
+
+**Usage**: Automatically triggered for vim/neovim related questions requiring expert guidance.
+
+### Slash Commands
+
+#### `commands/catch-me-up.md` - Repository Analysis
+Comprehensive project overview command for quick understanding:
+
+**Analysis Scope**:
+- Repository structure and project type identification
+- Recent development activity and commit analysis  
+- Technology stack and architecture overview
+- Current direction and development priorities
+
+**Output Format**: Structured summary with project overview, recent activity, and future direction.
+
+### Installation and Management
+
+#### `mcp-install.sh` - Automated Setup
+Comprehensive installation script for all MCP servers:
+
+**Installation Process**:
+1. **Dependency Check**: Verifies npm and node availability via mise
+2. **Core Servers**: Installs filesystem, git, bash, database servers
+3. **Integration Servers**: Adds GitHub, Slack, search capabilities  
+4. **Browser Automation**: Installs Playwright with browser binaries
+5. **System Dependencies**: Handles OS-specific requirements
+
+**Error Handling**: Graceful fallback for missing dependencies with clear instructions.
+
+### Workflow Integration
+
+#### Development Workflow Enhancement
+The Claude configuration integrates with existing development patterns:
+
+1. **File Operations**: Automatic buffer reloading maintains editor synchronization
+2. **Git Workflow**: MCP git server provides repository insights and operations
+3. **Testing**: Playwright integration enables automated browser testing
+4. **Documentation**: Web fetch capabilities allow real-time documentation access
+5. **Database Work**: Direct database connectivity for development tasks
+
+#### Security Model
+Multi-layered security approach:
+
+1. **Command Restrictions**: Only approved bash commands with specific patterns
+2. **Scope Limitations**: File access restricted to development directories  
+3. **API Authentication**: Secure token management for external services
+4. **Domain Restrictions**: Web access limited to trusted documentation sources
+5. **Audit Trail**: All operations logged for security monitoring```
 
 ## Current Neovim Configuration Architecture
 
