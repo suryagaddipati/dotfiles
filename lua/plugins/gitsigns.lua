@@ -47,7 +47,7 @@ return {
     {
       '<leader>gC',
       function()
-        vim.system({'~/.claude/local/claude', 'commit', '-p', '--dangerously-skip-permissions'}, {}, function(result)
+        vim.system({'claude', 'commit', '-p', '--dangerously-skip-permissions'}, {}, function(result)
           if result.code == 0 then
             Snacks.notify('Claude commit completed', { level = 'info' })
           else
