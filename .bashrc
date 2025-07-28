@@ -201,5 +201,11 @@ grp() {
     | xargs -d '\n' grep --color=auto -n "$pattern" 2>/dev/null
 }
 
+# Uncomment all lines in /etc/hosts
+focus() {
+  sudo sed -i 's/^#\(.*\)/\1/' /etc/hosts
+  echo "All commented lines in /etc/hosts have been uncommented"
+}
+
 
 eval "$(/home/surya/.local/bin/mise activate bash)"
