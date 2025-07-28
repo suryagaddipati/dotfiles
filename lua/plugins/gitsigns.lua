@@ -39,7 +39,7 @@ return {
           timeout = false  -- Keep notification open
         })
         vim.system({'git', 'auto-commit'}, {}, function(result)
-          Snacks.notify.dismiss(notify_id)  -- Dismiss the running notification
+          notify_id.hide()  -- Dismiss the running notification
           if result.code == 0 then
             Snacks.notify('Git auto-commit completed', { level = 'info' })
           else
@@ -57,7 +57,7 @@ return {
           timeout = false  -- Keep notification open
         })
         vim.system({'claude', 'commit', '-p', '--dangerously-skip-permissions'}, {}, function(result)
-          Snacks.notify.dismiss(notify_id)  -- Dismiss the running notification
+          notify_id.hide()  -- Dismiss the running notification
           if result.code == 0 then
             Snacks.notify('Claude commit completed', { level = 'info' })
           else
