@@ -68,9 +68,13 @@ return {
         
         vim.system({'claude', 'commit', '-p', '--dangerously-skip-permissions'}, {}, function(result)
           -- Dismiss the running notification safely
-          if notify_handle and type(notify_handle) == 'table' and notify_handle.hide then
+          if notify_handle then
             pcall(function()
-              notify_handle.hide()
+              if type(notify_handle) == 'table' and notify_handle.hide then
+                notify_handle.hide()
+              elseif type(notify_handle.close) == 'function' then
+                notify_handle.close()
+              end
             end)
           end
           
