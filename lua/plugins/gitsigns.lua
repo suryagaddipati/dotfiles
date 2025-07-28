@@ -34,20 +34,26 @@ return {
     {
       '<leader>gc',
       function()
-        Snacks.terminal('git auto-commit', {
-          win = { title = 'Git Auto-Commit' },
-          interactive = false
-        })
+        vim.system({'git', 'auto-commit'}, {}, function(result)
+          if result.code == 0 then
+            Snacks.notify('Git auto-commit completed', { level = 'info' })
+          else
+            Snacks.notify('Git auto-commit failed', { level = 'error' })
+          end
+        end)
       end,
       desc = 'Commit staged changes'
     },
     {
       '<leader>gC',
       function()
-        Snacks.terminal('~/.claude/local/claude commit -p --dangerously-skip-permissions', {
-          win = { title = 'Claude Commit' },
-          interactive = false
-        })
+        vim.system({'~/.claude/local/claude', 'commit', '-p', '--dangerously-skip-permissions'}, {}, function(result)
+          if result.code == 0 then
+            Snacks.notify('Claude commit completed', { level = 'info' })
+          else
+            Snacks.notify('Claude commit failed', { level = 'error' })
+          end
+        end)
       end,
       desc = 'Commit with Claude message'
     },

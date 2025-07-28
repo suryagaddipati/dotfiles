@@ -21,6 +21,7 @@ claude_files := '.claude/hooks.json .claude/settings.local.json .claude/.mcp.jso
 claude_dirs := '.claude/agents .claude/commands'
 claude_scripts := '.claude/mcp-install.sh'
 git_commands := 'git-auto-commit.sh'
+claude_commands := '.claude/local/claude'
 
 # Colors
 red := '\033[0;31m'
@@ -145,6 +146,16 @@ install: backup setup-nvim
             fi; \
         done; \
     fi
+    @for file in {{claude_commands}}; do \
+        if [ -f "{{home_dir}}/$file" ]; then \
+            target_name="claude"; \
+            printf "{{green}}Installing claude command: $target_name{{nc}}\n"; \
+            ln -sf "{{home_dir}}/$file" "{{home_dir}}/.local/bin/$target_name"; \
+            chmod +x "{{home_dir}}/.local/bin/$target_name"; \
+        else \
+            printf "{{yellow}}Warning: $file not found (expected at {{home_dir}}/$file){{nc}}\n"; \
+        fi \
+    done
     @printf "{{green}}Dotfiles installation complete!{{nc}}\n"
     @printf "{{yellow}}Run 'source ~/.bashrc' to reload your shell{{nc}}\n"
 
@@ -324,6 +335,14 @@ uninstall:
             rm "$target_file"; \
         fi \
     done
+    @for file in {{claude_commands}}; do \
+        target_name="claude"; \
+        target_file="{{home_dir}}/.local/bin/$target_name"; \
+        if [ -L "$target_file" ]; then \
+            printf "{{yellow}}Removing claude command: $target_name{{nc}}\n"; \
+            rm "$target_file"; \
+        fi \
+    done
     @printf "{{green}}Dotfiles uninstalled{{nc}}\n"
     @printf "{{yellow}}Backups preserved in {{backup_dir}}{{nc}}\n"
 
@@ -407,6 +426,24 @@ status:
             link_target=$(readlink "$target_file"); \
             if [ "$link_target" = "{{dotfiles_dir}}/$file" ]; then \
                 printf "  {{green}}✓{{nc}} $target_name → {{dotfiles_dir}}/$file\n"; \
+            else \
+                printf "  {{yellow}}⚠{{nc}} $target_name → $link_target (wrong target)\n"; \
+            fi; \
+        elif [ -f "$target_file" ]; then \
+            printf "  {{red}}✗{{nc}} $target_name (regular file, not symlinked)\n"; \
+        else \
+            printf "  {{red}}✗{{nc}} $target_name (not found)\n"; \
+        fi; \
+    done
+    @printf "\n"
+    @printf "{{yellow}}Claude Commands:{{nc}}\n"
+    @for file in {{claude_commands}}; do \
+        target_name="claude"; \
+        target_file="{{home_dir}}/.local/bin/$target_name"; \
+        if [ -L "$target_file" ]; then \
+            link_target=$(readlink "$target_file"); \
+            if [ "$link_target" = "{{home_dir}}/$file" ]; then \
+                printf "  {{green}}✓{{nc}} $target_name → {{home_dir}}/$file\n"; \
             else \
                 printf "  {{yellow}}⚠{{nc}} $target_name → $link_target (wrong target)\n"; \
             fi; \
