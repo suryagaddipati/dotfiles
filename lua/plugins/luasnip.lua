@@ -6,13 +6,49 @@ return {
     'rafamadriz/friendly-snippets',
   },
   keys = {
-    { '<Tab>', function() require('luasnip').expand_or_jump() end, mode = {'i', 's'}, desc = 'Expand or jump snippet' },
-    { '<S-Tab>', function() require('luasnip').jump(-1) end, mode = {'i', 's'}, desc = 'Jump back in snippet' },
-    { '<C-l>', function() require('luasnip').change_choice(1) end, mode = {'i', 's'}, desc = 'Change snippet choice' },
+    {
+      '<Tab>',
+      function()
+        local luasnip = require('luasnip')
+        if luasnip.expand_or_jumpable() then
+          luasnip.expand_or_jump()
+        else
+          return '<Tab>'
+        end
+      end,
+      mode = { 'i', 's' },
+      expr = true,
+      desc = 'Expand or jump snippet'
+    },
+    {
+      '<S-Tab>',
+      function()
+        local luasnip = require('luasnip')
+        if luasnip.jumpable(-1) then
+          luasnip.jump(-1)
+        else
+          return '<S-Tab>'
+        end
+      end,
+      mode = { 'i', 's' },
+      expr = true,
+      desc = 'Jump back in snippet'
+    },
+    {
+      '<C-l>',
+      function()
+        local luasnip = require('luasnip')
+        if luasnip.choice_active() then
+          luasnip.change_choice(1)
+        end
+      end,
+      mode = { 'i', 's' },
+      desc = 'Change snippet choice'
+    },
   },
   config = function()
     local luasnip = require('luasnip')
-    
+
     luasnip.setup({
       history = true,
       delete_check_events = 'TextChanged',
@@ -23,7 +59,7 @@ return {
 
     -- Load friendly-snippets
     require('luasnip.loaders.from_vscode').lazy_load()
-    
+
     -- Load custom snippets
     require('luasnip.loaders.from_lua').load({ paths = { './lua/snippets' } })
 
@@ -66,16 +102,17 @@ return {
     })
 
     -- Set up keybindings for snippet navigation
-    vim.keymap.set({'i', 's'}, '<C-k>', function()
+    vim.keymap.set({ 'i', 's' }, '<C-k>', function()
       if luasnip.expand_or_jumpable() then
         luasnip.expand_or_jump()
       end
     end, { silent = true })
 
-    vim.keymap.set({'i', 's'}, '<C-j>', function()
+    vim.keymap.set({ 'i', 's' }, '<C-j>', function()
       if luasnip.jumpable(-1) then
         luasnip.jump(-1)
       end
     end, { silent = true })
   end,
 }
+
