@@ -2,13 +2,13 @@ return {
   'lewis6991/gitsigns.nvim',
   event = { 'BufReadPre', 'BufNewFile' },
   keys = {
-    { '<leader>gb', '<cmd>Gitsigns blame_line<cr>',                 desc = 'Git blame line' },
-    { '<leader>gp', '<cmd>Gitsigns preview_hunk<cr>',               desc = 'Preview git hunk' },
-    { '<leader>gn', '<cmd>Gitsigns nav_hunk next preview=true<cr>', desc = 'Preview next hunk' },
-    { ',n',         '<cmd>Gitsigns nav_hunk next preview=true<cr>', desc = 'Preview next hunk' },
-    { '<leader>gN', '<cmd>Gitsigns nav_hunk prev preview=true<cr>', desc = 'Preview previous hunk' },
-    { '<leader>gd', '<cmd>Gitsigns reset_hunk<cr>',                 desc = 'Reset git hunk' },
-    { '<leader>gs', '<cmd>Gitsigns stage_hunk<cr>',                 desc = 'Stage git hunk' },
+    { '<leader>gb', function() require('gitsigns').blame_line() end, desc = 'Git blame line' },
+    { '<leader>gp', function() require('gitsigns').preview_hunk() end, desc = 'Preview git hunk' },
+    { '<leader>gn', function() require('gitsigns').nav_hunk('next', {preview = true}) end, desc = 'Preview next hunk' },
+    { ',n',         function() require('gitsigns').nav_hunk('next', {preview = true}) end, desc = 'Preview next hunk' },
+    { '<leader>gN', function() require('gitsigns').nav_hunk('prev', {preview = true}) end, desc = 'Preview previous hunk' },
+    { '<leader>gd', function() require('gitsigns').reset_hunk() end, desc = 'Reset git hunk' },
+    { '<leader>gs', function() require('gitsigns').stage_hunk() end, desc = 'Stage git hunk' },
     {
       '<leader>gS',
       function()
@@ -29,8 +29,8 @@ return {
       end,
       desc = 'Stage entire buffer (handles new files)'
     },
-    { '<leader>gu', '<cmd>Gitsigns undo_stage_hunk<cr>', desc = 'Undo stage hunk' },
-    { '<leader>gR', '<cmd>Gitsigns reset_buffer<cr>',    desc = 'Reset entire buffer' },
+    { '<leader>gu', function() require('gitsigns').undo_stage_hunk() end, desc = 'Undo stage hunk' },
+    { '<leader>gR', function() require('gitsigns').reset_buffer() end, desc = 'Reset entire buffer' },
     {
       '<leader>gc',
       function()
@@ -52,23 +52,42 @@ return {
     {
       '<leader>gC',
       function()
-        local notify_id = Snacks.notify('Running Claude commit...', { 
-          level = 'info',
-          timeout = false  -- Keep notification open
-        })
+        local notify_handle = nil
+        
+        -- Show notification with error handling
+        local ok, result = pcall(function()
+          return Snacks.notify('Running Claude commit...', { 
+            level = 'info',
+            timeout = false  -- Keep notification open
+          })
+        end)
+        
+        if ok then
+          notify_handle = result
+        end
+        
         vim.system({'claude', 'commit', '-p', '--dangerously-skip-permissions'}, {}, function(result)
-          notify_id.hide()  -- Dismiss the running notification
-          if result.code == 0 then
-            Snacks.notify('Claude commit completed', { level = 'info' })
-          else
-            Snacks.notify('Claude commit failed', { level = 'error' })
+          -- Dismiss the running notification
+          if notify_handle and notify_handle.hide then
+            pcall(function()
+              notify_handle.hide()
+            end)
           end
+          
+          -- Show completion notification
+          pcall(function()
+            if result.code == 0 then
+              Snacks.notify('Claude commit completed', { level = 'info' })
+            else
+              Snacks.notify('Claude commit failed: ' .. (result.stderr or 'Unknown error'), { level = 'error' })
+            end
+          end)
         end)
       end,
       desc = 'Commit with Claude message'
     },
-    { '<leader>gs', ':Gitsigns stage_hunk<CR>', mode = 'v', desc = 'Stage selected hunk' },
-    { '<leader>gr', ':Gitsigns reset_hunk<CR>', mode = 'v', desc = 'Reset selected hunk' },
+    { '<leader>gs', function() require('gitsigns').stage_hunk() end, mode = 'v', desc = 'Stage selected hunk' },
+    { '<leader>gr', function() require('gitsigns').reset_hunk() end, mode = 'v', desc = 'Reset selected hunk' },
   },
   config = function()
     require('gitsigns').setup({
