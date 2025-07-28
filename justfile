@@ -133,6 +133,17 @@ install: backup setup-nvim
             printf "{{yellow}}Warning: $file not found{{nc}}\n"; \
         fi \
     done
+    @mkdir -p "{{claude_config_dir}}/commands"
+    @for command in {{global_claude_commands}}; do \
+        if [ -f "{{dotfiles_dir}}/.claude/commands/$command" ]; then \
+
+            if [ ! -f "{{claude_config_dir}}/commands/$command" ] || ! cmp -s "{{dotfiles_dir}}/.claude/commands/$command" "{{claude_config_dir}}/commands/$command"; then \
+                cp "{{dotfiles_dir}}/.claude/commands/$command" "{{claude_config_dir}}/commands/$command"; \
+            fi; \
+        else \
+            printf "{{yellow}}Warning: Claude command $command not found{{nc}}\n"; \
+        fi \
+    done
     @printf "{{green}}Dotfiles installation complete!{{nc}}\n"
     @printf "{{yellow}}Run 'source ~/.bashrc' to reload your shell{{nc}}\n"
 
