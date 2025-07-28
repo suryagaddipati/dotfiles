@@ -366,11 +366,11 @@ grp pattern ext1 [ext2...]       # Multi-extension grep using git ls-files (e.g.
 - `<leader>/` or `<leader>h` - Clear search highlighting
 
 #### File Explorer (nvim-tree)
-- `<leader>e` - Toggle nvim-tree
+- `<leader>p` - Toggle nvim-tree
 
 #### File Finding (Telescope)
-- `<leader>p` - Find files in project
-- `<leader>f` - Live grep (search text in files)
+- `<leader>f` - Find files in project
+- `<leader>e` - Live grep (search text in files)
 - `<leader>b` - Find buffers
 - `<leader>hr` - Recent files history
 
@@ -1208,8 +1208,8 @@ gd             # Go to definition (neovim LSP)
 #### Example 2: Git Workflow Integration
 ```bash
 # Editing multiple files in neovim
-<leader>p      # Find files (telescope)
-<leader>f TODO # Search for TODOs across project (live grep)
+<leader>f      # Find files (telescope)
+<leader>e TODO # Search for TODOs across project (live grep)
 Tab            # Next buffer (neovim)
 <leader>w      # Save current file
 Alt+l          # Switch to terminal pane
@@ -1265,9 +1265,9 @@ Result:           Zero startup time, persistent state
 #### The File Management Flow
 ```bash
 # Multiple ways to navigate files, choose by context:
-<leader>p      # Find files (telescope) - when you know the name
-<leader>f      # Live grep (telescope) - when searching content
-<leader>e      # File tree (nvim-tree) - when browsing structure
+<leader>f      # Find files (telescope) - when you know the name
+<leader>e      # Live grep (telescope) - when searching content
+<leader>p      # File tree (nvim-tree) - when browsing structure
 Alt+2          # Dedicated file manager window (ranger) - for operations
 ```
 
