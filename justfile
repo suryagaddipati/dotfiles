@@ -20,7 +20,7 @@ config_files := '.config/alacritty/alacritty.toml .config/wezterm/wezterm.lua .c
 claude_files := '.claude/hooks.json .claude/settings.local.json .claude/.mcp.json'
 claude_dirs := '.claude/agents .claude/commands'
 claude_scripts := '.claude/mcp-install.sh'
-git_commands := 'git-auto-commit.sh'
+git_commands := 'git-commands/git-auto-commit.sh'
 claude_commands := '.claude/local/claude'
 
 # Colors
