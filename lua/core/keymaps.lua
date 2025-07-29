@@ -42,7 +42,8 @@ keymap('n', 'g*', 'g*zzzv', { desc = 'Search partial word forward' })
 keymap('n', 'g#', 'g#zzzv', { desc = 'Search partial word backward' })
 
 -- Better search and replace workflow
-keymap('n', '<leader>sr', ':%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>', { desc = 'Search and replace word under cursor' })
+keymap('n', '<leader>sr', ':%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>',
+  { desc = 'Search and replace word under cursor' })
 keymap('v', '<leader>sr', '"hy:%s/<C-r>h/<C-r>h/gc<left><left><left>', { desc = 'Search and replace selection' })
 
 keymap('v', '<', '<gv')
@@ -134,4 +135,22 @@ keymap('n', '<leader>tr', ':set relativenumber!<CR>', { desc = 'Toggle relative 
 keymap('n', '<leader>tw', ':set wrap!<CR>', { desc = 'Toggle word wrap' })
 keymap('n', '<leader>ts', ':set spell!<CR>', { desc = 'Toggle spell check' })
 
-
+--- Git shortcuts
+keymap('n',
+  '<leader>gc',
+  function()
+    local notify_id = Snacks.notify('Running git auto-commit...', {
+      level = 'info',
+      timeout = false -- Keep notification open
+    })
+    vim.system({ 'git', 'auto-commit' }, {}, function(result)
+      notify_id.hide() -- Dismiss the running notification
+      if result.code == 0 then
+        Snacks.notify('Git auto-commit completed', { level = 'info' })
+      else
+        Snacks.notify('Git auto-commit failed', { level = 'error' })
+      end
+    end)
+  end,
+  { desc = 'Commit staged changes' }
+)
