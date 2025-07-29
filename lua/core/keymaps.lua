@@ -140,6 +140,7 @@ keymap('n',
   '<leader>gc',
   function()
     local note_id = Snacks.notifier.notify("Running git commit...", "info", {
+      timeout = false,
       spinner = true,
       title = "Git",
       position = "bottom_right",
