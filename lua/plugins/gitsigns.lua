@@ -7,7 +7,8 @@ return {
     { '<leader>gn', function() require('gitsigns').nav_hunk('next', { preview = true }) end, desc = 'Preview next hunk' },
     { ',n',         function() require('gitsigns').nav_hunk('next', { preview = true }) end, desc = 'Preview next hunk' },
     { '<leader>gN', function() require('gitsigns').nav_hunk('prev', { preview = true }) end, desc = 'Preview previous hunk' },
-    { '<leader>gd', function() require('gitsigns').reset_hunk() end,                       desc = 'Reset git hunk' },
+    { '<leader>gd', function() require('gitsigns').reset_hunk() end,                       desc = 'Discard git hunk' },
+    { '<leader>gD', function() require('gitsigns').reset_buffer() end,                     desc = 'Discard entire buffer' },
     { '<leader>gs', function() require('gitsigns').stage_hunk() end,                       desc = 'Stage git hunk' },
     {
       '<leader>gS',
