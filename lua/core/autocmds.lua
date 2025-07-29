@@ -98,3 +98,21 @@ vim.api.nvim_create_autocmd('QuickFixCmdPost', {
   end,
 })
 
+-- Auto-reload files when changed externally
+vim.api.nvim_create_autocmd({ 'FocusGained', 'BufEnter', 'CursorHold', 'CursorHoldI' }, {
+  group = augroup,
+  pattern = '*',
+  callback = function()
+    if vim.fn.mode() ~= 'c' then
+      vim.cmd('checktime')
+    end
+  end,
+})
+
+-- Silent file reload when changed externally
+vim.api.nvim_create_autocmd('FileChangedShellPost', {
+  group = augroup,
+  pattern = '*',
+  command = 'echon ""',
+})
+
