@@ -144,7 +144,6 @@ keymap('n',
       title = "Git",
       position = "bottom_right",
     })
-
     vim.system({ "git", "auto-commit" }, {}, function(result)
       Snacks.notifier.hide(note_id)
     end)
