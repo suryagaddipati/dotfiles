@@ -139,17 +139,14 @@ keymap('n', '<leader>ts', ':set spell!<CR>', { desc = 'Toggle spell check' })
 keymap('n',
   '<leader>gc',
   function()
-    local notify_id = Snacks.notify('Running git auto-commit...', {
-      level = 'info',
-      timeout = false -- Keep notification open
+    local note_id = Snacks.notifier.notify("Running git commit...", "info", {
+      spinner = true,
+      title = "Git",
+      position = "bottom_right",
     })
-    vim.system({ 'git', 'auto-commit' }, {}, function(result)
-      notify_id.hide() -- Dismiss the running notification
-      if result.code == 0 then
-        Snacks.notify('Git auto-commit completed', { level = 'info' })
-      else
-        Snacks.notify('Git auto-commit failed', { level = 'error' })
-      end
+
+    vim.system({ "git", "auto-commit" }, {}, function(result)
+      Snacks.notifier.hide(note_id)
     end)
   end,
   { desc = 'Commit staged changes' }
