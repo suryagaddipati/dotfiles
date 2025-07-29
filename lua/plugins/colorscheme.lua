@@ -61,6 +61,6 @@ return {
     
     -- Create command and keybinding for night mode toggle
     vim.api.nvim_create_user_command('ToggleNightMode', toggle_night_mode, {})
-    vim.keymap.set('n', '<leader>tn', toggle_night_mode, { desc = 'Toggle night mode' })
+    vim.keymap.set('n', '<leader>n', toggle_night_mode, { desc = 'Toggle night mode' })
   end,
 }
