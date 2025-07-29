@@ -49,6 +49,47 @@ return {
       end,
       desc = 'Commit staged changes'
     },
+    {
+      '<leader>gC',
+      function()
+        local notify_handle = nil
+        
+        -- Show notification with error handling
+        local ok, result = pcall(function()
+          return Snacks.notify('Running Claude commit...', { 
+            level = 'info',
+            timeout = false  -- Keep notification open
+          })
+        end)
+        
+        if ok and result then
+          notify_handle = result
+        end
+        
+        vim.system({'claude', 'commit', '-p', '--dangerously-skip-permissions'}, {}, function(result)
+          -- Dismiss the running notification safely
+          if notify_handle then
+            pcall(function()
+              if type(notify_handle) == 'table' and notify_handle.hide then
+                notify_handle.hide()
+              elseif type(notify_handle.close) == 'function' then
+                notify_handle.close()
+              end
+            end)
+          end
+          
+          -- Show completion notification
+          pcall(function()
+            if result.code == 0 then
+              Snacks.notify('Claude commit completed', { level = 'info' })
+            else
+              Snacks.notify('Claude commit failed: ' .. (result.stderr or 'Unknown error'), { level = 'error' })
+            end
+          end)
+        end)
+      end,
+      desc = 'Commit with Claude message'
+    },
     { '<leader>gs', function() require('gitsigns').stage_hunk() end, mode = 'v', desc = 'Stage selected hunk' },
     { '<leader>gr', function() require('gitsigns').reset_hunk() end, mode = 'v', desc = 'Reset selected hunk' },
   },
