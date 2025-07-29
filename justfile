@@ -117,7 +117,7 @@ install: backup setup-nvim
     done
     @for file in {{git_commands}}; do \
         if [ -f "{{dotfiles_dir}}/$file" ]; then \
-            target_name=$(echo "$file" | sed 's/\.sh$//'); \
+            target_name=$(basename "$file" .sh); \
             printf "{{green}}Installing git command: $target_name{{nc}}\n"; \
             ln -sf "{{dotfiles_dir}}/$file" "{{home_dir}}/.local/bin/$target_name"; \
             chmod +x "{{home_dir}}/.local/bin/$target_name"; \
@@ -328,7 +328,7 @@ uninstall:
         fi \
     done
     @for file in {{git_commands}}; do \
-        target_name=$(echo "$file" | sed 's/\.sh$//'); \
+        target_name=$(basename "$file" .sh); \
         target_file="{{home_dir}}/.local/bin/$target_name"; \
         if [ -L "$target_file" ]; then \
             printf "{{yellow}}Removing git command: $target_name{{nc}}\n"; \
@@ -420,7 +420,7 @@ status:
     @printf "\n"
     @printf "{{yellow}}Git Commands:{{nc}}\n"
     @for file in {{git_commands}}; do \
-        target_name=$(echo "$file" | sed 's/\.sh$//'); \
+        target_name=$(basename "$file" .sh); \
         target_file="{{home_dir}}/.local/bin/$target_name"; \
         if [ -L "$target_file" ]; then \
             link_target=$(readlink "$target_file"); \
