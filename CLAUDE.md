@@ -11,20 +11,15 @@ This is a personal dotfiles repository containing configuration files for bash, 
 ### Installation Strategy
 - **Symlink-based architecture**: All configurations are symlinked from the repository to their target locations, enabling live editing
 - **Automated via justfile**: The `just` command provides comprehensive installation, backup, and management with cross-platform support
-- **Backup-first approach**: Always backs up existing configurations before installation to `~/.dotfiles_backup`
-- **Dual editor support**: Both vim (.vimrc) and neovim (init.lua) configurations maintained with shared keybindings
 - **Modern neovim focus**: Recent migration to performance-optimized configuration with Claude Code integration
 
 ### Integration Patterns
 - **Consistent theming**: Gruvbox color scheme unified across tmux, vim, and neovim
 - **Unified key bindings**: Vim-style navigation throughout (tmux panes, neovim splits, Alt+hjkl shortcuts)
-- **Smart session management**: Intelligent tmux session attachment/creation via `t` alias and `tmux_smart_session` function
-- **Multi-extension search**: `grp` function for efficient codebase searching across file types
 
 ### Key Technical Details
-- **Tmux prefix**: Ctrl-Space instead of default Ctrl-B (critical for avoiding conflicts)
 - **Neovim leader**: Space for all custom mappings
-- **Plugin managers**: lazy.nvim (neovim), vim-plug (vim) with auto-installation
+- **Plugin managers**: lazy.nvim (neovim)
 - **Development tools**: mise (unified tool manager for Node.js, Python, Go, Rust, etc.), replacing NVM/SDKMAN/etc.
 - **Cross-platform support**: Justfile detects and uses appropriate package manager (apt/brew/yum)
 - **Claude Code integration**: Official Coder plugin integrated with neovim for AI assistance
@@ -32,7 +27,7 @@ This is a personal dotfiles repository containing configuration files for bash, 
 ## File Structure
 
 - `.bashrc` - Bash shell configuration with aliases, functions, and environment setup
-- `.gitconfig` - Git configuration with user settings and aliases  
+- `.gitconfig` - Git configuration with user settings and aliases
 - `.tmux.conf` - Comprehensive tmux configuration with custom key bindings and appearance
 - `init.lua` - Modern neovim configuration with lua-based plugins and custom mappings
 - `tmux.bash` - Tmux session management wrapper function
@@ -53,7 +48,7 @@ This is a personal dotfiles repository containing configuration files for bash, 
 - Extended PATH with `~/.local/bin` for user-installed tools (including `just`)
 
 ### Git Configuration
-- Email: meowlicious99@gmail.com, Name: Surya G  
+- Email: meowlicious99@gmail.com, Name: Surya G
 - GitHub CLI integration for credential management
 - Useful aliases: `s` (status), `co` (checkout), `b` (branch)
 - Auto-push to origin HEAD with `-u` flag
@@ -65,7 +60,6 @@ This is a personal dotfiles repository containing configuration files for bash, 
 - Mouse support enabled
 - Comprehensive key bindings for window/pane/session management
 - Alt+number shortcuts for quick window switching
-- F12 for nested tmux session support
 
 ### Neovim Configuration
 - Leader key: comma (,)
@@ -131,7 +125,7 @@ mise global node@20
 ### Available Tools
 mise supports hundreds of tools including:
 - **Languages**: node, python, go, rust, java, ruby, php, etc.
-- **Databases**: postgres, mysql, redis, etc.  
+- **Databases**: postgres, mysql, redis, etc.
 - **Build tools**: gradle, maven, cmake, etc.
 - **Cloud tools**: terraform, kubectl, aws-cli, etc.
 
@@ -410,7 +404,7 @@ grp pattern ext1 [ext2...]       # Multi-extension grep using git ls-files (e.g.
 
 **Git Inspection & Navigation**
 - `<leader>gg` - Git status (diffview)
-- `<leader>gh` - Git file history 
+- `<leader>gh` - Git file history
 - `<leader>gf` - Git files panel
 - `<leader>gb` - Git blame current line
 - `<leader>gp` - Preview git hunk
@@ -421,7 +415,7 @@ grp pattern ext1 [ext2...]       # Multi-extension grep using git ls-files (e.g.
 - `<leader>gs` - Stage current hunk
 - `<leader>gS` - Stage entire buffer
 - `<leader>gu` - Unstage/undo hunk
-- `<leader>gr` - Reset/discard hunk  
+- `<leader>gr` - Reset/discard hunk
 - `<leader>gR` - Reset entire buffer
 
 **Git Commits**
@@ -452,7 +446,7 @@ grp pattern ext1 [ext2...]       # Multi-extension grep using git ls-files (e.g.
 
 # 4. Commit with appropriate method
 <leader>gc          # Quick auto-commit
-<leader>gC          # Interactive manual commit  
+<leader>gC          # Interactive manual commit
 <leader>gm          # Claude-generated commit message
 ```
 
@@ -604,7 +598,7 @@ The Claude Code integration consists of four main components:
 The Claude Code setup follows three core principles:
 
 1. **Security First**: Granular permissions and scoped access prevent unauthorized operations
-2. **Development Efficiency**: Automated workflows reduce context switching and manual tasks  
+2. **Development Efficiency**: Automated workflows reduce context switching and manual tasks
 3. **Extensibility**: Modular architecture allows easy addition of new capabilities
 
 ## Claude MCP (Model Context Protocol) Integration
@@ -657,7 +651,7 @@ Main MCP server configuration defining available servers and their parameters:
       "args": ["@modelcontextprotocol/server-filesystem", "/home/surya/code"]
     },
     "git": {
-      "command": "npx", 
+      "command": "npx",
       "args": ["@modelcontextprotocol/server-git", "--repository", "/home/surya/code/dotfiles"]
     }
   }
@@ -710,7 +704,7 @@ nvim ~/.claude/.mcp.json
 
 ### Security Considerations
 - **Filesystem access**: Limited to `/home/surya/code` directory
-- **Git operations**: Restricted to the dotfiles repository 
+- **Git operations**: Restricted to the dotfiles repository
 - **API keys**: Store securely and rotate regularly
 - **Bash commands**: Executed within the MCP security context
 
@@ -753,7 +747,7 @@ Provides seamless integration between Claude Code and your development environme
     "PostToolUse": [
       {
         "matcher": { "tool_name": "Edit" },
-        "hooks": [{ 
+        "hooks": [{
           "type": "command",
           "command": "curl IDE reload endpoint...",
           "timeout": 5000
@@ -775,7 +769,7 @@ Granular permissions controlling Claude Code's access to system tools:
   "permissions": {
     "allow": [
       "Bash(git add:*)",
-      "Bash(npm install:*)", 
+      "Bash(npm install:*)",
       "Bash(just status:*)",
       "WebFetch(domain:github.com)",
       "mcp__ide__getDiagnostics"
@@ -803,7 +797,7 @@ Configures Model Context Protocol servers for enhanced AI capabilities:
       "env": {}
     },
     "playwright": {
-      "command": "npx", 
+      "command": "npx",
       "args": ["@playwright/mcp"],
       "env": {}
     }
@@ -838,7 +832,7 @@ Comprehensive project overview command for quick understanding:
 
 **Analysis Scope**:
 - Repository structure and project type identification
-- Recent development activity and commit analysis  
+- Recent development activity and commit analysis
 - Technology stack and architecture overview
 - Current direction and development priorities
 
@@ -852,7 +846,7 @@ Comprehensive installation script for all MCP servers:
 **Installation Process**:
 1. **Dependency Check**: Verifies npm and node availability via mise
 2. **Core Servers**: Installs filesystem, git, bash, database servers
-3. **Integration Servers**: Adds GitHub, Slack, search capabilities  
+3. **Integration Servers**: Adds GitHub, Slack, search capabilities
 4. **Browser Automation**: Installs Playwright with browser binaries
 5. **System Dependencies**: Handles OS-specific requirements
 
@@ -873,7 +867,7 @@ The Claude configuration integrates with existing development patterns:
 Multi-layered security approach:
 
 1. **Command Restrictions**: Only approved bash commands with specific patterns
-2. **Scope Limitations**: File access restricted to development directories  
+2. **Scope Limitations**: File access restricted to development directories
 3. **API Authentication**: Secure token management for external services
 4. **Domain Restrictions**: Web access limited to trusted documentation sources
 5. **Audit Trail**: All operations logged for security monitoring```
@@ -997,7 +991,7 @@ I           " Toggle hidden files
 **jiangmiao/auto-pairs** - Auto-close brackets
 ```vim
 "           " Types ""| (cursor between)
-(           " Types ()| 
+(           " Types ()|
 {<Enter>    " Types {<newline>|<newline>}
 ```
 
@@ -1152,7 +1146,7 @@ Neovim splits:  Ctrl+h/j/k/l        (no prefix, same pattern)
 #### Instant Context Switching
 ```bash
 # The developer's movement pattern:
-Alt+h/j/k/l     → Navigate between tmux panes instantly  
+Alt+h/j/k/l     → Navigate between tmux panes instantly
 Alt+1/2/3       → Switch tmux windows (projects) instantly
 Tab/Shift+Tab   → Cycle neovim buffers (files) instantly
 ```
@@ -1180,12 +1174,12 @@ Edit code → Alt+l → Git commands → Alt+j → Check tests → Alt+h → Bac
 ```bash
 # Smart session management with the 't' command:
 t frontend      # Attach/create frontend project session
-t backend       # Attach/create backend project session  
+t backend       # Attach/create backend project session
 t infra         # Attach/create infrastructure session
 
 # Instant project switching:
 Alt+1          # Frontend window
-Alt+2          # Backend window  
+Alt+2          # Backend window
 Alt+3          # Infrastructure window
 ```
 
@@ -1214,7 +1208,7 @@ Tab            # Next buffer (neovim)
 <leader>w      # Save current file
 Alt+l          # Switch to terminal pane
 g s            # Git status (bash alias)
-g add .        # Stage changes  
+g add .        # Stage changes
 g commit -m "fix: resolve TODO items"
 Alt+h          # Back to neovim - no interruption to flow
 ```
@@ -1229,7 +1223,7 @@ Alt+3          # Testing window (REPL, test runner)
 # Flow:
 Alt+2 → Research API docs
 Alt+1 → Implement feature
-Alt+3 → Test in REPL  
+Alt+3 → Test in REPL
 Alt+1 → Refine code
 Alt+3 → Run full test suite
 ```
@@ -1277,7 +1271,7 @@ Alt+2          # Dedicated file manager window (ranger) - for operations
 t project1     # Attach to yesterday's session
 # Everything exactly as you left it:
 # - Neovim with files open, undo history intact
-# - Terminal with command history  
+# - Terminal with command history
 # - Test pane with last output
 # Zero setup time, instant productivity
 ```
@@ -1286,7 +1280,7 @@ t project1     # Attach to yesterday's session
 ```bash
 # Debugging layout:
 Main pane:     Neovim with code, LSP providing context
-Right pane:    Debugger (pdb, gdb, node inspect)  
+Right pane:    Debugger (pdb, gdb, node inspect)
 Bottom pane:   Application output/logs
 # Navigate with Alt+hjkl while maintaining all contexts
 ```
@@ -1298,7 +1292,7 @@ Bottom pane:   Application output/logs
 - **Persistent neovim**: No repeated startup costs
 - **Shared LSP servers**: Language intelligence stays loaded
 
-#### CPU Efficiency  
+#### CPU Efficiency
 - **Lazy plugin loading**: Neovim only loads what you need
 - **Process reuse**: Terminal tools stay warm in tmux panes
 - **Smart caching**: Telescope caches, LSP maintains project index
