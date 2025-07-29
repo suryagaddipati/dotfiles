@@ -12,6 +12,7 @@
 [alias]
 	s = status
 	push = push -u origin HEAD
+	p = push -u origin HEAD
 	co = checkout
 	b = branch
 [init]
