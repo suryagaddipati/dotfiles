@@ -140,12 +140,11 @@ keymap('n',
   '<leader>gc',
   function()
     local note_id = Snacks.notifier.notify("Running git commit...", "info", {
-      timeout = false,
       spinner = true,
       title = "Git",
       position = "bottom_right",
     })
-    vim.system({ "git", "auto-commit" }, {}, function(result)
+    vim.system({ "git", "auto-commit" }, {}, function(_)
       Snacks.notifier.hide(note_id)
     end)
   end,
