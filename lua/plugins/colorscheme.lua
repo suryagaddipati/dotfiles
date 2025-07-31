@@ -3,8 +3,31 @@ return {
   lazy = false,
   priority = 1000,
   config = function()
-    -- Night mode state
-    local night_mode = false
+    -- Path to store theme preference (shared with tmux and other tools)
+    local theme_file = vim.fn.expand('~/.config/theme_preference')
+    
+    -- Load theme preference from file
+    local function load_theme_preference()
+      local file = io.open(theme_file, 'r')
+      if file then
+        local content = file:read('*all')
+        file:close()
+        return content:match('night') == 'night'
+      end
+      return false -- Default to day mode
+    end
+    
+    -- Save theme preference to file
+    local function save_theme_preference(is_night)
+      local file = io.open(theme_file, 'w')
+      if file then
+        file:write(is_night and 'night' or 'day')
+        file:close()
+      end
+    end
+    
+    -- Night mode state (load from file)
+    local night_mode = load_theme_preference()
     
     local function setup_gruvbox()
       require('gruvbox').setup({
@@ -53,6 +76,7 @@ return {
     -- Toggle night mode function
     local function toggle_night_mode()
       night_mode = not night_mode
+      save_theme_preference(night_mode)
       setup_gruvbox()
     end
     
