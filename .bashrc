@@ -80,7 +80,7 @@ _setup_colors() {
         test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
         alias ls='ls --color=auto'
         alias grep='grep --color=auto'
-        alias fgrep='fgrep --color=auto' 
+        alias fgrep='fgrep --color=auto'
         alias egrep='egrep --color=auto'
     fi
 }
@@ -103,9 +103,6 @@ alias g='git'
 
 # tmux shortcuts
 alias t='tmux_smart_session'
-
-# claude alias
-alias claude='/home/surya/.claude/local/claude'
 
 # git auto-commit alias
 alias git-autocommit='/home/surya/code/dotfiles/git-auto-commit.sh'
@@ -170,6 +167,9 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 
 # Add ~/.local/bin to PATH for user-installed tools (including just)
 export PATH="$HOME/.local/bin:$PATH"
+
+# Add git-commands to PATH for custom git subcommands
+export PATH="$HOME/code/dotfiles/git-commands:$PATH"
 
 # Set vi mode
 set -o vi

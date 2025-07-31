@@ -144,9 +144,28 @@ keymap('n',
       title = "Git",
       position = "bottom_right",
     })
-    vim.system({ "git", "auto-commit" }, {}, function(_)
-      Snacks.notifier.hide(note_id)
+    vim.system({ "git", "claude-staged-commit" }, {}, function(_)
+      vim.schedule(function()
+        Snacks.notifier.hide(note_id)
+      end)
     end)
   end,
   { desc = 'Commit staged changes' }
+)
+
+keymap('n',
+  '<leader>gC',
+  function()
+    local note_id = Snacks.notifier.notify("Running Claude commit...", "info", {
+      spinner = true,
+      title = "Git",
+      position = "bottom_right",
+    })
+    vim.system({ "git", "claude-commit" }, {}, function(_)
+      vim.schedule(function()
+        Snacks.notifier.hide(note_id)
+      end)
+    end)
+  end,
+  { desc = 'Claude commit everything' }
 )
