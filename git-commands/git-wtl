@@ -1,29 +1,8 @@
 #!/bin/bash
 
-# git-wtl: List all git worktrees
-
-set -e
-
-# Check if we're in a git repository
-if ! git rev-parse --git-dir > /dev/null 2>&1; then
-    echo "Error: Not in a git repository"
-    exit 1
-fi
-
-# Check if any worktrees exist
-if ! git worktree list > /dev/null 2>&1; then
-    echo "No worktrees found"
-    exit 0
-fi
-
-echo "Git Worktrees:"
-echo "=============="
-
-# Get worktree list and format it nicely
 git worktree list --porcelain | while IFS= read -r line; do
     if [[ $line == worktree* ]]; then
         worktree_path=${line#worktree }
-        # Extract just the directory name from the path
         worktree_name=$(basename "$worktree_path")
         printf "%-20s" "$worktree_name"
     elif [[ $line == branch* ]]; then
@@ -31,15 +10,8 @@ git worktree list --porcelain | while IFS= read -r line; do
         printf "%-20s" "($branch_name)"
     elif [[ $line == HEAD* ]]; then
         commit_hash=${line#HEAD }
-        commit_hash_short=${commit_hash:0:8}
-        printf "%s" "$commit_hash_short"
+        printf "%s" "${commit_hash:0:8}"
     elif [[ -z $line ]]; then
-        # Empty line indicates end of worktree entry
         echo
     fi
 done
-
-# If no output was produced by the while loop, fall back to simple list
-if [ ${#BASH_LINENO[@]} -eq 1 ]; then
-    git worktree list
-fi
