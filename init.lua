@@ -1,4 +1,5 @@
 require('core.options')
 require('core.keymaps')
+require('core.git-keymaps')
 require('core.lazy')
 require('core.autocmds')
