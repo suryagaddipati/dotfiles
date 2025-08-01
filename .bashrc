@@ -209,3 +209,6 @@ focus() {
 
 
 eval "$(/home/surya/.local/bin/mise activate bash)"
+
+# opencode
+export PATH=/home/surya/.opencode/bin:$PATH
