@@ -45,10 +45,7 @@ vim.opt.guicursor = {
 -- Better visual feedback
 vim.opt.laststatus = 2  -- Always show status line
 vim.opt.showcmd = true
-vim.opt.showmode = false  -- Status line will show mode
-
--- Custom statusline with file path
-vim.opt.statusline = '%f %m%r%h%w%=%l,%c %p%%'
+vim.opt.showmode = false  -- Lualine will show mode
 
 vim.opt.mouse = 'a'
 vim.opt.clipboard = 'unnamedplus'
