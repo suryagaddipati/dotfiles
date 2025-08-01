@@ -251,18 +251,18 @@ keymap('n', '<leader>gwl', function()
   end
 end, { desc = 'List git worktrees' })
 
-keymap('n', '<leader>gwr', function()
-  vim.ui.input({ prompt = 'Remove worktree: ' }, function(branch)
+keymap('n', '<leader>gwd', function()
+  vim.ui.input({ prompt = 'Delete worktree: ' }, function(branch)
     if branch and branch ~= '' then
       local repo_root = vim.fn.system('git rev-parse --show-toplevel'):gsub('\n', '')
       local worktree_path = repo_root .. '/.worktrees/' .. branch
-      local cmd = 'git worktree remove ' .. worktree_path
+      local cmd = 'git wtd ' .. worktree_path
       vim.fn.system(cmd)
       if vim.v.shell_error == 0 then
-        vim.notify('Worktree removed: ' .. branch, vim.log.levels.INFO)
+        vim.notify('Worktree deleted: ' .. branch, vim.log.levels.INFO)
       else
-        vim.notify('Failed to remove worktree: ' .. branch, vim.log.levels.ERROR)
+        vim.notify('Failed to delete worktree: ' .. branch, vim.log.levels.ERROR)
       end
     end
   end)
-end, { desc = 'Remove git worktree' })
+end, { desc = 'Delete git worktree' })
