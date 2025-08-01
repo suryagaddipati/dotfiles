@@ -15,6 +15,7 @@
 	p = push -u origin HEAD
 	co = checkout
 	b = branch
+	wtd = worktree remove
 [init]
 	defaultBranch = main
 [core]
