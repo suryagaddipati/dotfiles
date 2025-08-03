@@ -3,7 +3,7 @@ return {
   dependencies = { "folke/snacks.nvim" },
   config = function()
     require('claudecode').setup({
-      terminal_cmd = 'claude --dangerously-skip-permissions',
+      terminal_cmd = '~/.claude/local/claude --dangerously-skip-permissions',
       terminal = {
         split_side = "right",           -- "left", "right", "top", "bottom"
         split_height_percentage = 0.30, -- For horizontal splits (top/bottom)

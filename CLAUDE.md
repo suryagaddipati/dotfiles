@@ -404,19 +404,20 @@ grp pattern ext1 [ext2...]       # Multi-extension grep using git ls-files (e.g.
 
 **Git Inspection & Navigation**
 - `<leader>gg` - Git status (diffview)
-- `<leader>gh` - Git file history
+- `<leader>gH` - Git file history
 - `<leader>gf` - Git files panel
 - `<leader>gb` - Git blame current line
-- `<leader>gp` - Preview git hunk
-- `<leader>gn` - Next hunk with preview
-- `<leader>gN` - Previous hunk with preview
 
-**Git Actions**
-- `<leader>gs` - Stage current hunk
-- `<leader>gS` - Stage entire buffer
-- `<leader>gu` - Unstage/undo hunk
-- `<leader>gr` - Reset/discard hunk
-- `<leader>gR` - Reset entire buffer
+**Git Hunk Operations (under `<leader>gh`)**
+- `<leader>ghp` - Preview git hunk
+- `<leader>ghn` - Next hunk with preview
+- `<leader>ghN` - Previous hunk with preview
+- `<leader>ghs` - Stage current hunk
+- `<leader>ghS` - Stage entire buffer
+- `<leader>ghu` - Unstage/undo hunk
+- `<leader>ghr` - Reset/discard hunk
+- `<leader>ghR` - Reset entire buffer
+- `<leader>ghd` - Discard git hunk (alias for reset)
 
 **Git Commits**
 - `<leader>gc` - Quick commit (auto-generated message)
@@ -433,16 +434,16 @@ grp pattern ext1 [ext2...]       # Multi-extension grep using git ls-files (e.g.
 ```bash
 # 1. Inspect changes
 <leader>gg          # Open git status overview
-<leader>gp          # Preview current hunk
-<leader>gn          # Navigate to next hunk
+<leader>ghp         # Preview current hunk
+<leader>ghn         # Navigate to next hunk
 
 # 2. Get AI assistance
 <leader>ga          # Add hunk to Claude for review
 <leader>gi          # Ask Claude to explain/improve hunk
 
 # 3. Stage changes
-<leader>gs          # Stage current hunk
-<leader>gS          # Stage entire buffer
+<leader>ghs         # Stage current hunk
+<leader>ghS         # Stage entire buffer
 
 # 4. Commit with appropriate method
 <leader>gc          # Quick auto-commit
