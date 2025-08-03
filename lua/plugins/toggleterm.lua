@@ -16,6 +16,7 @@ return {
     { '<leader>t7', '<cmd>7ToggleTerm<cr>', desc = 'Terminal 7' },
     { '<leader>t8', '<cmd>8ToggleTerm<cr>', desc = 'Terminal 8' },
     { '<leader>t9', '<cmd>9ToggleTerm<cr>', desc = 'Terminal 9' },
+    { '<leader>tz', '<cmd>1ToggleTerm direction=tab<cr>', desc = 'Terminal 1 maximized' },
   },
   config = function()
     require('toggleterm').setup({
