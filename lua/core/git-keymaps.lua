@@ -1,19 +1,38 @@
 local keymap = vim.keymap.set
 
+--- Helper function for git commands with notifications
+local function run_git_command(command, message, success_msg, error_msg)
+  local note_id = Snacks.notifier.notify(message, "info", {
+    spinner = true,
+    title = "Git",
+    position = "bottom_right",
+  })
+  
+  vim.system(command, {}, function(result)
+    vim.schedule(function()
+      Snacks.notifier.hide(note_id)
+      if result.code == 0 then
+        if success_msg then
+          vim.notify(success_msg, vim.log.levels.INFO)
+        end
+      else
+        local error_text = error_msg or "Git command failed"
+        vim.notify(error_text .. ": " .. (result.stderr or ""), vim.log.levels.ERROR)
+      end
+    end)
+  end)
+end
+
 --- Git shortcuts
 keymap('n',
   '<leader>gc',
   function()
-    local note_id = Snacks.notifier.notify("Running git commit...", "info", {
-      spinner = true,
-      title = "Git",
-      position = "bottom_right",
-    })
-    vim.system({ "git", "claude-staged-commit" }, {}, function(_)
-      vim.schedule(function()
-        Snacks.notifier.hide(note_id)
-      end)
-    end)
+    run_git_command(
+      { "git", "claude-staged-commit" },
+      "Running git commit...",
+      "Git commit successful",
+      "Git commit failed"
+    )
   end,
   { desc = 'Commit staged changes' }
 )
@@ -21,18 +40,27 @@ keymap('n',
 keymap('n',
   '<leader>gC',
   function()
-    local note_id = Snacks.notifier.notify("Running Claude commit...", "info", {
-      spinner = true,
-      title = "Git",
-      position = "bottom_right",
-    })
-    vim.system({ "git", "claude-commit" }, {}, function(_)
-      vim.schedule(function()
-        Snacks.notifier.hide(note_id)
-      end)
-    end)
+    run_git_command(
+      { "git", "claude-commit" },
+      "Running Claude commit...",
+      "Claude commit successful",
+      "Claude commit failed"
+    )
   end,
   { desc = 'Claude commit everything' }
+)
+
+keymap('n',
+  '<leader>gp',
+  function()
+    run_git_command(
+      { "git", "push" },
+      "Running git push...",
+      "Git push successful",
+      "Git push failed"
+    )
+  end,
+  { desc = 'Git push' }
 )
 
 -- Git worktree shortcuts
