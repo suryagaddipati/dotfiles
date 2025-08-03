@@ -4,7 +4,7 @@ return {
   config = function()
     require('which-key').setup({
       preset = 'modern',
-      delay = 100,
+      delay = 500,
     })
   end,
 }
