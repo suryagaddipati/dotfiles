@@ -9,7 +9,7 @@ return {
           vim.cmd('DiffviewOpen')
         end
       end, desc = 'Git status (diffview)' },
-    { '<leader>gh', '<cmd>DiffviewFileHistory<cr>', desc = 'Git file history' },
+    { '<leader>gH', '<cmd>DiffviewFileHistory<cr>', desc = 'Git file history' },
     { '<leader>gf', '<cmd>DiffviewToggleFiles<cr>', desc = 'Git files panel' },
   },
   config = function()
