@@ -3,15 +3,16 @@ return {
   event = { 'BufReadPre', 'BufNewFile' },
   keys = {
     { '<leader>gb', function() require('gitsigns').blame_line() end,                       desc = 'Git blame line' },
-    { '<leader>gp', function() require('gitsigns').preview_hunk() end,                     desc = 'Preview git hunk' },
-    { '<leader>gn', function() require('gitsigns').nav_hunk('next', { preview = true }) end, desc = 'Preview next hunk' },
-    { ',n',         function() require('gitsigns').nav_hunk('next', { preview = true }) end, desc = 'Preview next hunk' },
-    { '<leader>gN', function() require('gitsigns').nav_hunk('prev', { preview = true }) end, desc = 'Preview previous hunk' },
-    { '<leader>gd', function() require('gitsigns').reset_hunk() end,                       desc = 'Discard git hunk' },
-    { '<leader>gD', function() require('gitsigns').reset_buffer() end,                     desc = 'Discard entire buffer' },
-    { '<leader>gs', function() require('gitsigns').stage_hunk() end,                       desc = 'Stage git hunk' },
+    -- All hunk operations moved under <leader>gh prefix
+    { '<leader>ghp', function() require('gitsigns').preview_hunk() end,                     desc = 'Preview git hunk' },
+    { '<leader>ghn', function() require('gitsigns').nav_hunk('next', { preview = true }) end, desc = 'Preview next hunk' },
+    { ',n',          function() require('gitsigns').nav_hunk('next', { preview = true }) end, desc = 'Preview next hunk' },
+    { '<leader>ghN', function() require('gitsigns').nav_hunk('prev', { preview = true }) end, desc = 'Preview previous hunk' },
+    { '<leader>ghd', function() require('gitsigns').reset_hunk() end,                       desc = 'Discard git hunk' },
+    { '<leader>ghD', function() require('gitsigns').reset_buffer() end,                     desc = 'Discard entire buffer' },
+    { '<leader>ghs', function() require('gitsigns').stage_hunk() end,                       desc = 'Stage git hunk' },
     {
-      '<leader>gS',
+      '<leader>ghS',
       function()
         local gitsigns = require('gitsigns')
         local bufnr = vim.api.nvim_get_current_buf()
@@ -30,10 +31,10 @@ return {
       end,
       desc = 'Stage entire buffer (handles new files)'
     },
-    { '<leader>gu', function() require('gitsigns').undo_stage_hunk() end, desc = 'Undo stage hunk' },
-    { '<leader>gR', function() require('gitsigns').reset_buffer() end,    desc = 'Reset entire buffer' },
-    { '<leader>gs', function() require('gitsigns').stage_hunk() end,      mode = 'v',                  desc = 'Stage selected hunk' },
-    { '<leader>gr', function() require('gitsigns').reset_hunk() end,      mode = 'v',                  desc = 'Reset selected hunk' },
+    { '<leader>ghu', function() require('gitsigns').undo_stage_hunk() end, desc = 'Undo stage hunk' },
+    { '<leader>ghR', function() require('gitsigns').reset_buffer() end,    desc = 'Reset entire buffer' },
+    { '<leader>ghs', function() require('gitsigns').stage_hunk() end,      mode = 'v',                  desc = 'Stage selected hunk' },
+    { '<leader>ghr', function() require('gitsigns').reset_hunk() end,      mode = 'v',                  desc = 'Reset selected hunk' },
   },
   config = function()
     require('gitsigns').setup({
