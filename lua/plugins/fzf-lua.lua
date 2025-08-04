@@ -3,17 +3,17 @@ return {
   dependencies = { 'nvim-tree/nvim-web-devicons' },
   keys = {
     -- File operations
-    { '<leader>f', function() require('fzf-lua').files() end, desc = 'Find files' },
+    { '<leader>o', function() require('fzf-lua').files() end, desc = 'Find files' },
     { '<leader>e', function() require('fzf-lua').live_grep() end, desc = 'Live grep' },
     { '<leader>b', function() require('fzf-lua').buffers() end, desc = 'Buffers' },
     { '<leader>hr', function() require('fzf-lua').oldfiles() end, desc = 'Recent files' },
-    
+
     -- Git integration
     { '<leader>gf', function() require('fzf-lua').git_files() end, desc = 'Git files' },
     { '<leader>gs', function() require('fzf-lua').git_status() end, desc = 'Git status' },
     { '<leader>gl', function() require('fzf-lua').git_commits() end, desc = 'Git log' },
     { '<leader>gb', function() require('fzf-lua').git_branches() end, desc = 'Git branches' },
-    
+
     -- LSP integration (avoiding conflicts with existing LSP keybindings)
     { '<leader>fD', function() require('fzf-lua').lsp_definitions() end, desc = 'LSP definitions (fzf)' },
     { '<leader>fR', function() require('fzf-lua').lsp_references() end, desc = 'LSP references (fzf)' },
@@ -21,7 +21,7 @@ return {
     { '<leader>fY', function() require('fzf-lua').lsp_workspace_symbols() end, desc = 'Workspace symbols' },
     { '<leader>fd', function() require('fzf-lua').lsp_document_diagnostics() end, desc = 'Document diagnostics' },
     { '<leader>fA', function() require('fzf-lua').lsp_workspace_diagnostics() end, desc = 'Workspace diagnostics' },
-    
+
     -- Utility functions
     { '<leader>r', function() require('fzf-lua').registers() end, desc = 'Registers' },
     { '<leader>:', function() require('fzf-lua').command_history() end, desc = 'Command history' },
@@ -30,7 +30,7 @@ return {
     { '<leader>?', function() require('fzf-lua').grep_curbuf() end, desc = 'Grep current buffer' },
     { '<leader>k', function() require('fzf-lua').keymaps() end, desc = 'Keymaps' },
     { '<leader>ht', function() require('fzf-lua').help_tags() end, desc = 'Help tags' },
-    
+
     -- Enhanced search functions matching your bash fzf functions
     { '<leader>fp', function() require('fzf-lua').grep_project() end, desc = 'Grep project' },
     { '<leader>fw', function() require('fzf-lua').grep_cword() end, desc = 'Grep word under cursor' },
@@ -40,10 +40,10 @@ return {
     -- Global settings
     global_resume = true,
     global_resume_query = true,
-    
+
     -- Use the same fzf binary as your bash setup
     fzf_bin = 'fzf',
-    
+
     -- Match your bash FZF_DEFAULT_OPTS
     fzf_opts = {
       ['--height'] = '40%',
@@ -53,7 +53,7 @@ return {
       ['--info'] = 'inline',
       ['--cycle'] = '',
     },
-    
+
     -- Window configuration
     winopts = {
       height = 0.85,
@@ -73,7 +73,7 @@ return {
         scrollbar = 'float',
       },
     },
-    
+
     -- Files configuration
     files = {
       prompt = 'Files❯ ',
@@ -87,7 +87,7 @@ return {
       rg_opts = "--color=never --files --hidden --follow -g '!.git'",
       fd_opts = "--color=never --type f --hidden --follow --exclude .git",
     },
-    
+
     -- Grep configuration
     grep = {
       prompt = 'Grep❯ ',
@@ -99,7 +99,7 @@ return {
       rg_opts = "--column --line-number --no-heading --color=always --smart-case --max-columns=4096 -e",
       grep_opts = "--binary-files=without-match --line-number --recursive --color=auto --perl-regexp -e",
     },
-    
+
     -- Buffer configuration
     buffers = {
       prompt = 'Buffers❯ ',
@@ -108,7 +108,7 @@ return {
       sort_lastused = true,
       show_unloaded = true,
     },
-    
+
     -- Git configuration
     git = {
       files = {
@@ -140,7 +140,7 @@ return {
         preview_pager = "delta --width=$FZF_PREVIEW_COLUMNS",
       },
     },
-    
+
     -- LSP configuration
     lsp = {
       prompt_postfix = '❯ ',
@@ -182,7 +182,7 @@ return {
         },
       },
     },
-    
+
     -- Colorscheme integration (match your gruvbox theme)
     defaults = {
       file_icons = true,
