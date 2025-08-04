@@ -1,7 +1,16 @@
+
+[terminal.shell]
+program = "/bin/bash"
+
+[general]
 # Alacritty Configuration (TOML format)
 
-[shell]
-program = "/bin/bash"
+import = [
+    "~/.config/alacritty/themes/themes/gruvbox_dark.toml"
+]
+
+[colors.primary]
+foreground = "#ffffff"
 
 [font]
 size = 20.0
@@ -9,3 +18,9 @@ size = 20.0
 [font.normal]
 family = "Hack Nerd Font"
 style = "Regular"
+
+[window]
+decorations = "none"
+startup_mode = "Fullscreen"
+
+[terminal]
