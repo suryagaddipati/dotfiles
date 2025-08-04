@@ -11,6 +11,7 @@ import = [
 
 [colors.primary]
 foreground = "#ffffff"
+background = "#000000"
 
 [font]
 size = 20.0
