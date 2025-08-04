@@ -161,6 +161,11 @@ sdk() {
 }
 . "$HOME/.cargo/env"
 
+# Source private bash configuration if it exists
+if [ -f ~/.bashrc_private ]; then
+    . ~/.bashrc_private
+fi
+
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
