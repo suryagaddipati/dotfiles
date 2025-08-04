@@ -217,3 +217,7 @@ eval "$(/home/surya/.local/bin/mise activate bash)"
 
 # opencode
 export PATH=/home/surya/.opencode/bin:$PATH
+
+export PATH=$PATH:/opt/homebrew/bin
+
+alias claude="/Users/suryag/.claude/local/claude"
