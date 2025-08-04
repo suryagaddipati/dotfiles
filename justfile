@@ -16,6 +16,7 @@ claude_config_dir := home_dir / '.claude'
 
 # Files to manage
 dotfiles := '.bashrc .gitconfig .tmux.conf init.lua'
+nvim_dirs := 'lua'
 config_files := '.config/alacritty/alacritty.toml .config/wezterm/wezterm.lua .config/mise/config.toml'
 claude_files := '.claude/hooks.json .claude/settings.local.json .claude/.mcp.json'
 claude_dirs := '.claude/agents .claude/commands'
@@ -89,6 +90,14 @@ install: backup setup-nvim
             fi \
         else \
             printf "{{yellow}}Warning: $file not found{{nc}}\n"; \
+        fi \
+    done
+    @for dir in {{nvim_dirs}}; do \
+        if [ -d "{{dotfiles_dir}}/$dir" ]; then \
+            printf "{{green}}Linking nvim $dir directory{{nc}}\n"; \
+            ln -sf "{{dotfiles_dir}}/$dir" "{{nvim_config_dir}}/$dir"; \
+        else \
+            printf "{{yellow}}Warning: nvim $dir directory not found{{nc}}\n"; \
         fi \
     done
     @for file in {{config_files}}; do \
@@ -172,6 +181,21 @@ backup:
         if [ -f "$target_file" ] && [ ! -L "$target_file" ]; then \
             printf "{{yellow}}Backing up $file{{nc}}\n"; \
             cp "$target_file" "{{backup_dir}}/$file.backup"; \
+        fi \
+    done
+    @for dir in {{nvim_dirs}}; do \
+        target_dir="{{nvim_config_dir}}/$dir"; \
+        if [ -d "$target_dir" ] && [ ! -L "$target_dir" ]; then \
+            printf "{{yellow}}Backing up and removing nvim $dir directory{{nc}}\n"; \
+            cp -r "$target_dir" "{{backup_dir}}/$dir.backup"; \
+            rm -rf "$target_dir"; \
+        fi \
+    done
+    @# Clean up other nvim config files that might conflict
+    @for old_file in "{{nvim_config_dir}}"/.git* "{{nvim_config_dir}}/LICENSE" "{{nvim_config_dir}}/coc-settings.json" "{{nvim_config_dir}}/plugin" "{{nvim_config_dir}}/.stylua.toml"; do \
+        if [ -e "$old_file" ]; then \
+            printf "{{yellow}}Removing old nvim config: $(basename "$old_file"){{nc}}\n"; \
+            rm -rf "$old_file"; \
         fi \
     done
     @for file in {{config_files}}; do \
@@ -304,6 +328,13 @@ uninstall:
         if [ -L "$target_file" ]; then \
             printf "{{yellow}}Removing symlink: $file{{nc}}\n"; \
             rm "$target_file"; \
+        fi \
+    done
+    @for dir in {{nvim_dirs}}; do \
+        target_dir="{{nvim_config_dir}}/$dir"; \
+        if [ -L "$target_dir" ]; then \
+            printf "{{yellow}}Removing symlink: nvim $dir{{nc}}\n"; \
+            rm "$target_dir"; \
         fi \
     done
     @for file in {{config_files}}; do \
@@ -460,6 +491,21 @@ status:
     else \
         printf "  {{red}}✗{{nc}} init.lua not linked\n"; \
     fi
+    @for dir in {{nvim_dirs}}; do \
+        target_dir="{{nvim_config_dir}}/$dir"; \
+        if [ -L "$target_dir" ]; then \
+            link_target=$(readlink "$target_dir"); \
+            if [ "$link_target" = "{{dotfiles_dir}}/$dir" ]; then \
+                printf "  {{green}}✓{{nc}} $dir → {{dotfiles_dir}}/$dir\n"; \
+            else \
+                printf "  {{yellow}}⚠{{nc}} $dir → $link_target (wrong target)\n"; \
+            fi; \
+        elif [ -d "$target_dir" ]; then \
+            printf "  {{red}}✗{{nc}} $dir (regular directory, not symlinked)\n"; \
+        else \
+            printf "  {{red}}✗{{nc}} $dir (not found)\n"; \
+        fi; \
+    done
     @if [ -d "{{home_dir}}/.local/share/nvim/lazy" ]; then \
         printf "  {{green}}✓{{nc}} lazy.nvim plugin manager installed\n"; \
     else \
