@@ -1,2 +1,4 @@
 tags
 .worktrees/
+.bashrc_private
+workspace
