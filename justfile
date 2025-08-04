@@ -317,6 +317,21 @@ install-mcp:
         exit 1; \
     fi
 
+# Install language servers for neovim LSP
+install-lsp:
+    @printf "{{blue}}Installing language servers for neovim...{{nc}}\n"
+    @if command -v mise > /dev/null 2>&1; then \
+        printf "{{yellow}}Installing bash-language-server...{{nc}}\n"; \
+        mise exec -- npm install -g bash-language-server; \
+        printf "{{yellow}}Installing other language servers...{{nc}}\n"; \
+        mise exec -- npm install -g typescript-language-server; \
+        mise exec -- npm install -g vscode-langservers-extracted; \
+        printf "{{green}}Language servers installed!{{nc}}\n"; \
+    else \
+        printf "{{red}}mise not found. Run 'just install-mise' first.{{nc}}\n"; \
+        exit 1; \
+    fi
+
 # Remove dotfile symlinks (keeps backups)
 uninstall:
     @printf "{{blue}}Removing dotfile symlinks...{{nc}}\n"
@@ -534,7 +549,7 @@ clean:
 quick-install: backup install
 
 # Full installation with all dependencies and dev tools
-full-install: install-deps install install-dev
+full-install: install-deps install install-dev install-lsp
     @printf "\n"
     @printf "{{green}}🎉 Full installation complete!{{nc}}\n"
     @printf "{{yellow}}Next steps:{{nc}}\n"
