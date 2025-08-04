@@ -105,7 +105,7 @@ alias g='git'
 alias t='tmux_smart_session'
 
 # git auto-commit alias
-alias git-autocommit='/home/surya/code/dotfiles/git-auto-commit.sh'
+alias git-autocommit="$HOME/code/dotfiles/git-auto-commit.sh"
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
@@ -213,11 +213,19 @@ focus() {
 }
 
 
-eval "$(/home/surya/.local/bin/mise activate bash)"
+# Initialize mise (cross-platform)
+if command -v mise >/dev/null 2>&1; then
+    eval "$(mise activate bash)"
+fi
 
-# opencode
-export PATH=/home/surya/.opencode/bin:$PATH
+# opencode (cross-platform)
+if [ -d "$HOME/.opencode/bin" ]; then
+    export PATH=$HOME/.opencode/bin:$PATH
+fi
 
 export PATH=$PATH:/opt/homebrew/bin
 
-alias claude="/Users/suryag/.claude/local/claude"
+# Claude CLI alias (cross-platform)
+if [ -f "$HOME/.claude/local/claude" ]; then
+    alias claude="$HOME/.claude/local/claude"
+fi
