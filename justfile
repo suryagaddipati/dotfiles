@@ -7,7 +7,6 @@ set shell := ['bash', '-c']
 # Configuration
 dotfiles_dir := justfile_directory()
 home_dir := env_var('HOME')
-backup_dir := home_dir / '.dotfiles_backup'
 nvim_config_dir := home_dir / '.config/nvim'
 vim_dir := home_dir / '.vim'
 alacritty_config_dir := home_dir / '.config/alacritty'
@@ -71,8 +70,7 @@ check-prereqs:
         printf "\n{{green}}All prerequisites satisfied!{{nc}}\n"; \
     fi
 
-# Install all dotfiles (with backup)
-install: backup setup-nvim
+install: setup-nvim
     @printf "{{blue}}Installing dotfiles...{{nc}}\n"
     @mkdir -p "{{nvim_config_dir}}"
     @mkdir -p "{{alacritty_config_dir}}"
@@ -167,73 +165,6 @@ install: backup setup-nvim
     done
     @printf "{{green}}Dotfiles installation complete!{{nc}}\n"
     @printf "{{yellow}}Run 'source ~/.bashrc' to reload your shell{{nc}}\n"
-
-# Backup existing configuration files
-backup:
-    @printf "{{blue}}Creating backup directory...{{nc}}\n"
-    @mkdir -p "{{backup_dir}}"
-    @printf "{{blue}}Backing up existing configurations...{{nc}}\n"
-    @for file in {{dotfiles}}; do \
-        target_file="{{home_dir}}/$file"; \
-        if [ "$file" = "init.lua" ]; then \
-            target_file="{{nvim_config_dir}}/$file"; \
-        fi; \
-        if [ -f "$target_file" ] && [ ! -L "$target_file" ]; then \
-            printf "{{yellow}}Backing up $file{{nc}}\n"; \
-            cp "$target_file" "{{backup_dir}}/$file.backup"; \
-        fi \
-    done
-    @for dir in {{nvim_dirs}}; do \
-        target_dir="{{nvim_config_dir}}/$dir"; \
-        if [ -d "$target_dir" ] && [ ! -L "$target_dir" ]; then \
-            printf "{{yellow}}Backing up and removing nvim $dir directory{{nc}}\n"; \
-            cp -r "$target_dir" "{{backup_dir}}/$dir.backup"; \
-            rm -rf "$target_dir"; \
-        fi \
-    done
-    @# Clean up other nvim config files that might conflict
-    @for old_file in "{{nvim_config_dir}}"/.git* "{{nvim_config_dir}}/LICENSE" "{{nvim_config_dir}}/coc-settings.json" "{{nvim_config_dir}}/plugin" "{{nvim_config_dir}}/.stylua.toml"; do \
-        if [ -e "$old_file" ]; then \
-            printf "{{yellow}}Removing old nvim config: $(basename "$old_file"){{nc}}\n"; \
-            rm -rf "$old_file"; \
-        fi \
-    done
-    @for file in {{config_files}}; do \
-        target_file="{{home_dir}}/$file"; \
-        if [ -f "$target_file" ] && [ ! -L "$target_file" ]; then \
-            printf "{{yellow}}Backing up $file{{nc}}\n"; \
-            mkdir -p "{{backup_dir}}/$(dirname "$file")"; \
-            cp "$target_file" "{{backup_dir}}/$file.backup"; \
-        fi \
-    done
-    @for file in {{claude_files}}; do \
-        target_file="{{home_dir}}/$file"; \
-        if [ -f "$target_file" ] && [ ! -L "$target_file" ]; then \
-            printf "{{yellow}}Backing up $file{{nc}}\n"; \
-            mkdir -p "{{backup_dir}}/$(dirname "$file")"; \
-            cp "$target_file" "{{backup_dir}}/$file.backup"; \
-        fi \
-    done
-    @printf "{{green}}Backup complete in {{backup_dir}}{{nc}}\n"
-
-# Restore original configuration files from backup
-restore:
-    @printf "{{blue}}Restoring from backup...{{nc}}\n"
-    @if [ ! -d "{{backup_dir}}" ]; then \
-        printf "{{red}}No backup directory found!{{nc}}\n"; \
-        exit 1; \
-    fi
-    @for file in {{dotfiles}}; do \
-        if [ -f "{{backup_dir}}/$file.backup" ]; then \
-            printf "{{yellow}}Restoring $file{{nc}}\n"; \
-            target_file="{{home_dir}}/$file"; \
-            if [ "$file" = "init.lua" ]; then \
-                target_file="{{nvim_config_dir}}/$file"; \
-            fi; \
-            cp "{{backup_dir}}/$file.backup" "$target_file"; \
-        fi \
-    done
-    @printf "{{green}}Restore complete!{{nc}}\n"
 
 # Setup neovim configuration and plugins
 setup-nvim: check-nvim
@@ -332,7 +263,6 @@ install-lsp:
         exit 1; \
     fi
 
-# Remove dotfile symlinks (keeps backups)
 uninstall:
     @printf "{{blue}}Removing dotfile symlinks...{{nc}}\n"
     @for file in {{dotfiles}}; do \
@@ -390,165 +320,10 @@ uninstall:
         fi \
     done
     @printf "{{green}}Dotfiles uninstalled{{nc}}\n"
-    @printf "{{yellow}}Backups preserved in {{backup_dir}}{{nc}}\n"
 
-# Show installation status
-status:
-    @printf "{{blue}}Dotfiles Status{{nc}}\n"
-    @printf "=================\n"
-    @printf "{{yellow}}Dotfiles Directory:{{nc}} {{dotfiles_dir}}\n"
-    @printf "{{yellow}}Backup Directory:{{nc}} {{backup_dir}}\n"
-    @printf "\n"
-    @printf "{{yellow}}Configuration Files:{{nc}}\n"
-    @for file in {{dotfiles}}; do \
-        target_file="{{home_dir}}/$file"; \
-        if [ "$file" = "init.lua" ]; then \
-            target_file="{{nvim_config_dir}}/$file"; \
-        fi; \
-        if [ -L "$target_file" ]; then \
-            link_target=$(readlink "$target_file"); \
-            if [ "$link_target" = "{{dotfiles_dir}}/$file" ]; then \
-                printf "  {{green}}✓{{nc}} $file → {{dotfiles_dir}}/$file\n"; \
-            else \
-                printf "  {{yellow}}⚠{{nc}} $file → $link_target (wrong target)\n"; \
-            fi; \
-        elif [ -f "$target_file" ]; then \
-            printf "  {{red}}✗{{nc}} $file (regular file, not symlinked)\n"; \
-        else \
-            printf "  {{red}}✗{{nc}} $file (not found)\n"; \
-        fi; \
-    done
-    @for file in {{config_files}}; do \
-        target_file="{{home_dir}}/$file"; \
-        if [ -L "$target_file" ]; then \
-            link_target=$(readlink "$target_file"); \
-            if [ "$link_target" = "{{dotfiles_dir}}/$file" ]; then \
-                printf "  {{green}}✓{{nc}} $file → {{dotfiles_dir}}/$file\n"; \
-            else \
-                printf "  {{yellow}}⚠{{nc}} $file → $link_target (wrong target)\n"; \
-            fi; \
-        elif [ -f "$target_file" ]; then \
-            printf "  {{red}}✗{{nc}} $file (regular file, not symlinked)\n"; \
-        else \
-            printf "  {{red}}✗{{nc}} $file (not found)\n"; \
-        fi; \
-    done
-    @for file in {{claude_files}}; do \
-        target_file="{{home_dir}}/$file"; \
-        if [ -L "$target_file" ]; then \
-            link_target=$(readlink "$target_file"); \
-            if [ "$link_target" = "{{dotfiles_dir}}/$file" ]; then \
-                printf "  {{green}}✓{{nc}} $file → {{dotfiles_dir}}/$file\n"; \
-            else \
-                printf "  {{yellow}}⚠{{nc}} $file → $link_target (wrong target)\n"; \
-            fi; \
-        elif [ -f "$target_file" ]; then \
-            printf "  {{red}}✗{{nc}} $file (regular file, not symlinked)\n"; \
-        else \
-            printf "  {{red}}✗{{nc}} $file (not found)\n"; \
-        fi; \
-    done
-    @for dir in {{claude_dirs}}; do \
-        target_dir="{{home_dir}}/$dir"; \
-        if [ -L "$target_dir" ]; then \
-            link_target=$(readlink "$target_dir"); \
-            if [ "$link_target" = "{{dotfiles_dir}}/$dir" ]; then \
-                printf "  {{green}}✓{{nc}} $dir → {{dotfiles_dir}}/$dir\n"; \
-            else \
-                printf "  {{yellow}}⚠{{nc}} $dir → $link_target (wrong target)\n"; \
-            fi; \
-        elif [ -d "$target_dir" ]; then \
-            printf "  {{red}}✗{{nc}} $dir (regular directory, not symlinked)\n"; \
-        else \
-            printf "  {{red}}✗{{nc}} $dir (not found)\n"; \
-        fi; \
-    done
-    @printf "\n"
-    @printf "{{yellow}}Git Commands:{{nc}}\n"
-    @for file in {{git_commands}}; do \
-        target_name=$(basename "$file" .sh); \
-        target_file="{{home_dir}}/.local/bin/$target_name"; \
-        if [ -L "$target_file" ]; then \
-            link_target=$(readlink "$target_file"); \
-            if [ "$link_target" = "{{dotfiles_dir}}/$file" ]; then \
-                printf "  {{green}}✓{{nc}} $target_name → {{dotfiles_dir}}/$file\n"; \
-            else \
-                printf "  {{yellow}}⚠{{nc}} $target_name → $link_target (wrong target)\n"; \
-            fi; \
-        elif [ -f "$target_file" ]; then \
-            printf "  {{red}}✗{{nc}} $target_name (regular file, not symlinked)\n"; \
-        else \
-            printf "  {{red}}✗{{nc}} $target_name (not found)\n"; \
-        fi; \
-    done
-    @printf "\n"
-    @printf "{{yellow}}Claude Commands:{{nc}}\n"
-    @for file in {{claude_commands}}; do \
-        target_name="claude"; \
-        target_file="{{home_dir}}/.local/bin/$target_name"; \
-        if [ -L "$target_file" ]; then \
-            link_target=$(readlink "$target_file"); \
-            if [ "$link_target" = "{{home_dir}}/$file" ]; then \
-                printf "  {{green}}✓{{nc}} $target_name → {{home_dir}}/$file\n"; \
-            else \
-                printf "  {{yellow}}⚠{{nc}} $target_name → $link_target (wrong target)\n"; \
-            fi; \
-        elif [ -f "$target_file" ]; then \
-            printf "  {{red}}✗{{nc}} $target_name (regular file, not symlinked)\n"; \
-        else \
-            printf "  {{red}}✗{{nc}} $target_name (not found)\n"; \
-        fi; \
-    done
-    @printf "\n"
-    @printf "{{yellow}}Neovim Setup:{{nc}}\n"
-    @if [ -f "{{nvim_config_dir}}/init.lua" ]; then \
-        printf "  {{green}}✓{{nc}} init.lua linked\n"; \
-    else \
-        printf "  {{red}}✗{{nc}} init.lua not linked\n"; \
-    fi
-    @for dir in {{nvim_dirs}}; do \
-        target_dir="{{nvim_config_dir}}/$dir"; \
-        if [ -L "$target_dir" ]; then \
-            link_target=$(readlink "$target_dir"); \
-            if [ "$link_target" = "{{dotfiles_dir}}/$dir" ]; then \
-                printf "  {{green}}✓{{nc}} $dir → {{dotfiles_dir}}/$dir\n"; \
-            else \
-                printf "  {{yellow}}⚠{{nc}} $dir → $link_target (wrong target)\n"; \
-            fi; \
-        elif [ -d "$target_dir" ]; then \
-            printf "  {{red}}✗{{nc}} $dir (regular directory, not symlinked)\n"; \
-        else \
-            printf "  {{red}}✗{{nc}} $dir (not found)\n"; \
-        fi; \
-    done
-    @if [ -d "{{home_dir}}/.local/share/nvim/lazy" ]; then \
-        printf "  {{green}}✓{{nc}} lazy.nvim plugin manager installed\n"; \
-    else \
-        printf "  {{red}}✗{{nc}} lazy.nvim not installed\n"; \
-    fi
-    @# Legacy vim plugin check removed
 
-# Clean up backup files and neovim plugins
-clean:
-    @printf "{{blue}}Cleaning up...{{nc}}\n"
-    @if [ -d "{{backup_dir}}" ]; then \
-        printf "{{yellow}}Removing backup directory...{{nc}}\n"; \
-        rm -rf "{{backup_dir}}"; \
-    fi
-    @if [ -d "{{home_dir}}/.local/share/nvim" ]; then \
-        printf "{{yellow}}Cleaning neovim plugins...{{nc}}\n"; \
-        rm -rf "{{home_dir}}/.local/share/nvim"; \
-    fi
-    @if [ -d "{{vim_dir}}/plugged" ]; then \
-        printf "{{yellow}}Cleaning vim plugins...{{nc}}\n"; \
-        rm -rf "{{vim_dir}}/plugged"; \
-    fi
-    @printf "{{green}}Cleanup complete!{{nc}}\n"
+quick-install: install
 
-# Quick install without dependencies
-quick-install: backup install
-
-# Full installation with all dependencies and dev tools
 full-install: install-deps install install-dev install-lsp
     @printf "\n"
     @printf "{{green}}🎉 Full installation complete!{{nc}}\n"
