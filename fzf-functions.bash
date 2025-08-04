@@ -67,7 +67,7 @@ if command -v fzf >/dev/null 2>&1; then
         else
             # Use original grp function with fzf
             local ext_regex=$(printf "\\.%s$|" "$@" | sed 's/|$//')
-            git ls-files --cached --others --exclude-standard \
+            git ls-files --cached --others --exclude-standard 2>/dev/null \
                 | grep -E "$ext_regex" \
                 | xargs grep -l "$pattern" 2>/dev/null \
                 | fzf --prompt="Files containing '$pattern'> " \

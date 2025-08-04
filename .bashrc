@@ -235,3 +235,8 @@ if [ -f "$HOME/.claude/local/claude" ]; then
     alias claude="$HOME/.claude/local/claude"
 fi
 
+# Source FZF functions and configuration
+if [ -f "$HOME/code/dotfiles/fzf-functions.bash" ]; then
+    source "$HOME/code/dotfiles/fzf-functions.bash"
+fi
+

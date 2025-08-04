@@ -3,7 +3,17 @@ return {
   dependencies = { 'nvim-tree/nvim-web-devicons' },
   keys = {
     -- File operations
-    { '<leader>o', function() require('fzf-lua').files() end, desc = 'Find files' },
+    { '<leader>o', function() 
+        -- Use git_files if in a git repo, otherwise files
+        local ok = pcall(require('fzf-lua').git_files, { 
+          show_untracked = true,
+          -- This ensures we show both tracked and untracked files
+          cmd = 'git ls-files --cached --others --exclude-standard'
+        })
+        if not ok then
+          require('fzf-lua').files()
+        end
+      end, desc = 'Find files' },
     { '<leader>e', function() require('fzf-lua').live_grep() end, desc = 'Live grep' },
     { '<leader>b', function() require('fzf-lua').buffers() end, desc = 'Buffers' },
     { '<leader>hr', function() require('fzf-lua').oldfiles() end, desc = 'Recent files' },
@@ -62,7 +72,7 @@ return {
       col = 0.50,
       border = 'rounded',
       preview = {
-        default = 'bat',
+        default = 'builtin',
         border = 'border',
         wrap = 'nowrap',
         hidden = 'nohidden',
@@ -74,18 +84,15 @@ return {
       },
     },
 
-    -- Files configuration
+    -- Files configuration - ONLY use git ls-files
     files = {
       prompt = 'Files❯ ',
-      multiprocess = true,
+      multiprocess = false,  -- Disable multiprocess to ensure our cmd is used
       file_icons = true,
       color_icons = true,
       git_icons = true,
-      -- Use same command as your bash FZF_DEFAULT_COMMAND
-      cmd = 'git ls-files --cached --others --exclude-standard 2>/dev/null || find . -type f -not -path "*/\\.git/*" 2>/dev/null',
-      find_opts = [[-type f -not -path "*/\\.git/*" -printf "%P\n"]],
-      rg_opts = "--color=never --files --hidden --follow -g '!.git'",
-      fd_opts = "--color=never --type f --hidden --follow --exclude .git",
+      -- Force ONLY git ls-files, no fallbacks
+      cmd = 'git ls-files --cached --others --exclude-standard',
     },
 
     -- Grep configuration
@@ -113,7 +120,8 @@ return {
     git = {
       files = {
         prompt = 'GitFiles❯ ',
-        cmd = 'git ls-files --exclude-standard',
+        cmd = 'git ls-files --cached --others --exclude-standard',
+        show_untracked = true,
         multiprocess = true,
         file_icons = true,
         color_icons = true,
