@@ -212,6 +212,11 @@ focus() {
   echo "All commented lines in /etc/hosts have been uncommented"
 }
 
+# Source FZF functions from separate file
+if [ -f ~/code/dotfiles/fzf-functions.bash ]; then
+    . ~/code/dotfiles/fzf-functions.bash
+fi
+
 
 # Initialize mise (cross-platform)
 if command -v mise >/dev/null 2>&1; then
@@ -229,3 +234,4 @@ export PATH=$PATH:/opt/homebrew/bin
 if [ -f "$HOME/.claude/local/claude" ]; then
     alias claude="$HOME/.claude/local/claude"
 fi
+
