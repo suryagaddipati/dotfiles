@@ -3,35 +3,10 @@ return {
   priority = 1000,
   lazy = false,
   keys = {
-    -- Picker functionality (replaces telescope)
-    { '<leader>e', function() Snacks.picker.grep() end, desc = 'Live grep' },
-    { '<leader>f', function() Snacks.picker.files() end, desc = 'Find files' },
-    { '<leader>b', function() Snacks.picker.buffers() end, desc = 'Buffers' },
-    { '<leader>hr', function() Snacks.picker.recent() end, desc = 'Recent files' },
-    { '<leader>r', function() Snacks.picker.registers() end, desc = 'Registers' },
-    { '<leader>:', function() Snacks.picker.command_history() end, desc = 'Command history' },
-    { '<leader>;', function() Snacks.picker.commands() end, desc = 'Commands' },
-    
     -- Zen/Focus functionality (replaces maximizer + focus)
     { '<leader>z', function() Snacks.zen.zoom() end, desc = 'Toggle maximize split' },
   },
   opts = {
-    -- Picker configuration
-    picker = {
-      sources = {
-        files = { hidden = true },
-        grep = { hidden = true },
-      },
-      win = {
-        input = {
-          keys = {
-            ['<C-u>'] = { 'scroll_up', mode = { 'i', 'n' } },
-            ['<C-d>'] = { 'scroll_down', mode = { 'i', 'n' } },
-          },
-        },
-      },
-    },
-    
     -- Zen mode configuration
     zen = {
       toggles = {

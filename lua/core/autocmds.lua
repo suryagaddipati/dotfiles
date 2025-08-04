@@ -42,11 +42,41 @@ vim.api.nvim_create_autocmd('BufEnter', {
 vim.api.nvim_create_autocmd('BufDelete', {
   group = augroup,
   pattern = '*',
-  callback = function()
-    local buffers = vim.fn.getbufinfo({buflisted = 1})
-    if #buffers == 1 then
-      vim.cmd('enew')  -- Create new empty buffer
+  callback = function(event)
+    local buf = event.buf
+    
+    -- Skip for special buffers, temporary buffers, or plugin buffers
+    local buftype = vim.api.nvim_buf_get_option(buf, 'buftype')
+    local filetype = vim.api.nvim_buf_get_option(buf, 'filetype')
+    local bufname = vim.api.nvim_buf_get_name(buf)
+    
+    -- Skip if it's not a normal file buffer
+    if buftype ~= '' 
+       or filetype == 'fzf' 
+       or filetype == 'fzf-lua'
+       or string.match(bufname, 'fzf')
+       or string.match(bufname, 'term://')
+       or string.match(bufname, 'nvim%-tree')
+       or not vim.api.nvim_buf_get_option(buf, 'buflisted') then
+      return
     end
+    
+    -- Only proceed if we're deleting a listed, normal file buffer
+    vim.schedule(function()
+      local buffers = vim.fn.getbufinfo({buflisted = 1})
+      local normal_buffers = 0
+      
+      for _, buffer in ipairs(buffers) do
+        local bt = vim.api.nvim_buf_get_option(buffer.bufnr, 'buftype')
+        if bt == '' then
+          normal_buffers = normal_buffers + 1
+        end
+      end
+      
+      if normal_buffers == 0 then
+        vim.cmd('enew')  -- Create new empty buffer
+      end
+    end)
   end,
 })
 
