@@ -4,6 +4,7 @@ node = "20"
 python = "3.11"
 go = "1.21"
 rust = "1.75"
+java = "21"
 
 # Core development tools
 neovim = "latest"
@@ -11,3 +12,7 @@ neovim = "latest"
 # CLI utilities
 ripgrep = "latest"
 fzf = "latest"
+
+# Formatters
+stylua = "latest"
+shfmt = "latest"
