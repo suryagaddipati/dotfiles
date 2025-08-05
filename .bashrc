@@ -240,3 +240,5 @@ if [ -f "$HOME/code/dotfiles/fzf-functions.bash" ]; then
     source "$HOME/code/dotfiles/fzf-functions.bash"
 fi
 
+export PATH="$PATH:/Users/suryag/Library/Application Support/Coursier/bin"
+
