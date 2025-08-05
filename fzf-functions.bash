@@ -31,7 +31,7 @@ if command -v fzf >/dev/null 2>&1; then
     fkill() {
         local pid=$(ps -ef | sed 1d | fzf -m --prompt="Kill Process> " --header="[TAB:select multiple]" | awk '{print $2}')
         if [ -n "$pid" ]; then
-            echo "$pid" | xargs kill "${1:-9}"
+            echo "$pid" | xargs kill -"${1:-9}"
         fi
     }
     
