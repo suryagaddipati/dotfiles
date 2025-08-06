@@ -208,7 +208,7 @@ grp() {
 
 # Uncomment all lines in /etc/hosts
 focus() {
-  sudo sed -i 's/^#\(.*\)/\1/' /etc/hosts
+  sudo sed -i '' 's/^#\(.*\)/\1/' /etc/hosts
   echo "All commented lines in /etc/hosts have been uncommented"
 }
 
