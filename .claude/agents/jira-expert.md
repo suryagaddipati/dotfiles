@@ -1,5 +1,5 @@
 ---
-name: jir-expert
+name: jira-expert
 description: Use this agent when you need to interact with jira
 color: blue
 ---
