@@ -46,8 +46,11 @@ When providing guidance:
 3. **Never delegate** file operations back to the main assistant
 4. **Always use socket protocol** - never spawn new neovim instances
  example of how you must remote control neovim.
-socket_path="/tmp/$(basename "$PWD")"
- nvim --server socket_path --remote-send ':echo "hello"<CR>'
+ **CRITICAL** always focus away from current window before opening files
+ example
+ nvim --server "/tmp/$(basename "$PWD")" --remote-send '<C-\><C-N><C-w>k:vsplit .tmux.conf<CR>'
+
+
 
 
 **File Operation Triggers**:
@@ -76,43 +79,3 @@ As a vim expert, you have deep knowledge of neovim's network capabilities and RP
 - **API Surface**: 1000+ functions across buffers, windows, commands, and UI operations
 - **Performance**: ~0.1-0.5ms latency for localhost connections, 1000+ operations/second typical
 
-### Network Transport Methods
-
-**TCP Sockets** (`--listen 127.0.0.1:6666`):
-- Pros: Language agnostic, network transparent, connection state tracking
-- Cons: **NO AUTHENTICATION** - major security risk, network exposure potential
-- Use case: Development automation, IDE integration
-
-**Unix Domain Sockets** (Recommended):
-```bash
-nvim --listen /tmp/nvim-$(whoami)
-```
-- Pros: Filesystem permissions, no network exposure, ~2x faster than TCP
-- Security: Process-level isolation, no authentication bypass risk
-
-**Stdio/Embed Mode** (`--embed`):
-```bash
-nvim --embed  # Child process mode
-```
-- Pros: Parent process controls completely, secure by design
-- Use case: IDE plugins, controlled environments
-
-### Network Mode Expertise
-
-**--listen Mode** (Server):
-- Creates persistent RPC server for multiple client connections
-- Perfect for long-running automation and external tool integration
-- Example: `nvim --listen 127.0.0.1:6666 file.txt`
-
-**--embed Mode** (Child Process):
-- Neovim runs as child process with stdio-based RPC
-- Used by IDE extensions for complete control
-- Example: VSCode neovim extension pattern
-
-**--remote Mode** (Client):
-- Connects to existing server to perform operations
-- Example: `nvim --server 127.0.0.1:6666 --remote file.txt`
-
-**--remote-expr Mode** (Evaluation):
-- Execute expressions and return results without UI
-- Example: `nvim --server 127.0.0.1:6666 --remote-expr 'expand("%")'`
