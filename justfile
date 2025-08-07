@@ -14,7 +14,7 @@ mise_config_dir := home_dir / '.config/mise'
 claude_config_dir := home_dir / '.claude'
 
 # Files to manage
-dotfiles := '.bashrc .gitconfig .tmux.conf init.lua'
+dotfiles := '.bashrc .gitconfig .tmux.conf init.lua .bash_profile'
 nvim_dirs := 'lua'
 config_files := '.config/alacritty/alacritty.toml .config/wezterm/wezterm.lua .config/mise/config.toml'
 claude_files := '.claude/hooks.json .claude/settings.local.json .claude/.mcp.json'
