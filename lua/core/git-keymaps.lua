@@ -7,7 +7,7 @@ local function run_git_command(command, message, success_msg, error_msg)
     title = "Git",
     position = "bottom_right",
   })
-  
+
   vim.system(command, {}, function(result)
     vim.schedule(function()
       Snacks.notifier.hide(note_id)
@@ -34,7 +34,7 @@ keymap('n',
       "Git commit failed"
     )
   end,
-  { desc = 'Commit staged changes' }
+  { desc = 'Claude Commit staged changes' }
 )
 
 keymap('n',
@@ -112,12 +112,12 @@ keymap('n', '<leader>gwl', function()
     vim.api.nvim_buf_set_option(buf, 'buftype', 'nofile')
     vim.api.nvim_buf_set_option(buf, 'bufhidden', 'wipe')
     vim.api.nvim_buf_set_option(buf, 'filetype', 'gitworktree')
-    
+
     -- Open in a split
     vim.cmd('split')
     vim.api.nvim_win_set_buf(0, buf)
     vim.api.nvim_buf_set_name(buf, 'Git Worktrees')
-    
+
     -- Add keymaps for the worktree list buffer
     vim.api.nvim_buf_set_keymap(buf, 'n', 'q', ':q<CR>', { noremap = true, silent = true })
     vim.api.nvim_buf_set_keymap(buf, 'n', '<CR>', '', {
@@ -159,3 +159,4 @@ keymap('n', '<leader>gwd', function()
     end
   end)
 end, { desc = 'Delete git worktree' })
+
