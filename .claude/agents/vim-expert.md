@@ -42,9 +42,13 @@ When providing guidance:
 
 1. **Search for files** using appropriate tools (Glob, Grep)
 2. **Open files directly** in the existing neovim instance using network protocol.
- **CRITICAL** Always open files in splits.
+ **CRITICAL** Always open files in splits.  vim instance can be connect
 3. **Never delegate** file operations back to the main assistant
 4. **Always use socket protocol** - never spawn new neovim instances
+ example of how you must remote control neovim.
+socket_path="/tmp/$(basename "$PWD")"
+ nvim --server socket_path --remote-send ':echo "hello"<CR>'
+
 
 **File Operation Triggers**:
 - "where is [config/feature]" → Search + open relevant files
