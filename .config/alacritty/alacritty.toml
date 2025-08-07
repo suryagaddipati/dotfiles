@@ -6,12 +6,12 @@ program = "/bin/bash"
 # Alacritty Configuration (TOML format)
 
 import = [
-    "~/.config/alacritty/themes/themes/gruvbox_dark.toml"
+    "~/.config/alacritty/catppuccin-mocha.toml"
+    # Other available themes:
+    # "~/.config/alacritty/catppuccin-macchiato.toml"
+    # "~/.config/alacritty/catppuccin-frappe.toml"
+    # "~/.config/alacritty/catppuccin-latte.toml"
 ]
-
-[colors.primary]
-foreground = "#ffffff"
-background = "#000000"
 
 [font]
 size = 20.0
@@ -23,5 +23,8 @@ style = "Regular"
 [window]
 decorations = "none"
 startup_mode = "Fullscreen"
+
+[env]
+TERM = "xterm-256color"
 
 [terminal]
