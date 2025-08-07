@@ -6,6 +6,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a personal dotfiles repository containing configuration files for bash, git, tmux, and neovim. The configurations are designed for a Linux development environment with productivity-focused customizations.
 
+**CRITICAL**
+
+Use vim-expert when user asks to open files. ask vim-expert to open files you found.
+
+
 ## Architecture and Key Insights
 
 ### Installation Strategy
