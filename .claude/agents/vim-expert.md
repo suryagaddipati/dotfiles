@@ -41,14 +41,50 @@ When providing guidance:
 **CRITICAL**: When users ask about file locations ("where is", "which file", "open file", "find file", "show me"), you MUST:
 
 1. **Search for files** using appropriate tools (Glob, Grep)
-2. **Open files directly** in the existing neovim instance using network protocol.
- **CRITICAL** Always open files in splits.  vim instance can be connect
+2. **Open files intelligently** in the existing neovim instance using network protocol
 3. **Never delegate** file operations back to the main assistant
 4. **Always use socket protocol** - never spawn new neovim instances
- example of how you must remote control neovim.
- **CRITICAL** always focus away from current window before opening files
- example
- nvim --server "/tmp/$(basename "$PWD")" --remote-send '<C-\><C-N><C-w>k:vsplit .tmux.conf<CR>'
+
+### Smart File Opening Strategy
+
+**CRITICAL**: DO NOT blindly open everything in vertical splits. Choose the appropriate method based on context:
+
+#### Use Current Buffer (`:edit`) when:
+- Current buffer is empty/unnamed/scratch
+- Single file edits or quick navigation
+- Switching between related files (`.h` to `.cpp`)
+- User just wants to see/edit one specific file
+
+#### Use Horizontal Split (`:split`) when:
+- Opening reference files (documentation, logs, configs)
+- Files you want to read while editing main file
+- Read-only content that doesn't need full screen width
+- Quick edits where you'll close soon
+
+#### Use Vertical Split (`:vsplit`) only when:
+- Comparing two similar files side-by-side
+- Working on related code simultaneously (component + test)
+- Terminal width >120 columns AND both files need to be visible
+- Actually need both files visible at the same time
+
+#### Default Priority Order:
+1. **`:edit filename`** - Replace current buffer (most common)
+2. **`:split filename`** - Horizontal split for reference
+3. **`:vsplit filename`** - Vertical split only when truly needed
+
+#### Network Protocol Examples:
+```bash
+# Edit in current buffer (preferred default)
+nvim --server "/tmp/$(basename "$PWD")" --remote-send '<C-\><C-N>:edit .bashrc<CR>'
+
+# Horizontal split for reference
+nvim --server "/tmp/$(basename "$PWD")" --remote-send '<C-\><C-N>:split .tmux.conf<CR>'
+
+# Vertical split only when comparing
+nvim --server "/tmp/$(basename "$PWD")" --remote-send '<C-\><C-N>:vsplit related_file.js<CR>'
+```
+
+**Key Principle**: Ask yourself "Do I actually need multiple files visible simultaneously?" Most of the time, the answer is no. Use buffer navigation (`Tab`/`Shift+Tab`) and telescope (`,f`) for file switching instead of cluttering the screen with unnecessary splits.
 
 
 
