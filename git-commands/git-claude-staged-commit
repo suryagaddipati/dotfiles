@@ -1,10 +1,28 @@
 #!/bin/bash
 
+# Simple function to run Claude and check exit code
+run_claude() {
+    local prompt="$1"
+    local output_format="${2:-text}"
+
+    if ~/.claude/local/claude -p "$prompt" --output-format "$output_format"; then
+        echo "Success!"
+    else
+        echo "Error: Claude failed with exit code $?" >&2
+        return 1
+    fi
+}
+
 if ! git diff --cached --quiet; then
     staged_diff=$(git diff --cached)
-    commit_msg=$(echo "$staged_diff" | ~/.claude/local/claude -p "Analyze these staged git changes and create a commit message that explains WHY this change was needed - what problem does it solve or what value does it add? Focus on the underlying motivation and business/user impact, not just the technical implementation. Use conventional commit format with a clear title, then explain the reasoning and benefits in the body. Only respond with the commit message and no affirmation.")
-    git commit -m "$commit_msg"
-    echo "Committed with message: $commit_msg"
+    commit_msg=$(echo "$staged_diff" | run_claude "Analyze these staged git changes and create a commit message that explains WHY this change was needed - what problem does it solve or what value does it add? Focus on the underlying motivation and business/user impact, not just the technical implementation. Use conventional commit format with a clear title, then explain the reasoning and benefits in the body. Only respond with the commit message and no affirmation.")
+    if [ $? -eq 0 ]; then
+        git commit -m "$commit_msg"
+        echo "Committed with message: $commit_msg"
+    else
+        echo "Failed to generate commit message"
+        exit 1
+    fi
 else
     echo "No staged changes to commit"
 fi
