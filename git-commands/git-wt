@@ -7,16 +7,18 @@ COMMAND=$1
 BRANCH_NAME=$2
 
 show_usage() {
-    echo "Usage: git-worktree <command> [branch]"
+    echo "Usage: git-wt <command> [branch]"
     echo "Commands:"
     echo "  create|cr <branch> - Create worktree for branch (new or existing)"
     echo "  change|c <branch>  - Change to existing worktree"
+    echo "  delete|d <branch>  - Delete worktree and remove directory"
     echo "  list|l             - List all worktrees"
     echo ""
     echo "Examples:"
-    echo "  git-worktree cr feature-branch    # Create worktree"
-    echo "  git-worktree c feature-branch     # Change to worktree"
-    echo "  git-worktree l                    # List worktrees"
+    echo "  git-wt cr feature-branch    # Create worktree"
+    echo "  git-wt c feature-branch     # Change to worktree"
+    echo "  git-wt d feature-branch     # Delete worktree"
+    echo "  git-wt l                    # List worktrees"
 }
 
 create_worktree() {
@@ -64,6 +66,36 @@ change_to_worktree() {
     echo "cd \"$worktree_path\""
 }
 
+delete_worktree() {
+    local branch_name="$1"
+    
+    if [ -z "$branch_name" ]; then
+        echo "Error: Branch name required for delete command"
+        show_usage
+        return 1
+    fi
+    
+    local repo_root=$(git rev-parse --show-toplevel)
+    local worktree_path="$repo_root/.worktrees/$branch_name"
+    
+    if [ ! -d "$worktree_path" ]; then
+        echo "Error: Worktree .worktrees/$branch_name does not exist"
+        echo "Available worktrees:"
+        ls -1 "$repo_root/.worktrees" 2>/dev/null || echo "No worktrees found"
+        return 1
+    fi
+    
+    echo "Removing worktree: $worktree_path"
+    git worktree remove "$worktree_path"
+    
+    if [ $? -eq 0 ]; then
+        echo "Worktree '$branch_name' successfully removed"
+    else
+        echo "Error: Failed to remove worktree '$branch_name'"
+        return 1
+    fi
+}
+
 list_worktrees() {
     git worktree list --porcelain | while IFS= read -r line; do
         if [[ $line == worktree* ]]; then
@@ -88,6 +120,9 @@ case $COMMAND in
         ;;
     "change"|"c"|"goto"|"cd")
         change_to_worktree "$BRANCH_NAME"
+        ;;
+    "delete"|"d"|"rm"|"remove")
+        delete_worktree "$BRANCH_NAME"
         ;;
     "list"|"l"|"ls")
         list_worktrees
