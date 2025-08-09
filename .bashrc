@@ -209,18 +209,10 @@ caps_ctrl() {
     setxkbmap -option caps:ctrl_modifier 2>/dev/null || true
 }
 
-# Simple function to run Claude and check exit code
-run_claude() {
-    local prompt="$1"
-    local output_format="${2:-text}"
-
-    if ~/.claude/local/claude -p "$prompt" --output-format "$output_format"; then
-        echo "Success!"
-    else
-        echo "Error: Claude failed with exit code $?" >&2
-        return 1
-    fi
-}
+# Source Claude helper functions
+if [ -f ~/code/dotfiles/claude-functions.bash ]; then
+    . ~/code/dotfiles/claude-functions.bash
+fi
 
 grp() {
   if [ "$#" -lt 2 ]; then

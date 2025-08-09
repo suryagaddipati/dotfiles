@@ -1,16 +1,6 @@
 #!/bin/bash
 
-# Simple function to run Claude and check exit code
-run_claude() {
-    local prompt="$1"
-    local output_format="${2:-text}"
+# Source Claude helper functions
+source ~/code/dotfiles/claude-functions.bash
 
-    if ~/.claude/local/claude -p "$prompt" --output-format "$output_format"; then
-        echo "Success!"
-    else
-        echo "Error: Claude failed with exit code $?" >&2
-        return 1
-    fi
-}
-
-run_claude "commit"
+run_claude "create a git commit" "text" "Bash(git:*)"
