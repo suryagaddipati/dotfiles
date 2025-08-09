@@ -70,7 +70,7 @@ check-prereqs:
         printf "\n{{green}}All prerequisites satisfied!{{nc}}\n"; \
     fi
 
-install: setup-nvim
+install: setup-nvim setup-tmux
     @printf "{{blue}}Installing dotfiles...{{nc}}\n"
     @mkdir -p "{{nvim_config_dir}}"
     @mkdir -p "{{alacritty_config_dir}}"
@@ -165,6 +165,22 @@ install: setup-nvim
     done
     @printf "{{green}}Dotfiles installation complete!{{nc}}\n"
     @printf "{{yellow}}Run 'source ~/.bashrc' to reload your shell{{nc}}\n"
+
+# Setup tmux plugin manager (TPM)
+setup-tmux:
+    @printf "{{blue}}Setting up tmux plugin manager (TPM)...{{nc}}\n"
+    @if [ ! -d "{{home_dir}}/.tmux/plugins/tpm" ]; then \
+        printf "{{yellow}}Installing TPM...{{nc}}\n"; \
+        git clone https://github.com/tmux-plugins/tpm "{{home_dir}}/.tmux/plugins/tpm"; \
+        printf "{{green}}TPM installed successfully{{nc}}\n"; \
+        printf "{{yellow}}Installing tmux plugins...{{nc}}\n"; \
+        "{{home_dir}}/.tmux/plugins/tpm/bin/install_plugins"; \
+        printf "{{green}}Tmux plugins installed{{nc}}\n"; \
+    else \
+        printf "{{green}}TPM already installed{{nc}}\n"; \
+        printf "{{yellow}}Updating tmux plugins...{{nc}}\n"; \
+        "{{home_dir}}/.tmux/plugins/tpm/bin/update_plugins" all; \
+    fi
 
 # Setup neovim configuration and plugins
 setup-nvim: check-nvim
