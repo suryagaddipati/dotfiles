@@ -201,6 +201,9 @@ set -o vi
 export EDITOR="nvim"
 export VISUAL="nvim"
 
+# Set TERM for Alacritty
+export TERM=xterm-256color
+
 # Remap Caps Lock to Ctrl (lazy-loaded for X11 sessions)
 caps_ctrl() {
     setxkbmap -option caps:ctrl_modifier 2>/dev/null || true
