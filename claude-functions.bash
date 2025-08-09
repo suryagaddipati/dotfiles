@@ -7,8 +7,10 @@ run_claude() {
     local output_format="${2:-text}"
     local allowed_tools="${3:-}"
 
-    # Use bypassPermissions mode since we have git permissions in settings.local.json
-    local cmd="~/.claude/local/claude -p \"$prompt\" --output-format \"$output_format\" --permission-mode bypassPermissions"
+    local cmd="~/.claude/local/claude -p \"$prompt\" --output-format \"$output_format\""
+
+    # Don't use --allowedTools since it overrides settings.local.json
+    # We already have Bash(git:*) permission in settings.local.json
     
     if eval "$cmd"; then
         echo "Success!"
