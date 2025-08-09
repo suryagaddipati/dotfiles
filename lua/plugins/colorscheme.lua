@@ -2,7 +2,7 @@ return {
   {
     'rose-pine/neovim',
     name = 'rose-pine',
-    lazy = true,
+    lazy = false,
     config = function()
       require('rose-pine').setup({
         variant = 'auto',      -- auto, main, moon, or dawn
@@ -12,8 +12,6 @@ return {
 
         enable = {
           terminal = true,
-          legacy_highlights = true, -- Improve compatibility for some plugins
-          migrations = true,        -- Handle deprecated options automatically
         },
 
         styles = {
