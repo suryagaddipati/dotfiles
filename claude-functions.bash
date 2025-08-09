@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 # Claude CLI helper functions
 
@@ -11,7 +11,7 @@ run_claude() {
 
     # Don't use --allowedTools since it overrides settings.local.json
     # We already have Bash(git:*) permission in settings.local.json
-    
+
     if eval "$cmd"; then
         echo "Success!"
     else
