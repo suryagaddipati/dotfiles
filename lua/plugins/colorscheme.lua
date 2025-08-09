@@ -1,32 +1,27 @@
 return {
-  'catppuccin/nvim',
-  name = 'catppuccin',
-  lazy = false,
-  priority = 1000,
-  config = function()
-    require('catppuccin').setup({
-      flavour = 'mocha',
-      background = {
-        light = 'latte',
-        dark = 'mocha',
-      },
-      transparent_background = true,
-      show_end_of_buffer = false,
-      dim_inactive = {
-        enabled = true,
-        shade = "dark",
-        percentage = 1.0,
-      },
-      default_integrations = true,
-      auto_integrations = false,
-      custom_highlights = function(colors)
-        return {
-          Comment = { fg = colors.flamingo },
-        }
-      end
-    })
-    vim.cmd.colorscheme('catppuccin-mocha')
+  {
+    'rose-pine/neovim',
+    name = 'rose-pine',
+    lazy = true,
+    config = function()
+      require('rose-pine').setup({
+        variant = 'auto',      -- auto, main, moon, or dawn
+        dark_variant = 'main', -- main, moon, or dawn
+        dim_inactive_windows = true,
+        extend_background_behind_borders = true,
 
-    -- Force transparent background
-  end,
+        enable = {
+          terminal = true,
+          legacy_highlights = true, -- Improve compatibility for some plugins
+          migrations = true,        -- Handle deprecated options automatically
+        },
+
+        styles = {
+          bold = true,
+          italic = true,
+          transparency = false,
+        },
+      })
+    end,
+  },
 }
