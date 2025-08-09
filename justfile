@@ -20,7 +20,6 @@ config_files := '.config/alacritty/alacritty.toml .config/mise/config.toml'
 claude_files := '.claude/hooks.json .claude/settings.local.json .claude/.mcp.json'
 claude_dirs := '.claude/agents .claude/commands'
 claude_scripts := '.claude/mcp-install.sh'
-git_commands := 'git-commands/git-auto-commit.sh'
 claude_commands := '.claude/local/claude'
 
 # Colors
@@ -120,16 +119,6 @@ install: setup-nvim setup-tmux
             ln -sf "{{dotfiles_dir}}/$dir" "{{home_dir}}/$dir"; \
         else \
             printf "{{yellow}}Warning: $dir not found{{nc}}\n"; \
-        fi \
-    done
-    @for file in {{git_commands}}; do \
-        if [ -f "{{dotfiles_dir}}/$file" ]; then \
-            target_name=$(basename "$file" .sh); \
-            printf "{{green}}Installing git command: $target_name{{nc}}\n"; \
-            ln -sf "{{dotfiles_dir}}/$file" "{{home_dir}}/.local/bin/$target_name"; \
-            chmod +x "{{home_dir}}/.local/bin/$target_name"; \
-        else \
-            printf "{{yellow}}Warning: $file not found{{nc}}\n"; \
         fi \
     done
     @for file in {{claude_scripts}}; do \
@@ -317,14 +306,6 @@ uninstall:
         if [ -L "$target_dir" ]; then \
             printf "{{yellow}}Removing symlink: $dir{{nc}}\n"; \
             rm "$target_dir"; \
-        fi \
-    done
-    @for file in {{git_commands}}; do \
-        target_name=$(basename "$file" .sh); \
-        target_file="{{home_dir}}/.local/bin/$target_name"; \
-        if [ -L "$target_file" ]; then \
-            printf "{{yellow}}Removing git command: $target_name{{nc}}\n"; \
-            rm "$target_file"; \
         fi \
     done
     @for file in {{claude_commands}}; do \
