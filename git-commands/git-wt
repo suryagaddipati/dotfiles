@@ -10,99 +10,72 @@ show_usage() {
     echo "Usage: git-wt <command> [branch]"
     echo "Commands:"
     echo "  create|cr <branch> - Create worktree for branch (new or existing)"
-    echo "  change|c <branch>  - Change to existing worktree"
     echo "  delete|d <branch>  - Delete worktree, directory, and git branch"
     echo "  list|l             - List all worktrees"
     echo ""
     echo "Examples:"
     echo "  git-wt cr feature-branch    # Create worktree"
-    echo "  git-wt c feature-branch     # Change to worktree"
     echo "  git-wt d feature-branch     # Delete worktree"
     echo "  git-wt l                    # List worktrees"
 }
 
 create_worktree() {
     local branch_name="$1"
-    
+
     if [ -z "$branch_name" ]; then
         echo "Error: Branch name required for create command"
         show_usage
         return 1
     fi
-    
+
     # Get main repo root, not worktree root
     local repo_root=$(git worktree list | head -1 | awk '{print $1}')
     if [ -z "$repo_root" ]; then
         repo_root=$(git rev-parse --show-toplevel)
     fi
     local worktree_path="$repo_root/.worktrees/$branch_name"
-    
+
     mkdir -p "$repo_root/.worktrees"
-    
+
     if git show-ref --verify --quiet "refs/heads/$branch_name"; then
         git worktree add "$worktree_path" "$branch_name"
     else
         git worktree add -b "$branch_name" "$worktree_path"
     fi
-    
+
     echo "cd \"$worktree_path\""
 }
 
-change_to_worktree() {
-    local branch_name="$1"
-    
-    if [ -z "$branch_name" ]; then
-        echo "Error: Branch name required for change command"
-        show_usage
-        return 1
-    fi
-    
-    # Get main repo root, not worktree root
-    local repo_root=$(git worktree list | head -1 | awk '{print $1}')
-    if [ -z "$repo_root" ]; then
-        repo_root=$(git rev-parse --show-toplevel)
-    fi
-    local worktree_path="$repo_root/.worktrees/$branch_name"
-    
-    if [ ! -d "$worktree_path" ]; then
-        echo "Error: Worktree .worktrees/$branch_name does not exist"
-        echo "Available worktrees:"
-        ls -1 "$repo_root/.worktrees" 2>/dev/null || echo "No worktrees found"
-        return 1
-    fi
-    
-    echo "cd \"$worktree_path\""
-}
 
 delete_worktree() {
     local branch_name="$1"
-    
+
     if [ -z "$branch_name" ]; then
         echo "Error: Branch name required for delete command"
         show_usage
         return 1
     fi
-    
+
     # Get main repo root, not worktree root
     local repo_root=$(git worktree list | head -1 | awk '{print $1}')
     if [ -z "$repo_root" ]; then
         repo_root=$(git rev-parse --show-toplevel)
     fi
     local worktree_path="$repo_root/.worktrees/$branch_name"
-    
+
     if [ ! -d "$worktree_path" ]; then
         echo "Error: Worktree .worktrees/$branch_name does not exist"
         echo "Available worktrees:"
         ls -1 "$repo_root/.worktrees" 2>/dev/null || echo "No worktrees found"
         return 1
     fi
-    
+
     echo "Removing worktree: $worktree_path"
     git worktree remove "$worktree_path"
-    
+
     if [ $? -eq 0 ]; then
         echo "Worktree '$branch_name' successfully removed"
-        
+
         # Also delete the git branch if it exists
         if git show-ref --verify --quiet "refs/heads/$branch_name"; then
             echo "Deleting branch: $branch_name"
@@ -140,9 +113,6 @@ list_worktrees() {
 case $COMMAND in
     "create"|"cr")
         create_worktree "$BRANCH_NAME"
-        ;;
-    "change"|"c"|"goto"|"cd")
-        change_to_worktree "$BRANCH_NAME"
         ;;
     "delete"|"d"|"rm"|"remove")
         delete_worktree "$BRANCH_NAME"
