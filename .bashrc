@@ -244,6 +244,11 @@ if [ -f ~/code/dotfiles/fzf-functions.bash ]; then
     . ~/code/dotfiles/fzf-functions.bash
 fi
 
+# Source git-wt wrapper for proper cd handling
+if [ -f ~/code/dotfiles/git-wt-wrapper.bash ]; then
+    . ~/code/dotfiles/git-wt-wrapper.bash
+fi
+
 # Source tmux-worktree functions
 if [ -f ~/code/dotfiles/tmux-worktree.bash ]; then
     . ~/code/dotfiles/tmux-worktree.bash

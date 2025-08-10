@@ -127,10 +127,7 @@ twsync                  # Creates tmux windows for all existing worktrees
 ## Progress
 
 ### Todo
-- [ ] Create `worktree-switch` FZF interactive switcher (separate script)
-- [ ] Update `.tmux.conf` with keybindings for worktree navigation
-- [ ] Update `.tmux.conf` with git branch in status bar
-- [ ] Test workflow with multiple worktrees
+(All tasks completed)
 
 ### Done
 - [x] Create high-level plan and architecture
@@ -141,6 +138,13 @@ twsync                  # Creates tmux windows for all existing worktrees
 - [x] Add completion functions for worktree commands
 - [x] Add help function (twhelp)
 - [x] Implement FZF interactive switcher as function (twi) within tmux-worktree.bash
+- [x] Create `worktree-switch` FZF interactive switcher (separate script)
+- [x] Update `.tmux.conf` with keybindings for worktree navigation (Alt+w, Alt+W, Ctrl-y W/N/D)
+- [x] Update `.tmux.conf` with git branch in status bar
+- [x] Create git-wt wrapper for proper cd handling
+- [x] Implement session/window naming with branch extraction
+- [x] Add automatic tmux session creation option (TMUX_WORKTREE_SESSIONS=true)
+- [x] Test workflow with multiple worktrees
 
 ## Implementation Priority
 1. Start with basic `twa`, `tws`, `twd` functions
