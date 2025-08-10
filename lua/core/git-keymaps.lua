@@ -56,7 +56,7 @@ local function get_worktrees()
   local output = vim.fn.system('git worktree list --porcelain')
   local worktrees = {}
   local current = {}
-  
+
   for line in output:gmatch('[^\r\n]+') do
     if line:match('^worktree ') then
       if current.path then table.insert(worktrees, current) end
@@ -76,15 +76,13 @@ local function switch_to_worktree(wt)
   local branch = wt.name == 'main' and 'master' or wt.name
   local repo_root = vim.fn.system('git worktree list | head -1 | awk \'{print $1}\''):gsub('\n', '')
   local worktree_path = repo_root .. '/.worktrees/' .. branch
-  
+
   -- For main/master branch, use the repo root
   if branch == 'master' or branch == 'main' then
     worktree_path = repo_root
   end
-  
-  -- Change Neovim's working directory
-  vim.cmd('cd ' .. vim.fn.fnameescape(worktree_path))
-  
+
+
   -- If in tmux, switch or create window
   if vim.env.TMUX then
     local window_exists = vim.fn.system('tmux list-windows -F "#W" | grep -q "^' .. branch .. '$"; echo $?'):gsub('\n', '')
@@ -96,26 +94,26 @@ local function switch_to_worktree(wt)
       vim.fn.system('tmux new-window -n "' .. branch .. '" -c "' .. worktree_path .. '"')
     end
   end
-  
+
   vim.notify('Switched to worktree: ' .. wt.name .. ' at ' .. worktree_path, vim.log.levels.INFO)
 end
 
 local function worktree_picker(prompt, action, filter)
   local worktrees = get_worktrees()
   local items = {}
-  
+
   for _, wt in ipairs(worktrees) do
     if not filter or filter(wt) then
-      table.insert(items, string.format('%-20s %-30s %s', 
+      table.insert(items, string.format('%-20s %-30s %s',
         wt.name, wt.branch or '(detached)', wt.commit or ''))
     end
   end
-  
+
   if #items == 0 then
     vim.notify('No worktrees available', vim.log.levels.INFO)
     return
   end
-  
+
   require('fzf-lua').fzf_exec(items, {
     prompt = prompt,
     actions = {
@@ -145,7 +143,7 @@ keymap('n', '<leader>gwc', function()
           if selected and #selected > 0 then
             local branch = selected[1]:gsub('^origin/', '')
             local output = vim.fn.system(string.format('twc "%s"', branch))
-            
+
             if vim.v.shell_error == 0 then
               vim.notify('Worktree created: ' .. branch, vim.log.levels.INFO)
             else
@@ -187,7 +185,7 @@ keymap('n', '<leader>gwS', function()
     vim.notify('Not in a tmux session', vim.log.levels.WARN)
     return
   end
-  
+
   vim.fn.system('twsync')
   vim.notify('Synced tmux windows with worktrees', vim.log.levels.INFO)
 end, { desc = 'Sync tmux windows with worktrees' })
