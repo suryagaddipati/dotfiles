@@ -11,7 +11,7 @@ show_usage() {
     echo "Commands:"
     echo "  create|cr <branch> - Create worktree for branch (new or existing)"
     echo "  change|c <branch>  - Change to existing worktree"
-    echo "  delete|d <branch>  - Delete worktree and remove directory"
+    echo "  delete|d <branch>  - Delete worktree, directory, and git branch"
     echo "  list|l             - List all worktrees"
     echo ""
     echo "Examples:"
@@ -90,6 +90,17 @@ delete_worktree() {
     
     if [ $? -eq 0 ]; then
         echo "Worktree '$branch_name' successfully removed"
+        
+        # Also delete the git branch if it exists
+        if git show-ref --verify --quiet "refs/heads/$branch_name"; then
+            echo "Deleting branch: $branch_name"
+            git branch -D "$branch_name" 2>/dev/null
+            if [ $? -eq 0 ]; then
+                echo "Branch '$branch_name' successfully deleted"
+            else
+                echo "Warning: Could not delete branch '$branch_name' (may have unmerged changes)"
+            fi
+        fi
     else
         echo "Error: Failed to remove worktree '$branch_name'"
         return 1
