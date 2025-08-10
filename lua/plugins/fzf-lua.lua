@@ -56,7 +56,6 @@ return {
       ['--multi'] = '',
       ['--info'] = 'inline',
       ['--cycle'] = '',
-      ['--bind'] = 'esc:abort',
     },
 
     -- Window configuration
