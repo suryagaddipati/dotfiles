@@ -1,0 +1,33 @@
+# mise settings configuration
+# This file manages global mise settings
+
+# Disable paranoid mode to auto-trust config files
+# This prevents the "Config files are not trusted" warnings
+paranoid = false
+
+# Experimental features
+experimental = false
+
+# Jobs to run in parallel (default: 4)
+# jobs = 4
+
+# Color output (default: true)
+# color = true
+
+# Verbose output
+# verbose = false
+
+# Legacy version file support
+# legacy_version_file = true
+
+# Quiet mode
+# quiet = false
+
+# Raw output (no formatting)
+# raw = false
+
+# Trusted config paths (auto-trusted locations)
+# trusted_config_paths = []
+
+# Yes to all prompts
+# yes = false
