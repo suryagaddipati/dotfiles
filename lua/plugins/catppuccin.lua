@@ -22,8 +22,8 @@ return {
       },
       dim_inactive = {
         enabled = true,
-        shade = "dark",
-        percentage = 1.9,
+        shade = "light",
+        percentage = 0.5,
       },
     })
     vim.cmd.colorscheme('catppuccin')
