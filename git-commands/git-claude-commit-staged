@@ -4,7 +4,7 @@
 source ~/code/dotfiles/claude-functions.bash
 
 if ! git diff --cached --quiet; then
-    run_claude "create a git commit for the currently staged changes" "text" "Bash(git:*)"
+    run_claude "create a git commit for the currently staged changes" "text" "Bash"
 else
     echo "No staged changes to commit"
 fi

@@ -3,4 +3,4 @@
 # Source Claude helper functions
 source ~/code/dotfiles/claude-functions.bash
 
-run_claude "create a git commit" "text" "Bash(git:*)"
+run_claude "create a git commit" "text" "Bash"

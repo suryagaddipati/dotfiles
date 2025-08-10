@@ -9,8 +9,10 @@ run_claude() {
 
     local cmd="~/.claude/local/claude -p \"$prompt\" --output-format \"$output_format\""
 
-    # Don't use --allowedTools since it overrides settings.local.json
-    # We already have Bash(git:*) permission in settings.local.json
+    # Add allowedTools if provided
+    if [ -n "$allowed_tools" ]; then
+        cmd="$cmd --allowedTools \"$allowed_tools\""
+    fi
 
     if eval "$cmd"; then
         echo "Success!"
