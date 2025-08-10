@@ -91,7 +91,13 @@ return {
       if lsp == 'lua_ls' then
         config.settings = {
           Lua = {
-            diagnostics = { globals = {'vim'} },
+            diagnostics = { 
+              globals = {'vim'},
+              disable = {'trailing-space', 'empty-block'}
+            },
+            format = {
+              enable = false
+            },
             workspace = {
               library = vim.api.nvim_get_runtime_file('', true),
               checkThirdParty = false,
