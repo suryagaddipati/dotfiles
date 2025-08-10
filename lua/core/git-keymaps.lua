@@ -28,26 +28,26 @@ keymap('n',
   '<leader>gc',
   function()
     run_git_command(
-      { "git", "claude-staged-commit" },
+      { "git", "ai-commit-staged" },
       "Running git commit...",
       "Git commit successful",
       "Git commit failed"
     )
   end,
-  { desc = 'Claude Commit staged changes' }
+  { desc = 'AI Commit staged changes' }
 )
 
 keymap('n',
   '<leader>gC',
   function()
     run_git_command(
-      { "git", "claude-commit" },
-      "Running Claude commit...",
-      "Claude commit successful",
-      "Claude commit failed"
+      { "git", "ai-commit" },
+      "Running AI commit...",
+      "AI commit successful",
+      "AI commit failed"
     )
   end,
-  { desc = 'Claude commit everything' }
+  { desc = 'AI commit everything' }
 )
 
 keymap('n',
