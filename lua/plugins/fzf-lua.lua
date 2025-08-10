@@ -66,9 +66,6 @@ return {
       row = 0.35,
       col = 0.50,
       border = 'rounded',
-      on_create = function()
-        vim.keymap.set('t', '<esc>', '<c-\\><c-n>', { buffer = true })
-      end,
       preview = {
         default = 'builtin',
         border = 'border',
