@@ -160,3 +160,9 @@ keymap('n', '<leader>gwd', function()
   end)
 end, { desc = 'Delete git worktree' })
 
+-- Git fzf-lua integration
+keymap('n', '<leader>gf', function() require('fzf-lua').git_files() end, { desc = 'Git files' })
+keymap('n', '<leader>gs', function() require('fzf-lua').git_status() end, { desc = 'Git status' })
+keymap('n', '<leader>gl', function() require('fzf-lua').git_commits() end, { desc = 'Git log' })
+keymap('n', '<leader>gb', function() require('fzf-lua').git_branches() end, { desc = 'Git branches' })
+

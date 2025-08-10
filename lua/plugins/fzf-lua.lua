@@ -18,12 +18,6 @@ return {
     { '<leader>b', function() require('fzf-lua').buffers() end, desc = 'Buffers' },
     { '<leader>hr', function() require('fzf-lua').oldfiles() end, desc = 'Recent files' },
 
-    -- Git integration
-    { '<leader>gf', function() require('fzf-lua').git_files() end, desc = 'Git files' },
-    { '<leader>gs', function() require('fzf-lua').git_status() end, desc = 'Git status' },
-    { '<leader>gl', function() require('fzf-lua').git_commits() end, desc = 'Git log' },
-    { '<leader>gb', function() require('fzf-lua').git_branches() end, desc = 'Git branches' },
-
     -- LSP integration (avoiding conflicts with existing LSP keybindings)
     { '<leader>fD', function() require('fzf-lua').lsp_definitions() end, desc = 'LSP definitions (fzf)' },
     { '<leader>fR', function() require('fzf-lua').lsp_references() end, desc = 'LSP references (fzf)' },
