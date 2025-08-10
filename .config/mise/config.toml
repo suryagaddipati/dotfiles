@@ -16,3 +16,6 @@ fzf = "latest"
 # Formatters
 stylua = "latest"
 shfmt = "latest"
+
+[settings]
+paranoid = false
