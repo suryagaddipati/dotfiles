@@ -8,9 +8,15 @@ _in_git_repo() {
     git rev-parse --show-toplevel &>/dev/null
 }
 
-# Helper: Get repository root
+# Helper: Get main repository root (not worktree root)
 _get_repo_root() {
-    git rev-parse --show-toplevel 2>/dev/null
+    # Get the main repository path, not the worktree path
+    local main_repo=$(git worktree list | head -1 | awk '{print $1}')
+    if [ -n "$main_repo" ]; then
+        echo "$main_repo"
+    else
+        git rev-parse --show-toplevel 2>/dev/null
+    fi
 }
 
 # Helper: Check if we're in tmux
@@ -85,6 +91,52 @@ tws() {
     fi
 
     local repo_root=$(_get_repo_root)
+    local repo_name=$(basename "$repo_root")
+
+    # Get current branch/worktree name
+    local current_branch=$(git rev-parse --abbrev-ref HEAD)
+
+    # Check if we're already in the target branch/worktree
+    if [ "$branch" = "$current_branch" ]; then
+        echo "Already in worktree: $branch"
+
+        # Still handle tmux window switching
+        if _in_tmux; then
+            if _tmux_window_exists "$branch"; then
+                tmux select-window -t ":$branch"
+                echo "Switched to tmux window: $branch"
+            else
+                local current_path=$(pwd)
+                tmux new-window -n "$branch" -c "$current_path"
+                echo "Created and switched to tmux window: $branch"
+            fi
+        fi
+        return 0
+    fi
+
+    # Check if this is the main worktree (not in .worktrees/)
+    # The main worktree shows as the repo name in git-wt list
+    if [ "$branch" = "$repo_name" ] || [ "$branch" = "master" ] || [ "$branch" = "main" ]; then
+        # For main worktree, just cd to repo root
+        cd "$repo_root"
+        echo "Switched to main worktree: $repo_root"
+
+        # Handle tmux window switching
+        if _in_tmux; then
+            # Use "master" as window name for main repo
+            local window_name="master"
+
+            if _tmux_window_exists "$window_name"; then
+                tmux select-window -t ":$window_name"
+                echo "Switched to tmux window: $window_name"
+            else
+                tmux new-window -n "$window_name" -c "$repo_root"
+                echo "Created and switched to tmux window: $window_name"
+            fi
+        fi
+        return 0
+    fi
+
     local worktree_path="$repo_root/.worktrees/$branch"
 
     # Use git-wt change to switch to worktree (it handles cd)
@@ -148,13 +200,13 @@ twl() {
         if [[ -n "$line" ]]; then
             # Extract first word as branch name
             branch_name=$(echo "$line" | awk '{print $1}')
-            
+
             # Check tmux window status
             local window_status=""
             if _in_tmux && _tmux_window_exists "$branch_name"; then
                 window_status=" [tmux]"
             fi
-            
+
             echo "  ${line}${window_status}"
         fi
     done
@@ -201,15 +253,7 @@ twsync() {
 
 # Interactive switcher with FZF
 twi() {
-    if ! _in_git_repo; then
-        echo "Error: Not in a git repository"
-        return 1
-    fi
-
-    if ! command -v fzf >/dev/null 2>&1; then
-        echo "Error: fzf is not installed"
-        return 1
-    fi
+    echo "meow"
 
     local repo_root=$(_get_repo_root)
 
@@ -219,6 +263,7 @@ twi() {
     if [ -n "$selected" ]; then
         # Extract branch name (first word)
         local branch=$(echo "$selected" | awk '{print $1}')
+        echo "$branch branch"
         tws "$branch"
     fi
 }

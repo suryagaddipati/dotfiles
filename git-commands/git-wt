@@ -30,7 +30,11 @@ create_worktree() {
         return 1
     fi
     
-    local repo_root=$(git rev-parse --show-toplevel)
+    # Get main repo root, not worktree root
+    local repo_root=$(git worktree list | head -1 | awk '{print $1}')
+    if [ -z "$repo_root" ]; then
+        repo_root=$(git rev-parse --show-toplevel)
+    fi
     local worktree_path="$repo_root/.worktrees/$branch_name"
     
     mkdir -p "$repo_root/.worktrees"
@@ -53,7 +57,11 @@ change_to_worktree() {
         return 1
     fi
     
-    local repo_root=$(git rev-parse --show-toplevel)
+    # Get main repo root, not worktree root
+    local repo_root=$(git worktree list | head -1 | awk '{print $1}')
+    if [ -z "$repo_root" ]; then
+        repo_root=$(git rev-parse --show-toplevel)
+    fi
     local worktree_path="$repo_root/.worktrees/$branch_name"
     
     if [ ! -d "$worktree_path" ]; then
@@ -75,7 +83,11 @@ delete_worktree() {
         return 1
     fi
     
-    local repo_root=$(git rev-parse --show-toplevel)
+    # Get main repo root, not worktree root
+    local repo_root=$(git worktree list | head -1 | awk '{print $1}')
+    if [ -z "$repo_root" ]; then
+        repo_root=$(git rev-parse --show-toplevel)
+    fi
     local worktree_path="$repo_root/.worktrees/$branch_name"
     
     if [ ! -d "$worktree_path" ]; then
