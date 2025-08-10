@@ -2,3 +2,4 @@ tags
 .worktrees/
 .bashrc_private
 workspace
+claude-global-settings/ide/
