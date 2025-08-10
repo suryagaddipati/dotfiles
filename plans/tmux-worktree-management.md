@@ -127,17 +127,20 @@ twsync                  # Creates tmux windows for all existing worktrees
 ## Progress
 
 ### Todo
-- [ ] Create `tmux-worktree.bash` with wrapper functions (twa, tws, twd, twl, twsync)
-- [ ] Create `worktree-switch` FZF interactive switcher
+- [ ] Create `worktree-switch` FZF interactive switcher (separate script)
 - [ ] Update `.tmux.conf` with keybindings for worktree navigation
 - [ ] Update `.tmux.conf` with git branch in status bar
-- [ ] Update `.bashrc` to source tmux-worktree.bash
 - [ ] Test workflow with multiple worktrees
 
 ### Done
 - [x] Create high-level plan and architecture
 - [x] Define separation between git and tmux layers
 - [x] Document file structure and workflow
+- [x] Create `tmux-worktree.bash` with wrapper functions (twc, tws, twd, twl, twsync, twi)
+- [x] Update `.bashrc` to source tmux-worktree.bash
+- [x] Add completion functions for worktree commands
+- [x] Add help function (twhelp)
+- [x] Implement FZF interactive switcher as function (twi) within tmux-worktree.bash
 
 ## Implementation Priority
 1. Start with basic `twa`, `tws`, `twd` functions
