@@ -73,13 +73,31 @@ local function get_worktrees()
 end
 
 local function switch_to_worktree(wt)
-  vim.cmd('cd ' .. vim.fn.fnameescape(wt.path))
-  vim.notify('Switched to worktree: ' .. wt.name, vim.log.levels.INFO)
-  if vim.env.TMUX then
-    local window_name = wt.name == 'main' and 'master' or wt.name
-    vim.fn.system(string.format('tmux new-window -n "%s" -c "%s" || tmux select-window -t ":%s"', 
-      window_name, wt.path, window_name))
+  local branch = wt.name == 'main' and 'master' or wt.name
+  local repo_root = vim.fn.system('git worktree list | head -1 | awk \'{print $1}\''):gsub('\n', '')
+  local worktree_path = repo_root .. '/.worktrees/' .. branch
+  
+  -- For main/master branch, use the repo root
+  if branch == 'master' or branch == 'main' then
+    worktree_path = repo_root
   end
+  
+  -- Change Neovim's working directory
+  vim.cmd('cd ' .. vim.fn.fnameescape(worktree_path))
+  
+  -- If in tmux, switch or create window
+  if vim.env.TMUX then
+    local window_exists = vim.fn.system('tmux list-windows -F "#W" | grep -q "^' .. branch .. '$"; echo $?'):gsub('\n', '')
+    if window_exists == '0' then
+      -- Window exists, switch to it
+      vim.fn.system('tmux select-window -t ":' .. branch .. '"')
+    else
+      -- Create new window
+      vim.fn.system('tmux new-window -n "' .. branch .. '" -c "' .. worktree_path .. '"')
+    end
+  end
+  
+  vim.notify('Switched to worktree: ' .. wt.name .. ' at ' .. worktree_path, vim.log.levels.INFO)
 end
 
 local function worktree_picker(prompt, action, filter)
@@ -126,20 +144,10 @@ keymap('n', '<leader>gwc', function()
         ['default'] = function(selected)
           if selected and #selected > 0 then
             local branch = selected[1]:gsub('^origin/', '')
-            local cmd = string.format('cd "$(git rev-parse --show-toplevel)" && git-wt cr "%s"', branch)
-            local output = vim.fn.system(cmd)
+            local output = vim.fn.system(string.format('twc "%s"', branch))
             
             if vim.v.shell_error == 0 then
               vim.notify('Worktree created: ' .. branch, vim.log.levels.INFO)
-              local cd_cmd = output:match('cd "([^"]+)"')
-              if cd_cmd then
-                vim.cmd('cd ' .. vim.fn.fnameescape(cd_cmd))
-                vim.notify('Changed to worktree: ' .. branch, vim.log.levels.INFO)
-                if vim.env.TMUX then
-                  vim.fn.system(string.format('tmux new-window -n "%s" -c "%s" || tmux select-window -t ":%s"', 
-                    branch, cd_cmd, branch))
-                end
-              end
             else
               vim.notify('Failed to create worktree: ' .. output, vim.log.levels.ERROR)
             end
@@ -162,13 +170,9 @@ keymap('n', '<leader>gwd', function()
       prompt = 'Delete worktree "' .. wt.name .. '"?'
     }, function(choice)
       if choice == 'Yes' then
-        local cmd = string.format('cd "$(git rev-parse --show-toplevel)" && git-wt d "%s"', wt.name)
-        local output = vim.fn.system(cmd)
+        local output = vim.fn.system(string.format('twd "%s"', wt.name))
         if vim.v.shell_error == 0 then
           vim.notify('Worktree deleted: ' .. wt.name, vim.log.levels.INFO)
-          if vim.env.TMUX then
-            vim.fn.system(string.format('tmux kill-window -t ":%s" 2>/dev/null', wt.name))
-          end
         else
           vim.notify('Failed to delete worktree: ' .. output, vim.log.levels.ERROR)
         end
@@ -184,21 +188,8 @@ keymap('n', '<leader>gwS', function()
     return
   end
   
-  local worktrees = get_worktrees()
-  local synced = 0
-  
-  for _, wt in ipairs(worktrees) do
-    local window_name = wt.name == 'main' and 'master' or wt.name
-    local check_cmd = string.format('tmux list-windows -F "#W" | grep -q "^%s$"', window_name)
-    if vim.fn.system(check_cmd) ~= '' then
-      vim.fn.system(string.format('tmux new-window -n "%s" -c "%s"', window_name, wt.path))
-      synced = synced + 1
-    end
-  end
-  
-  vim.notify(synced > 0 and 
-    string.format('Synced %d tmux windows with worktrees', synced) or
-    'All worktrees already have tmux windows', vim.log.levels.INFO)
+  vim.fn.system('twsync')
+  vim.notify('Synced tmux windows with worktrees', vim.log.levels.INFO)
 end, { desc = 'Sync tmux windows with worktrees' })
 
 -- Git fzf-lua integration
