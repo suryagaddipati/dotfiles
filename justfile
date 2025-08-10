@@ -12,6 +12,7 @@ vim_dir := home_dir / '.vim'
 alacritty_config_dir := home_dir / '.config/alacritty'
 mise_config_dir := home_dir / '.config/mise'
 claude_config_dir := home_dir / '.claude'
+claude_global_dir := dotfiles_dir / 'claude-global-settings'
 
 # Files to manage
 dotfiles := '.bashrc .gitconfig .tmux.conf init.lua .bash_profile'
@@ -69,12 +70,11 @@ check-prereqs:
         printf "\n{{green}}All prerequisites satisfied!{{nc}}\n"; \
     fi
 
-install: setup-nvim setup-tmux
+install: setup-nvim setup-tmux setup-claude
     @printf "{{blue}}Installing dotfiles...{{nc}}\n"
     @mkdir -p "{{nvim_config_dir}}"
     @mkdir -p "{{alacritty_config_dir}}"
     @mkdir -p "{{mise_config_dir}}"
-    @mkdir -p "{{claude_config_dir}}"
     @mkdir -p "{{home_dir}}/.local/bin"
     @for file in {{dotfiles}}; do \
         if [ -f "{{dotfiles_dir}}/$file" ]; then \
@@ -103,53 +103,6 @@ install: setup-nvim setup-tmux
             ln -sf "{{dotfiles_dir}}/$file" "{{home_dir}}/$file"; \
         else \
             printf "{{yellow}}Warning: $file not found{{nc}}\n"; \
-        fi \
-    done
-    @for file in {{claude_files}}; do \
-        if [ -f "{{dotfiles_dir}}/$file" ]; then \
-            printf "{{green}}Linking $file{{nc}}\n"; \
-            ln -sf "{{dotfiles_dir}}/$file" "{{home_dir}}/$file"; \
-        else \
-            printf "{{yellow}}Warning: $file not found{{nc}}\n"; \
-        fi \
-    done
-    @for dir in {{claude_dirs}}; do \
-        if [ -d "{{dotfiles_dir}}/$dir" ]; then \
-            printf "{{green}}Linking $dir{{nc}}\n"; \
-            ln -sf "{{dotfiles_dir}}/$dir" "{{home_dir}}/$dir"; \
-        else \
-            printf "{{yellow}}Warning: $dir not found{{nc}}\n"; \
-        fi \
-    done
-    @for file in {{claude_scripts}}; do \
-        if [ -f "{{dotfiles_dir}}/$file" ]; then \
-            printf "{{green}}Linking $file{{nc}}\n"; \
-            ln -sf "{{dotfiles_dir}}/$file" "{{home_dir}}/$file"; \
-            chmod +x "{{home_dir}}/$file"; \
-        else \
-            printf "{{yellow}}Warning: $file not found{{nc}}\n"; \
-        fi \
-    done
-    @mkdir -p "{{claude_config_dir}}/commands"
-    @if [ -d "{{dotfiles_dir}}/.claude/commands" ]; then \
-        for command_file in "{{dotfiles_dir}}/.claude/commands"/*.md; do \
-            if [ -f "$command_file" ]; then \
-                command=$(basename "$command_file"); \
-                printf "{{green}}Copying Claude command: $command{{nc}}\n"; \
-                if [ ! -f "{{claude_config_dir}}/commands/$command" ] || ! cmp -s "$command_file" "{{claude_config_dir}}/commands/$command"; then \
-                    cp "$command_file" "{{claude_config_dir}}/commands/$command"; \
-                fi; \
-            fi; \
-        done; \
-    fi
-    @for file in {{claude_commands}}; do \
-        if [ -f "{{home_dir}}/$file" ]; then \
-            target_name="claude"; \
-            printf "{{green}}Installing claude command: $target_name{{nc}}\n"; \
-            ln -sf "{{home_dir}}/$file" "{{home_dir}}/.local/bin/$target_name"; \
-            chmod +x "{{home_dir}}/.local/bin/$target_name"; \
-        else \
-            printf "{{yellow}}Warning: $file not found (expected at {{home_dir}}/$file){{nc}}\n"; \
         fi \
     done
     @printf "{{green}}Dotfiles installation complete!{{nc}}\n"
@@ -183,6 +136,55 @@ setup-nvim: check-nvim
 # Check if neovim is available
 check-nvim:
     @which nvim > /dev/null || (printf "{{red}}Error: neovim not found. Please install neovim first.{{nc}}\n" && exit 1)
+
+# Setup Claude global settings
+setup-claude:
+    @printf "{{blue}}Setting up Claude global settings...{{nc}}\n"
+    @# Save existing session-specific directories if they exist
+    @if [ -e "{{claude_config_dir}}" ] && [ ! -L "{{claude_config_dir}}" ]; then \
+        printf "{{yellow}}Backing up existing ~/.claude directory...{{nc}}\n"; \
+        mkdir -p "{{claude_config_dir}}.backup"; \
+        backup_dir="{{claude_config_dir}}.backup/$$(date +%Y%m%d_%H%M%S)"; \
+        mv "{{claude_config_dir}}" "$$backup_dir"; \
+        printf "{{yellow}}Preserving session-specific directories...{{nc}}\n"; \
+        for dir in projects local shell-snapshots todos; do \
+            if [ -d "$$backup_dir/$$dir" ]; then \
+                mkdir -p "{{claude_global_dir}}/$$dir"; \
+                cp -r "$$backup_dir/$$dir"/* "{{claude_global_dir}}/$$dir" 2>/dev/null || true; \
+            fi; \
+        done; \
+    fi
+    @# Remove existing symlink if it exists
+    @if [ -L "{{claude_config_dir}}" ]; then \
+        printf "{{yellow}}Removing existing symlink...{{nc}}\n"; \
+        rm "{{claude_config_dir}}"; \
+    fi
+    @# Create symlink to claude-global-settings
+    @printf "{{green}}Creating symlink from claude-global-settings to ~/.claude{{nc}}\n"
+    @ln -sf "{{claude_global_dir}}" "{{claude_config_dir}}"
+    @# Create session-specific directories if they don't exist
+    @for dir in projects local shell-snapshots todos; do \
+        mkdir -p "{{claude_config_dir}}/$$dir"; \
+    done
+    @# Verify the symlink was created successfully
+    @if [ -L "{{claude_config_dir}}" ]; then \
+        printf "{{green}}✓ Successfully installed Claude global settings{{nc}}\n"; \
+    else \
+        printf "{{red}}✗ Failed to create symlink{{nc}}\n"; \
+        exit 1; \
+    fi
+    @# List key configuration files
+    @printf "\n{{yellow}}Key Claude configuration files:{{nc}}\n"
+    @[ -f "{{claude_config_dir}}/settings.json" ] && printf "  ✓ settings.json\n" || true
+    @[ -f "{{claude_config_dir}}/settings.local.json" ] && printf "  ✓ settings.local.json\n" || true
+    @[ -f "{{claude_config_dir}}/hooks.json" ] && printf "  ✓ hooks.json\n" || true
+    @[ -d "{{claude_config_dir}}/agents" ] && printf "  ✓ agents/\n" || true
+    @[ -d "{{claude_config_dir}}/commands" ] && printf "  ✓ commands/\n" || true
+    @printf "\n{{yellow}}Session directories (not tracked in git):{{nc}}\n"
+    @[ -d "{{claude_config_dir}}/projects" ] && printf "  ✓ projects/\n" || true
+    @[ -d "{{claude_config_dir}}/local" ] && printf "  ✓ local/\n" || true
+    @[ -d "{{claude_config_dir}}/shell-snapshots" ] && printf "  ✓ shell-snapshots/\n" || true
+    @[ -d "{{claude_config_dir}}/todos" ] && printf "  ✓ todos/\n" || true
 
 # Install system dependencies
 install-deps:
@@ -243,13 +245,13 @@ install-dev: install-deps
     fi
 
 # Install MCP servers for Claude Code
-install-mcp:
+install-mcp: setup-claude
     @printf "{{blue}}Installing MCP servers for Claude Code...{{nc}}\n"
-    @if [ -f "{{home_dir}}/.claude/mcp-install.sh" ]; then \
-        chmod +x "{{home_dir}}/.claude/mcp-install.sh"; \
-        "{{home_dir}}/.claude/mcp-install.sh"; \
+    @if [ -f "{{claude_config_dir}}/mcp-install.sh" ]; then \
+        chmod +x "{{claude_config_dir}}/mcp-install.sh"; \
+        "{{claude_config_dir}}/mcp-install.sh"; \
     else \
-        printf "{{red}}MCP install script not found. Run 'just install' first.{{nc}}\n"; \
+        printf "{{red}}MCP install script not found. Run 'just setup-claude' first.{{nc}}\n"; \
         exit 1; \
     fi
 
@@ -294,28 +296,11 @@ uninstall:
             rm "$target_file"; \
         fi \
     done
-    @for file in {{claude_files}}; do \
-        target_file="{{home_dir}}/$file"; \
-        if [ -L "$target_file" ]; then \
-            printf "{{yellow}}Removing symlink: $file{{nc}}\n"; \
-            rm "$target_file"; \
-        fi \
-    done
-    @for dir in {{claude_dirs}}; do \
-        target_dir="{{home_dir}}/$dir"; \
-        if [ -L "$target_dir" ]; then \
-            printf "{{yellow}}Removing symlink: $dir{{nc}}\n"; \
-            rm "$target_dir"; \
-        fi \
-    done
-    @for file in {{claude_commands}}; do \
-        target_name="claude"; \
-        target_file="{{home_dir}}/.local/bin/$target_name"; \
-        if [ -L "$target_file" ]; then \
-            printf "{{yellow}}Removing claude command: $target_name{{nc}}\n"; \
-            rm "$target_file"; \
-        fi \
-    done
+    @# Remove Claude symlink
+    @if [ -L "{{claude_config_dir}}" ]; then \
+        printf "{{yellow}}Removing Claude global settings symlink{{nc}}\n"; \
+        rm "{{claude_config_dir}}"; \
+    fi
     @printf "{{green}}Dotfiles uninstalled{{nc}}\n"
 
 
@@ -329,6 +314,40 @@ full-install: install-deps install install-dev install-lsp
     @printf "  2. Start tmux: tmux or t\n"
     @printf "  3. Open neovim: nvim (plugins will install automatically)\n"
     @printf "  4. Install MCP servers: just install-mcp\n"
+
+# Check Claude settings status
+status-claude:
+    @printf "{{blue}}Claude Global Settings Status{{nc}}\n"
+    @printf "============================\n"
+    @if [ -L "{{claude_config_dir}}" ]; then \
+        printf "{{green}}✓{{nc}} ~/.claude is symlinked to: "; \
+        readlink "{{claude_config_dir}}"; \
+    else \
+        printf "{{red}}✗{{nc}} ~/.claude is not symlinked\n"; \
+    fi
+    @printf "\n{{yellow}}Configuration files:{{nc}}\n"
+    @[ -f "{{claude_config_dir}}/settings.json" ] && printf "  {{green}}✓{{nc}} settings.json\n" || printf "  {{red}}✗{{nc}} settings.json\n"
+    @[ -f "{{claude_config_dir}}/settings.local.json" ] && printf "  {{green}}✓{{nc}} settings.local.json\n" || printf "  {{red}}✗{{nc}} settings.local.json\n"
+    @[ -f "{{claude_config_dir}}/hooks.json" ] && printf "  {{green}}✓{{nc}} hooks.json\n" || printf "  {{red}}✗{{nc}} hooks.json\n"
+    @[ -f "{{claude_config_dir}}/mcp-install.sh" ] && printf "  {{green}}✓{{nc}} mcp-install.sh\n" || printf "  {{red}}✗{{nc}} mcp-install.sh\n"
+    @printf "\n{{yellow}}Tracked directories (in git):{{nc}}\n"
+    @if [ -d "{{claude_config_dir}}/agents" ]; then \
+        count=`find {{claude_config_dir}}/agents -name "*.md" -type f | wc -l | tr -d ' '`; \
+        printf "  {{green}}✓{{nc}} agents/ ($count agents)\n"; \
+    else \
+        printf "  {{red}}✗{{nc}} agents/\n"; \
+    fi
+    @if [ -d "{{claude_config_dir}}/commands" ]; then \
+        count=`find {{claude_config_dir}}/commands -name "*.md" -type f | wc -l | tr -d ' '`; \
+        printf "  {{green}}✓{{nc}} commands/ ($count commands)\n"; \
+    else \
+        printf "  {{red}}✗{{nc}} commands/\n"; \
+    fi
+    @printf "\n{{yellow}}Session directories (not tracked):{{nc}}\n"
+    @[ -d "{{claude_config_dir}}/projects" ] && printf "  {{green}}✓{{nc}} projects/ (conversation history)\n" || printf "  {{yellow}}○{{nc}} projects/ (will be created on use)\n"
+    @[ -d "{{claude_config_dir}}/todos" ] && printf "  {{green}}✓{{nc}} todos/ (task tracking)\n" || printf "  {{yellow}}○{{nc}} todos/ (will be created on use)\n"
+    @[ -d "{{claude_config_dir}}/local" ] && printf "  {{green}}✓{{nc}} local/ (Claude CLI)\n" || printf "  {{yellow}}○{{nc}} local/ (will be created on use)\n"
+    @[ -d "{{claude_config_dir}}/shell-snapshots" ] && printf "  {{green}}✓{{nc}} shell-snapshots/ (shell history)\n" || printf "  {{yellow}}○{{nc}} shell-snapshots/ (will be created on use)\n"
 
 # Update dotfiles from git repository
 update:

@@ -7,7 +7,7 @@ run_claude() {
     local output_format="${2:-text}"
     local allowed_tools="${3:-}"
 
-    local cmd="~/.claude/local/claude -p \"$prompt\" --output-format \"$output_format\""
+    local cmd="claude -p \"$prompt\" --output-format \"$output_format\""
 
     # Add allowedTools if provided
     if [ -n "$allowed_tools" ]; then

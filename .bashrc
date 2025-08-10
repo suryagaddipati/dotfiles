@@ -176,7 +176,7 @@ export PATH="$HOME/.local/bin:$PATH"
 # nv function - launch nvim with socket based on current directory
 nv() {
     local socket_path="/tmp/$(basename "$PWD")"
-    
+
     # Check if socket is already in use
     if [ -S "$socket_path" ]; then
         if ! lsof "$socket_path" >/dev/null 2>&1; then
@@ -187,7 +187,7 @@ nv() {
             return 1
         fi
     fi
-    
+
     nvim . --listen "$socket_path"
 }
 
@@ -266,11 +266,6 @@ if [ -d "$HOME/.opencode/bin" ]; then
 fi
 
 export PATH=$PATH:/opt/homebrew/bin
-
-# Claude CLI alias (cross-platform)
-if [ -f "$HOME/.claude/local/claude" ]; then
-    alias claude="$HOME/.claude/local/claude"
-fi
 
 # Source FZF functions and configuration
 if [ -f "$HOME/code/dotfiles/fzf-functions.bash" ]; then
