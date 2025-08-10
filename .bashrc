@@ -244,6 +244,11 @@ if [ -f ~/code/dotfiles/fzf-functions.bash ]; then
     . ~/code/dotfiles/fzf-functions.bash
 fi
 
+# Source tmux-worktree functions
+if [ -f ~/code/dotfiles/tmux-worktree.bash ]; then
+    . ~/code/dotfiles/tmux-worktree.bash
+fi
+
 
 # Initialize mise (cross-platform)
 if command -v mise >/dev/null 2>&1; then

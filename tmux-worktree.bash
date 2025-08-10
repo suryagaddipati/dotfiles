@@ -40,7 +40,7 @@ twc() {
     local branch="$1"
 
     if [ -z "$branch" ]; then
-        echo "Usage: twa <branch>"
+        echo "Usage: twc <branch>"
         return 1
     fi
 
@@ -87,29 +87,24 @@ tws() {
     local repo_root=$(_get_repo_root)
     local worktree_path="$repo_root/.worktrees/$branch"
 
-    # Check if worktree exists
-    if [ ! -d "$worktree_path" ]; then
-        echo "Error: Worktree '$branch' does not exist"
-        echo "Available worktrees:"
-        ls -1 "$repo_root/.worktrees" 2>/dev/null || echo "  (none)"
+    # Use git-wt change to switch to worktree (it handles cd)
+    if ! git-wt change "$branch"; then
         return 1
     fi
 
+    # Handle tmux window switching
     if _in_tmux; then
         if _tmux_window_exists "$branch"; then
             tmux select-window -t ":$branch"
-            echo "Switched to window: $branch"
+            echo "Switched to tmux window: $branch"
         else
             tmux new-window -n "$branch" -c "$worktree_path"
-            echo "Created and switched to window: $branch"
+            echo "Created and switched to tmux window: $branch"
         fi
-    else
-        echo "cd $worktree_path"
-        cd "$worktree_path"
     fi
 }
 
-# Delete worktree + window
+# Delete worktree + tmux window + git branch
 twd() {
     local branch="$1"
 
@@ -129,7 +124,7 @@ twd() {
         echo "Killed tmux window: $branch"
     fi
 
-    # Delete worktree using git-wt
+    # Delete worktree and branch using git-wt (it handles both)
     git-wt delete "$branch"
 }
 
@@ -146,23 +141,21 @@ twl() {
     echo "Worktrees in $repo_name:"
     echo "----------------------------------------"
 
-    # Use git worktree list to get all worktrees
-    git worktree list --porcelain | while IFS= read -r line; do
-        if [[ $line == worktree* ]]; then
-            worktree_path=${line#worktree }
-            worktree_name=$(basename "$worktree_path")
-        elif [[ $line == branch* ]]; then
-            branch_name=${line#branch refs/heads/}
-
+    # Use git-wt list and enhance with tmux status
+    git-wt list | while IFS= read -r line; do
+        # Parse the line to extract branch name
+        # Expected format from git-wt list: "branch-name" or similar
+        if [[ -n "$line" ]]; then
+            # Extract first word as branch name
+            branch_name=$(echo "$line" | awk '{print $1}')
+            
             # Check tmux window status
             local window_status=""
-            if _in_tmux && _tmux_window_exists "$worktree_name"; then
+            if _in_tmux && _tmux_window_exists "$branch_name"; then
                 window_status=" [tmux]"
             fi
-
-            printf "  %-20s -> %-20s%s\n" "$worktree_name" "$branch_name" "$window_status"
-        elif [[ $line == detached ]]; then
-            printf "  %-20s -> %-20s\n" "$worktree_name" "(detached)"
+            
+            echo "  ${line}${window_status}"
         fi
     done
 }
@@ -220,22 +213,11 @@ twi() {
 
     local repo_root=$(_get_repo_root)
 
-    # Get list of worktrees
-    local selected=$(git worktree list --porcelain | awk '
-        /^worktree/ {
-            path = $2
-            name = substr(path, match(path, /[^/]+$/))
-        }
-        /^branch/ {
-            branch = substr($0, 18)
-            print name " -> " branch
-        }
-        /^detached/ {
-            print name " -> (detached)"
-        }
-    ' | fzf --header="Select worktree to switch to" --height=40% --reverse)
+    # Get list of worktrees using git-wt
+    local selected=$(git-wt list | fzf --header="Select worktree to switch to" --height=40% --reverse)
 
     if [ -n "$selected" ]; then
+        # Extract branch name (first word)
         local branch=$(echo "$selected" | awk '{print $1}')
         tws "$branch"
     fi
@@ -264,9 +246,9 @@ complete -F _tw_completion twd
 twhelp() {
     cat << EOF
 Tmux Worktree Commands:
-  twa <branch>   - Create worktree and tmux window
+  twc <branch>   - Create worktree and tmux window
   tws <branch>   - Switch to worktree/window
-  twd <branch>   - Delete worktree and window
+  twd <branch>   - Delete worktree, window, and branch
   twl            - List worktrees with tmux status
   twsync         - Sync tmux windows with worktrees
   twi            - Interactive worktree switcher (requires fzf)
