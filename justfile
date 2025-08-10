@@ -336,3 +336,52 @@ update:
     @git pull origin master
     @printf "{{green}}Update complete!{{nc}}\n"
     @printf "{{yellow}}Reload your shell: source ~/.bashrc{{nc}}\n"
+
+# Generate Brewfile from current Homebrew installation
+brewfile-dump:
+    @printf "{{blue}}Generating Brewfile from current installation...{{nc}}\n"
+    @brew bundle dump --force --file="{{dotfiles_dir}}/Brewfile"
+    @printf "{{green}}Brewfile generated successfully!{{nc}}\n"
+
+# Install packages from Brewfile
+brewfile-install:
+    @printf "{{blue}}Installing packages from Brewfile...{{nc}}\n"
+    @if [ -f "{{dotfiles_dir}}/Brewfile" ]; then \
+        brew bundle install --file="{{dotfiles_dir}}/Brewfile"; \
+        printf "{{green}}Brewfile packages installed successfully!{{nc}}\n"; \
+    else \
+        printf "{{red}}Brewfile not found at {{dotfiles_dir}}/Brewfile{{nc}}\n"; \
+        exit 1; \
+    fi
+
+# Check Brewfile status (what would be installed/removed)
+brewfile-check:
+    @printf "{{blue}}Checking Brewfile status...{{nc}}\n"
+    @if [ -f "{{dotfiles_dir}}/Brewfile" ]; then \
+        brew bundle check --file="{{dotfiles_dir}}/Brewfile" --verbose; \
+    else \
+        printf "{{red}}Brewfile not found at {{dotfiles_dir}}/Brewfile{{nc}}\n"; \
+        exit 1; \
+    fi
+
+# Clean up packages not in Brewfile
+brewfile-cleanup:
+    @printf "{{yellow}}Warning: This will remove packages not listed in the Brewfile!{{nc}}\n"
+    @printf "{{yellow}}Press Ctrl-C to cancel, or wait 5 seconds to continue...{{nc}}\n"
+    @sleep 5
+    @if [ -f "{{dotfiles_dir}}/Brewfile" ]; then \
+        brew bundle cleanup --file="{{dotfiles_dir}}/Brewfile"; \
+    else \
+        printf "{{red}}Brewfile not found at {{dotfiles_dir}}/Brewfile{{nc}}\n"; \
+        exit 1; \
+    fi
+
+# List packages installed but not in Brewfile
+brewfile-diff:
+    @printf "{{blue}}Packages installed but not in Brewfile:{{nc}}\n"
+    @if [ -f "{{dotfiles_dir}}/Brewfile" ]; then \
+        brew bundle cleanup --file="{{dotfiles_dir}}/Brewfile" --force; \
+    else \
+        printf "{{red}}Brewfile not found at {{dotfiles_dir}}/Brewfile{{nc}}\n"; \
+        exit 1; \
+    fi
