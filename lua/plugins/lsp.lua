@@ -35,7 +35,7 @@ return {
       severity_sort = true,
       float = {
         border = 'rounded',
-        source = 'always',
+        source = 'if_many',
         header = '',
         prefix = '',
       },
@@ -53,7 +53,7 @@ return {
       }
     })
 
-    local on_attach = function(client, bufnr)
+    local on_attach = function(_, bufnr)
       local opts = { buffer = bufnr, silent = true }
       vim.keymap.set('n', 'gd', function() vim.lsp.buf.definition(); vim.cmd('normal! zz') end, opts)
       vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
@@ -68,25 +68,25 @@ return {
       vim.keymap.set('n', '<leader>li', vim.lsp.buf.implementation, opts)
       vim.keymap.set('n', '<leader>lt', vim.lsp.buf.type_definition, opts)
       vim.keymap.set('n', '<leader>lw', vim.lsp.buf.workspace_symbol, opts)
-      vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
-      vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
+      vim.keymap.set('n', ']d', function() vim.diagnostic.jump({ count = 1 }) end, opts)
+      vim.keymap.set('n', '[d', function() vim.diagnostic.jump({ count = -1 }) end, opts)
       vim.keymap.set('n', '<leader>le', vim.diagnostic.open_float, opts)
       vim.keymap.set('n', '<leader>ll', vim.diagnostic.setloclist, opts)
     end
 
     local servers = { 'lua_ls', 'pyright', 'rust_analyzer', 'gopls', 'bashls', 'jsonls', 'yamlls' }
-    
+
     -- Only add ts_ls if TypeScript is available
     if vim.fn.executable('tsc') == 1 or vim.fn.executable('typescript') == 1 then
       table.insert(servers, 'ts_ls')
     end
-    
+
     for _, lsp in ipairs(servers) do
       local config = {
         on_attach = on_attach,
         capabilities = capabilities,
       }
-      
+
       -- Server-specific configurations
       if lsp == 'lua_ls' then
         config.settings = {
@@ -118,7 +118,7 @@ return {
           }
         }
       end
-      
+
       lspconfig[lsp].setup(config)
     end
   end,

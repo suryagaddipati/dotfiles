@@ -3,9 +3,9 @@ return {
   dependencies = { 'nvim-tree/nvim-web-devicons' },
   keys = {
     -- File operations
-    { '<leader>o', function() 
+    { '<leader>o', function()
         -- Use git_files if in a git repo, otherwise files
-        local ok = pcall(require('fzf-lua').git_files, { 
+        local ok = pcall(require('fzf-lua').git_files, {
           show_untracked = true,
           -- This ensures we show both tracked and untracked files
           cmd = 'git ls-files --cached --others --exclude-standard'

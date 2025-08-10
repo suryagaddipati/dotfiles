@@ -23,8 +23,8 @@ return {
       vim.keymap.set('n', '<leader>li', vim.lsp.buf.implementation, opts)
       vim.keymap.set('n', '<leader>lt', vim.lsp.buf.type_definition, opts)
       vim.keymap.set('n', '<leader>lw', vim.lsp.buf.workspace_symbol, opts)
-      vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
-      vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
+      vim.keymap.set('n', ']d', function() vim.diagnostic.jump({ count = 1 }) end, opts)
+      vim.keymap.set('n', '[d', function() vim.diagnostic.jump({ count = -1 }) end, opts)
       vim.keymap.set('n', '<leader>le', vim.diagnostic.open_float, opts)
       vim.keymap.set('n', '<leader>ll', vim.diagnostic.setloclist, opts)
       

@@ -109,9 +109,9 @@ keymap('n', '<leader>gwl', function()
     local buf = vim.api.nvim_create_buf(false, true)
     local lines = vim.split(output, '\n')
     vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
-    vim.api.nvim_buf_set_option(buf, 'buftype', 'nofile')
-    vim.api.nvim_buf_set_option(buf, 'bufhidden', 'wipe')
-    vim.api.nvim_buf_set_option(buf, 'filetype', 'gitworktree')
+    vim.bo[buf].buftype = 'nofile'
+    vim.bo[buf].bufhidden = 'wipe'
+    vim.bo[buf].filetype = 'gitworktree'
 
     -- Open in a split
     vim.cmd('split')
@@ -128,9 +128,9 @@ keymap('n', '<leader>gwl', function()
         local worktree_name = line:match('^(%S+)')
         if worktree_name and worktree_name ~= '' then
           vim.cmd('q') -- Close the list window
-          local output = vim.fn.system('git wt ' .. worktree_name)
+          local wt_output = vim.fn.system('git wt ' .. worktree_name)
           if vim.v.shell_error == 0 then
-            local cd_cmd = output:match('cd (.+)')
+            local cd_cmd = wt_output:match('cd (.+)')
             if cd_cmd then
               vim.cmd('cd ' .. cd_cmd)
               vim.notify('Switched to worktree: ' .. worktree_name, vim.log.levels.INFO)

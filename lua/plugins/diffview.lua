@@ -46,7 +46,7 @@ return {
 
             -- Check if file is untracked
             if file.status and file.status == '?' then
-              local ok, err = pcall(vim.fn.delete, file.absolute_path)
+              local ok = pcall(vim.fn.delete, file.absolute_path)
               if ok then
                 vim.notify(string.format('Deleted: %s', file.path))
                 -- Refresh the view
