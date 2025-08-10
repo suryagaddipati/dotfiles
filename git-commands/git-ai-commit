@@ -1,6 +1,6 @@
 #!/bin/bash
 
 # Source Claude helper functions
-source ~/code/dotfiles/claude-functions.bash
+source ~/code/dotfiles/bash_functions/claude-functions.bash
 
 run_claude "create a git commit" "text" "Bash"

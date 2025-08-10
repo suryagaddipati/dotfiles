@@ -210,8 +210,8 @@ caps_ctrl() {
 }
 
 # Source Claude helper functions
-if [ -f ~/code/dotfiles/claude-functions.bash ]; then
-    . ~/code/dotfiles/claude-functions.bash
+if [ -f ~/code/dotfiles/bash_functions/claude-functions.bash ]; then
+    . ~/code/dotfiles/bash_functions/claude-functions.bash
 fi
 
 grp() {
@@ -240,8 +240,8 @@ focus() {
 }
 
 # Source FZF functions from separate file
-if [ -f ~/code/dotfiles/fzf-functions.bash ]; then
-    . ~/code/dotfiles/fzf-functions.bash
+if [ -f ~/code/dotfiles/bash_functions/fzf-functions.bash ]; then
+    . ~/code/dotfiles/bash_functions/fzf-functions.bash
 fi
 
 # Source git-wt wrapper for proper cd handling
@@ -250,8 +250,8 @@ if [ -f ~/code/dotfiles/git-wt-wrapper.bash ]; then
 fi
 
 # Source tmux-worktree functions
-if [ -f ~/code/dotfiles/tmux-worktree.bash ]; then
-    . ~/code/dotfiles/tmux-worktree.bash
+if [ -f ~/code/dotfiles/bash_functions/tmux-worktree.bash ]; then
+    . ~/code/dotfiles/bash_functions/tmux-worktree.bash
 fi
 
 
@@ -268,8 +268,8 @@ fi
 export PATH=$PATH:/opt/homebrew/bin
 
 # Source FZF functions and configuration
-if [ -f "$HOME/code/dotfiles/fzf-functions.bash" ]; then
-    source "$HOME/code/dotfiles/fzf-functions.bash"
+if [ -f "$HOME/code/dotfiles/bash_functions/fzf-functions.bash" ]; then
+    source "$HOME/code/dotfiles/bash_functions/fzf-functions.bash"
 fi
 
 export PATH="$PATH:/Users/suryag/Library/Application Support/Coursier/bin"

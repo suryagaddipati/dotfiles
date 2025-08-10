@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Source Claude helper functions
-source ~/code/dotfiles/claude-functions.bash
+source ~/code/dotfiles/bash_functions/claude-functions.bash
 
 if ! git diff --cached --quiet; then
     run_claude "create a git commit for the currently staged changes" "text" "Bash"

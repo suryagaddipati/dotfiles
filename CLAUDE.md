@@ -38,7 +38,11 @@ Use vim-expert when user asks to open files. ask vim-expert to open files you fo
 - `.gitconfig` - Git configuration with user settings and aliases
 - `.tmux.conf` - Comprehensive tmux configuration with custom key bindings and appearance
 - `init.lua` - Modern neovim configuration with lua-based plugins and custom mappings
-- `tmux.bash` - Tmux session management wrapper function
+- `bash_functions/` - Directory containing bash function files
+  - `tmux.bash` - Tmux session management wrapper function
+  - `fzf-functions.bash` - FZF integration functions
+  - `tmux-worktree.bash` - Tmux worktree integration functions
+  - `claude-functions.bash` - Claude AI helper functions
 - `justfile` - Automated installation and management system
 - `.claude/` - Claude Code configuration directory with hooks and settings
 
