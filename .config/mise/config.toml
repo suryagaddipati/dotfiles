@@ -19,3 +19,4 @@ shfmt = "latest"
 
 [settings]
 paranoid = false
+idiomatic_version_file_enable_tools = ["java"]
