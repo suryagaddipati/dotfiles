@@ -21,7 +21,7 @@ vim.opt.tabstop = 2
 vim.opt.smartindent = true
 
 vim.opt.updatetime = 250
-vim.opt.timeoutlen = 300
+vim.opt.timeoutlen = 150
 vim.opt.lazyredraw = true
 vim.opt.synmaxcol = 200
 
