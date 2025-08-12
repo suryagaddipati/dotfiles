@@ -66,15 +66,7 @@ return {
       col = 0.50,
       border = 'rounded',
       preview = {
-        default = 'builtin',
-        border = 'border',
-        wrap = 'nowrap',
-        hidden = 'nohidden',
-        vertical = 'down:45%',
-        horizontal = 'right:50%',
-        layout = 'flex',
-        flip_columns = 120,
-        scrollbar = 'float',
+        hidden = 'hidden',  -- Disable all previews
       },
     },
 
@@ -127,19 +119,14 @@ return {
         file_icons = true,
         color_icons = true,
         git_icons = true,
-        preview_pager = "delta --width=$FZF_PREVIEW_COLUMNS",
       },
       commits = {
         prompt = 'Commits❯ ',
         cmd = "git log --color=always --pretty=format:'%C(yellow)%h%C(red)%d%C(reset) - %C(bold green)(%cr)%C(reset) %s %C(blue)<%an>%C(reset)'",
-        preview = "git show --color=always {1}",
-        preview_pager = "delta --width=$FZF_PREVIEW_COLUMNS",
       },
       branches = {
         prompt = 'Branches❯ ',
         cmd = "git branch --all --color=always",
-        preview = "git log --oneline --graph --date=short --color=always --pretty='format:%C(auto)%cd %h%d %s' {1}",
-        preview_pager = "delta --width=$FZF_PREVIEW_COLUMNS",
       },
     },
 

@@ -12,10 +12,10 @@ if command -v fzf >/dev/null 2>&1; then
                 [ -n "$branch" ] && git checkout "$branch"
                 ;;
             log)
-                git log --oneline --color=always | fzf --ansi --prompt="Git Log> " --preview 'git show --color=always {1}' | cut -d' ' -f1 | xargs git show
+                git log --oneline --color=always | fzf --ansi --prompt="Git Log> " | cut -d' ' -f1 | xargs git show
                 ;;
             status|files)
-                local file=$(git status --porcelain | awk '{print $2}' | fzf --prompt="Git Files> " --preview 'git diff --color=always {}')
+                local file=$(git status --porcelain | awk '{print $2}' | fzf --prompt="Git Files> ")
                 [ -n "$file" ] && echo "Selected: $file"
                 ;;
             *)
@@ -61,18 +61,14 @@ if command -v fzf >/dev/null 2>&1; then
             # No extensions specified, search all files
             git ls-files --cached --others --exclude-standard 2>/dev/null \
                 | xargs grep -l "$pattern" 2>/dev/null \
-                | fzf --prompt="Files containing '$pattern'> " \
-                      --preview "grep --color=always -n '$pattern' {}" \
-                      --preview-window=right:50%:wrap
+                | fzf --prompt="Files containing '$pattern'> "
         else
             # Use original grp function with fzf
             local ext_regex=$(printf "\\.%s$|" "$@" | sed 's/|$//')
             git ls-files --cached --others --exclude-standard 2>/dev/null \
                 | grep -E "$ext_regex" \
                 | xargs grep -l "$pattern" 2>/dev/null \
-                | fzf --prompt="Files containing '$pattern'> " \
-                      --preview "grep --color=always -n '$pattern' {}" \
-                      --preview-window=right:50%:wrap
+                | fzf --prompt="Files containing '$pattern'> "
         fi
     }
     
@@ -102,7 +98,7 @@ if command -v fzf >/dev/null 2>&1; then
     fi
     
     # Custom FZF options
-    export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border --multi --bind=esc:abort'
+    export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border --multi'
     export FZF_DEFAULT_COMMAND='git ls-files --cached --others --exclude-standard 2>/dev/null || find . -type f -not -path "*/\.git/*" 2>/dev/null'
     export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
     export FZF_ALT_C_COMMAND='find . -type d -not -path "*/\.git/*" 2>/dev/null'
