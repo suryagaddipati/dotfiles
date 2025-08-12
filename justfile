@@ -261,6 +261,8 @@ install-lsp:
     @if command -v mise > /dev/null 2>&1; then \
         printf "{{yellow}}Installing bash-language-server...{{nc}}\n"; \
         mise exec -- npm install -g bash-language-server; \
+        printf "{{yellow}}Installing yaml-language-server...{{nc}}\n"; \
+        mise exec -- npm install -g yaml-language-server; \
         printf "{{yellow}}Installing other language servers...{{nc}}\n"; \
         mise exec -- npm install -g typescript-language-server; \
         mise exec -- npm install -g vscode-langservers-extracted; \
