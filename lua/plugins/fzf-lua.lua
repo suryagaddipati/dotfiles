@@ -43,6 +43,7 @@ return {
     -- Tmux integration pickers
     { '<leader>tw', function() require('plugins.fzf-pickers.tmux').tmux_windows() end, desc = 'Tmux windows (current session)' },
     { '<leader>ts', function() require('plugins.fzf-pickers.tmux').tmux_sessions() end, desc = 'Tmux sessions' },
+    { '<leader>tp', function() require('plugins.fzf-pickers.tmux').code_projects() end, desc = 'Code projects (~/code tmux sessions)' },
   },
   opts = {
     -- Global settings

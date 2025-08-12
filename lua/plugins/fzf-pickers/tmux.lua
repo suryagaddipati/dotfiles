@@ -64,4 +64,69 @@ function M.tmux_sessions()
   })
 end
 
+function M.code_projects()
+  local fzf = require('fzf-lua')
+  local utils = require('fzf-lua.utils')
+  
+  -- Get directories in ~/code/
+  local home = vim.env.HOME
+  local code_path = home .. "/code"
+  
+  -- List only directories in ~/code/, excluding hidden directories
+  local cmd = "find " .. code_path .. " -maxdepth 1 -type d -not -path " .. code_path .. " -not -path '*/\\.*' | sed 's|" .. code_path .. "/||' | sort"
+  
+  -- Get existing tmux sessions for annotation
+  local sessions = {}
+  local session_list = vim.fn.systemlist("tmux list-sessions -F '#{session_name}' 2>/dev/null")
+  for _, session in ipairs(session_list) do
+    sessions[session] = true
+  end
+  
+  -- Process directory list and annotate with session status
+  local function process_dirs(fzf_cb)
+    local dirs = vim.fn.systemlist(cmd)
+    for _, dir in ipairs(dirs) do
+      local annotation = sessions[dir] and " [active]" or ""
+      fzf_cb(dir .. annotation)
+    end
+    fzf_cb()
+  end
+  
+  fzf.fzf_exec(process_dirs, {
+    prompt = 'Code Projects❯ ',
+    actions = {
+      ['default'] = function(selected)
+        if selected and #selected > 0 then
+          -- Extract project name (remove any annotation)
+          local project_name = selected[1]:gsub("%s*%[active%]%s*$", "")
+          
+          if project_name and project_name ~= "" then
+            -- Check if session exists
+            local session_exists = vim.fn.system("tmux has-session -t " .. vim.fn.shellescape(project_name) .. " 2>/dev/null; echo $?"):gsub("\n", "") == "0"
+            
+            if not session_exists then
+              -- Create new session with the project directory as working directory
+              local project_path = code_path .. "/" .. project_name
+              vim.fn.system("tmux new-session -d -s " .. vim.fn.shellescape(project_name) .. " -c " .. vim.fn.shellescape(project_path))
+            end
+            
+            -- Switch to or attach to the session
+            if vim.env.TMUX then
+              -- Inside tmux, switch client
+              vim.fn.system("tmux switch-client -t " .. vim.fn.shellescape(project_name))
+            else
+              -- Outside tmux, attach to session
+              vim.cmd("!tmux attach-session -t " .. vim.fn.shellescape(project_name))
+            end
+          end
+        end
+      end
+    },
+    fzf_opts = {
+      ['--no-multi'] = '',
+      ['--header'] = '[Enter:switch/create] [Esc:cancel] | [active] = existing session',
+    },
+  })
+end
+
 return M
