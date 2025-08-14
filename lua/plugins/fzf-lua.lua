@@ -39,11 +39,11 @@ return {
     { '<leader>fp', function() require('fzf-lua').grep_project() end, desc = 'Grep project' },
     { '<leader>fw', function() require('fzf-lua').grep_cword() end, desc = 'Grep word under cursor' },
     { '<leader>fW', function() require('fzf-lua').grep_cWORD() end, desc = 'Grep WORD under cursor' },
-    
+
     -- Tmux integration pickers
     { '<leader>tw', function() require('plugins.fzf-pickers.tmux').tmux_windows() end, desc = 'Tmux windows (current session)' },
     { '<leader>ts', function() require('plugins.fzf-pickers.tmux').tmux_sessions() end, desc = 'Tmux sessions' },
-    { '<leader>tp', function() require('plugins.fzf-pickers.tmux').code_projects() end, desc = 'Code projects (~/code tmux sessions)' },
+    { '<leader>tm', function() require('plugins.fzf-pickers.tmux').code_projects() end, desc = 'Code projects (~/code tmux sessions)' },
   },
   opts = {
     -- Global settings

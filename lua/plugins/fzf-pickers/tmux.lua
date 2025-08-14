@@ -85,9 +85,29 @@ function M.code_projects()
   -- Process directory list and annotate with session status
   local function process_dirs(fzf_cb)
     local dirs = vim.fn.systemlist(cmd)
+    local active_dirs = {}
+    local inactive_dirs = {}
+    
+    -- Separate active and inactive directories
     for _, dir in ipairs(dirs) do
-      local annotation = sessions[dir] and " [active]" or ""
-      fzf_cb(dir .. annotation)
+      if sessions[dir] then
+        -- Prefix with "★" to boost in search ranking
+        table.insert(active_dirs, "★ " .. dir .. " [active]")
+      else
+        table.insert(inactive_dirs, "  " .. dir)
+      end
+    end
+    
+    -- Sort both groups alphabetically
+    table.sort(active_dirs)
+    table.sort(inactive_dirs)
+    
+    -- Output active sessions first, then inactive ones
+    for _, dir in ipairs(active_dirs) do
+      fzf_cb(dir)
+    end
+    for _, dir in ipairs(inactive_dirs) do
+      fzf_cb(dir)
     end
     fzf_cb()
   end
@@ -97,8 +117,8 @@ function M.code_projects()
     actions = {
       ['default'] = function(selected)
         if selected and #selected > 0 then
-          -- Extract project name (remove any annotation)
-          local project_name = selected[1]:gsub("%s*%[active%]%s*$", "")
+          -- Extract project name (remove prefix and annotations)
+          local project_name = selected[1]:gsub("^[★ ]*", ""):gsub("%s*%[active%]%s*$", "")
           
           if project_name and project_name ~= "" then
             -- Check if session exists
