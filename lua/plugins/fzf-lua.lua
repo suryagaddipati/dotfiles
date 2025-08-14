@@ -63,6 +63,15 @@ return {
       ['--cycle'] = '',
     },
 
+    -- Custom key mappings for fzf
+    keymap = {
+      fzf = {
+        ["esc"] = "abort",
+        ["ctrl-c"] = "abort",
+        ["ctrl-q"] = "abort",
+      },
+    },
+
     -- Window configuration
     winopts = {
       height = 0.85,
