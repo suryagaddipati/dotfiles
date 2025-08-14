@@ -1,6 +1,7 @@
 return {
   'akinsho/toggleterm.nvim',
   version = '*',
+  lazy=false,
   keys = {
     { '<C-\\>', '<cmd>ToggleTerm<cr>', desc = 'Toggle terminal' },
     { '<leader>tt', '<cmd>1ToggleTerm direction=float<cr>', desc = 'Toggle terminal' },
