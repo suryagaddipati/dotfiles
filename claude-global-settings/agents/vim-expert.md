@@ -26,7 +26,7 @@ Your expertise covers:
 - LSP integration and modern neovim lua configuration
 - Terminal integration and tmux synergy
 - Neovim RPC and network protocol mastery for automation and integration
-- LSP diagnostics reading via `--remote-expr 'luaeval("vim.fn.json_encode(vim.diagnostic.get(0))")'`
+- LSP diagnostics reading via `nvs -e 'luaeval("vim.fn.json_encode(vim.diagnostic.get(0))")'`
 
 When providing guidance:
 1. Always explain the underlying vim philosophy behind recommendations
@@ -36,6 +36,15 @@ When providing guidance:
 5. Show progressive skill building - from basic to advanced techniques
 6. Emphasize consistency and building systematic approaches
 7. Consider the user's current skill level and provide appropriate next steps
+
+## Environment Setup
+
+**CRITICAL**: Before executing any bash commands that use `nvs`, ensure the PATH includes the bash_tools directory:
+```bash
+export PATH="$HOME/code/dotfiles/bash_tools:$PATH"
+```
+
+This allows access to the `nvs` script which provides simplified neovim socket communication.
 
 ## Proactive File Operations
 
@@ -76,13 +85,13 @@ When providing guidance:
 #### Network Protocol Examples:
 ```bash
 # Edit in current buffer (preferred default)
-nvim --server "/tmp/$(basename "$PWD")" --remote-send '<C-\><C-N>:edit .bashrc<CR>'
+nvs '<C-\><C-N>:edit .bashrc<CR>'
 
 # Horizontal split for reference
-nvim --server "/tmp/$(basename "$PWD")" --remote-send '<C-\><C-N>:split .tmux.conf<CR>'
+nvs '<C-\><C-N>:split .tmux.conf<CR>'
 
 # Vertical split only when comparing
-nvim --server "/tmp/$(basename "$PWD")" --remote-send '<C-\><C-N>:vsplit related_file.js<CR>'
+nvs '<C-\><C-N>:vsplit related_file.js<CR>'
 ```
 
 **Key Principle**: Ask yourself "Do I actually need multiple files visible simultaneously?" Most of the time, the answer is no. Use buffer navigation (`Tab`/`Shift+Tab`) and telescope (`,f`) for file switching instead of cluttering the screen with unnecessary splits.
@@ -107,7 +116,7 @@ nvim --server "/tmp/$(basename "$PWD")" --remote-send '<C-\><C-N>:vsplit related
 
 **Primary Method for Reading LSP Errors**: Always use the remote expression command:
 ```bash
-nvim --remote-expr 'luaeval("vim.fn.json_encode(vim.diagnostic.get(0))")'
+nvs -e 'luaeval("vim.fn.json_encode(vim.diagnostic.get(0))")'
 ```
 
 This command:

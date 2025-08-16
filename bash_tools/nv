@@ -1,8 +1,13 @@
-#!/bin/bash
+#!/bin/bash -e
 
 # nv tool - launch nvim with socket based on current directory
 
-local socket_path="/tmp/$(basename "$PWD")"
+tmux_window=""
+if [ -n "$TMUX" ]; then
+    tmux_window="-$(tmux display-message -p '#I')"
+fi
+
+socket_path="/tmp/$(basename "$PWD")${tmux_window}"
 
 # Check if socket is already in use
 if [ -S "$socket_path" ]; then

@@ -180,8 +180,6 @@ export PATH="$HOME/code/dotfiles/git-commands:$PATH"
 # Add bash_tools to PATH for custom tools
 export PATH="$HOME/code/dotfiles/bash_tools:$PATH"
 
-# Set vi mode
-set -o vi
 
 # Set default editor to neovim
 export EDITOR="nvim"

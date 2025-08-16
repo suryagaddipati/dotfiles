@@ -1,0 +1,47 @@
+#!/bin/bash -e
+
+# nvs tool - send commands to nvim via socket based on current directory
+
+tmux_window=""
+if [ -n "$TMUX" ]; then
+    tmux_window="-$(tmux display-message -p '#I')"
+fi
+
+socket_path="/tmp/$(basename "$PWD")${tmux_window}"
+
+# Check if socket exists and is in use
+if [ ! -S "$socket_path" ]; then
+    echo "Error: No neovim socket found at $socket_path"
+    echo "Start neovim with 'nv' first"
+    exit 1
+fi
+
+if ! lsof "$socket_path" >/dev/null 2>&1; then
+    echo "Error: Socket $socket_path exists but nothing is listening"
+    exit 1
+fi
+
+# If no command provided, show usage
+if [ $# -eq 0 ]; then
+    echo "Usage: nvs [-e] <command>"
+    echo "  -e  Use --remote-expr instead of --remote-send"
+    echo "Examples:"
+    echo "  nvs ':edit file.txt<CR>'"
+    echo "  nvs '<C-\\><C-N>:split config.lua<CR>'"
+    echo "  nvs ':w<CR>'"
+    echo "  nvs -e 'luaeval(\"vim.fn.json_encode(vim.diagnostic.get(0))\")'"
+    exit 1
+fi
+
+# Check for -e flag
+if [ "$1" = "-e" ]; then
+    if [ $# -lt 2 ]; then
+        echo "Error: -e flag requires an expression"
+        exit 1
+    fi
+    # Use --remote-expr for expressions
+    nvim --server "$socket_path" --remote-expr "$2"
+else
+    # Use --remote-send for commands
+    nvim --server "$socket_path" --remote-send "$1"
+fi
