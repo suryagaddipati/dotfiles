@@ -12,7 +12,7 @@ return {
       },
       transparent_background = false,
       default_integrations = true,
-      auto_integrations = false,
+      auto_integrations = true,
       color_overrides = {
         mocha = {
           base = "#000000",
