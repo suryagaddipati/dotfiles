@@ -173,23 +173,6 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 # Add ~/.local/bin to PATH for user-installed tools (including just)
 export PATH="$HOME/.local/bin:$PATH"
 
-# nv function - launch nvim with socket based on current directory
-nv() {
-    local socket_path="/tmp/$(basename "$PWD")"
-
-    # Check if socket is already in use
-    if [ -S "$socket_path" ]; then
-        if ! lsof "$socket_path" >/dev/null 2>&1; then
-            # Socket exists but nothing is listening, remove it
-            rm -f "$socket_path"
-        else
-            echo "Error: Socket $socket_path is already in use"
-            return 1
-        fi
-    fi
-
-    nvim . --listen "$socket_path"
-}
 
 # Add git-commands to PATH for custom git subcommands
 export PATH="$HOME/code/dotfiles/git-commands:$PATH"
