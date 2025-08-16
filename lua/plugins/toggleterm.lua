@@ -2,11 +2,11 @@ return {
   'akinsho/toggleterm.nvim',
   version = '*',
   keys = {
-    { '<C-\\>', '<cmd>ToggleTerm<cr>', desc = 'Toggle terminal' },
+    { '<C-\\>', '<cmd>1ToggleTerm<cr>', desc = 'Toggle terminal' },
     { '<leader>tt', '<cmd>1ToggleTerm direction=float<cr>', desc = 'Toggle terminal' },
-    { '<leader>tf', '<cmd>ToggleTerm direction=float<cr>', desc = 'Float terminal' },
-    { '<leader>th', '<cmd>ToggleTerm direction=horizontal<cr>', desc = 'Horizontal terminal' },
-    { '<leader>tv', '<cmd>ToggleTerm direction=vertical<cr>', desc = 'Vertical terminal' },
+    { '<leader>tf', '<cmd>2ToggleTerm direction=float<cr>', desc = 'Float terminal' },
+    { '<leader>th', '<cmd>3ToggleTerm direction=horizontal<cr>', desc = 'Horizontal terminal' },
+    { '<leader>tv', '<cmd>4ToggleTerm direction=vertical<cr>', desc = 'Vertical terminal' },
     { '<leader>t1', '<cmd>1ToggleTerm<cr>', desc = 'Terminal 1' },
     { '<leader>t2', '<cmd>2ToggleTerm<cr>', desc = 'Terminal 2' },
     { '<leader>t3', '<cmd>3ToggleTerm<cr>', desc = 'Terminal 3' },
@@ -33,7 +33,7 @@ return {
       start_in_insert = true,
       insert_mappings = true,
       terminal_mappings = true,
-      persist_size = true,
+      persist_size = false,
       direction = 'float',
       close_on_exit = true,
       shell = vim.o.shell,
@@ -48,7 +48,7 @@ return {
 
     local function set_terminal_keymaps()
       local opts = {buffer = 0}
-      -- Use jk instead of ESC to avoid conflicts with fzf
+      vim.keymap.set('t', '<Esc>', [[<C-\><C-n>:ToggleTerm<CR>]], opts)
       vim.keymap.set('t', 'jk', [[<C-\><C-n>]], opts)
       vim.keymap.set('t', '<C-h>', [[<Cmd>wincmd h<CR>]], opts)
       vim.keymap.set('t', '<C-j>', [[<Cmd>wincmd j<CR>]], opts)
