@@ -7,8 +7,13 @@
 [credential "https://gist.github.com"]
 	helper =
 	helper = !/usr/bin/gh auth git-credential
+[pull]
+	# For a cleaner, more linear history, prefer rebasing over creating merge commits.
+	rebase = true
 [push]
-	default = current
+	# `default = current` is deprecated. `autoSetupRemote = true` is the modern
+	# equivalent of `push -u` on the first push to a new branch.
+	autoSetupRemote = true
 [alias]
 	s = status
 	push = push -u origin HEAD

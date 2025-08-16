@@ -58,10 +58,20 @@ if [ -n "$force_color_prompt" ]; then
     fi
 fi
 
+# Function to get the current git branch using a more robust method
+parse_git_branch() {
+    local branch
+    branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+    if [[ -n "$branch" && "$branch" != "HEAD" ]]; then
+        echo " ($branch)" # Return branch name in parentheses
+    fi
+}
+
 if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+    # Added git branch display to the prompt
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[01;33m\]\$(parse_git_branch)\[\033[00m\]\$ '
 else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$(parse_git_branch)\\$ '
 fi
 unset color_prompt force_color_prompt
 
