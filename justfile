@@ -175,6 +175,7 @@ setup-claude:
     fi
     @# List key configuration files
     @printf "\n{{yellow}}Key Claude configuration files:{{nc}}\n"
+    @[ -f "{{claude_config_dir}}/CLAUDE.md" ] && printf "  ✓ CLAUDE.md (global)\n" || true
     @[ -f "{{claude_config_dir}}/settings.json" ] && printf "  ✓ settings.json\n" || true
     @[ -f "{{claude_config_dir}}/settings.local.json" ] && printf "  ✓ settings.local.json\n" || true
     @[ -f "{{claude_config_dir}}/hooks.json" ] && printf "  ✓ hooks.json\n" || true
@@ -328,6 +329,7 @@ status-claude:
         printf "{{red}}✗{{nc}} ~/.claude is not symlinked\n"; \
     fi
     @printf "\n{{yellow}}Configuration files:{{nc}}\n"
+    @[ -f "{{claude_config_dir}}/CLAUDE.md" ] && printf "  {{green}}✓{{nc}} CLAUDE.md (global)\n" || printf "  {{red}}✗{{nc}} CLAUDE.md (global)\n"
     @[ -f "{{claude_config_dir}}/settings.json" ] && printf "  {{green}}✓{{nc}} settings.json\n" || printf "  {{red}}✗{{nc}} settings.json\n"
     @[ -f "{{claude_config_dir}}/settings.local.json" ] && printf "  {{green}}✓{{nc}} settings.local.json\n" || printf "  {{red}}✗{{nc}} settings.local.json\n"
     @[ -f "{{claude_config_dir}}/hooks.json" ] && printf "  {{green}}✓{{nc}} hooks.json\n" || printf "  {{red}}✗{{nc}} hooks.json\n"
