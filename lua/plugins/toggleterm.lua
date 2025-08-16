@@ -46,7 +46,7 @@ return {
       },
     })
 
-    function _G.set_terminal_keymaps()
+    local function set_terminal_keymaps()
       local opts = {buffer = 0}
       -- Use jk instead of ESC to avoid conflicts with fzf
       vim.keymap.set('t', 'jk', [[<C-\><C-n>]], opts)
@@ -57,6 +57,9 @@ return {
       vim.keymap.set('t', '<C-w>', [[<C-\><C-n><C-w>]], opts)
     end
 
-    vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
+    vim.api.nvim_create_autocmd('TermOpen', {
+      pattern = 'term://*',
+      callback = set_terminal_keymaps,
+    })
   end,
 }
