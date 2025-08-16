@@ -98,7 +98,7 @@ if command -v fzf >/dev/null 2>&1; then
     fi
     
     # Custom FZF options
-    export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border --multi'
+    export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border --multi --bind=esc:abort,ctrl-c:abort'
     export FZF_DEFAULT_COMMAND='git ls-files --cached --others --exclude-standard 2>/dev/null || find . -type f -not -path "*/\.git/*" 2>/dev/null'
     export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
     export FZF_ALT_C_COMMAND='find . -type d -not -path "*/\.git/*" 2>/dev/null'
