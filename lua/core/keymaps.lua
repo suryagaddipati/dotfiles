@@ -98,7 +98,7 @@ keymap('n', '<leader>2', '"2p', { desc = 'Paste from register 2' })
 keymap('n', '<leader>3', '"3p', { desc = 'Paste from register 3' })
 keymap('n', '<leader>0', '"0p', { desc = 'Paste from yank register' })
 
-keymap('n', '<leader>m', function()
+keymap('n', '<leader>mg', function()
   local file = vim.fn.expand('%')
   if vim.bo.filetype == 'markdown' then
     require('toggleterm.terminal').Terminal:new({
@@ -110,7 +110,7 @@ keymap('n', '<leader>m', function()
   else
     print('Not a markdown file')
   end
-end, { desc = 'Preview markdown' })
+end, { desc = 'Preview markdown with glow' })
 
 keymap('n', '<leader>gc', ':ToggleTerm direction=float<CR>git commit<CR>', { desc = 'Git Commit' })
 
