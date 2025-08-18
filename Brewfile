@@ -31,6 +31,7 @@ brew "zellij"
 # Text Editors
 brew "neovim"
 brew "helix"
+brew "glow"
 
 # Search & File Management
 brew "ripgrep"
