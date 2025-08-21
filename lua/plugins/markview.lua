@@ -1,7 +1,7 @@
 return {
   "OXY2DEV/markview.nvim",
   lazy = true,
-  ft = "markdown",
+  -- ft = "markdown",  -- Commented out so it doesn't auto-load on markdown files
   dependencies = {
     "nvim-treesitter/nvim-treesitter",
     "nvim-tree/nvim-web-devicons"
@@ -13,6 +13,7 @@ return {
   },
   config = function()
     require("markview").setup({
+      initial_state = false,  -- Don't enable automatically
       preview = {
         modes = { "n", "no", "c" },
         hybrid_modes = { "n" },
