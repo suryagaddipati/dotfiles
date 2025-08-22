@@ -3,7 +3,7 @@ return {
   version = '*',
   keys = {
     { '<C-\\>', '<cmd>1ToggleTerm<cr>', desc = 'Toggle terminal' },
-    { '<leader>tt', '<cmd>1ToggleTerm direction=float<cr>', desc = 'Toggle terminal' },
+    { '<leader>tt', '<cmd>2ToggleTerm direction=float<cr>', desc = 'Toggle terminal 2' },
     { '<leader>tf', '<cmd>2ToggleTerm direction=float<cr>', desc = 'Float terminal' },
     { '<leader>th', '<cmd>3ToggleTerm direction=horizontal<cr>', desc = 'Horizontal terminal' },
     { '<leader>tv', '<cmd>4ToggleTerm direction=vertical<cr>', desc = 'Vertical terminal' },
