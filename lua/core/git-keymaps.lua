@@ -10,14 +10,30 @@ local function run_git_command(command, message, success_msg, error_msg)
 
   vim.system(command, {}, function(result)
     vim.schedule(function()
-      Snacks.notifier.hide(note_id)
       if result.code == 0 then
         if success_msg then
-          vim.notify(success_msg, vim.log.levels.INFO)
+          -- Update existing notification with success
+          Snacks.notifier.notify(success_msg, "info", {
+            id = note_id,  -- Reuse the same ID to update in-place
+            title = "Git ✓",
+            position = "bottom_right",
+            spinner = false,  -- Remove spinner
+            timeout = 2000,  -- Auto-dismiss success after 2 seconds
+          })
+        else
+          -- Just hide if no success message
+          Snacks.notifier.hide(note_id)
         end
       else
+        -- Update existing notification with error
         local error_text = error_msg or "Git command failed"
-        vim.notify(error_text .. ": " .. (result.stderr or ""), vim.log.levels.ERROR)
+        Snacks.notifier.notify(error_text .. ": " .. (result.stderr or ""), "error", {
+          id = note_id,  -- Reuse the same ID to update in-place
+          title = "Git ✗",
+          position = "bottom_right",
+          spinner = false,  -- Remove spinner
+          timeout = 5000,  -- Keep errors visible longer (5 seconds)
+        })
       end
     end)
   end)
