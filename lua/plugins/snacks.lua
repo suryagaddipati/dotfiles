@@ -5,6 +5,17 @@ return {
   keys = {
     -- Zen/Focus functionality (replaces maximizer + focus)
     { '<leader>z', function() Snacks.zen.zoom() end, desc = 'Toggle maximize split' },
+    -- Git browse - copy GitHub/GHE link for current line
+    { '<leader>gB', function() 
+        -- Auto-detect GitHub Enterprise or regular GitHub from remote URL
+        Snacks.gitbrowse({ 
+          notify = true,
+          -- This will work with both github.com and ghe.spotify.net
+        }) 
+      end, 
+      desc = 'Copy GitHub/GHE link', 
+      mode = { 'n', 'v' } 
+    },
   },
   opts = {
     -- Zen mode configuration
@@ -32,5 +43,16 @@ return {
     statuscolumn = { enabled = true },
     terminal = { enabled = true },
     words = { enabled = true },
+    gitbrowse = { 
+      enabled = true,
+      -- Support for GitHub Enterprise (ghe.spotify.net) and regular GitHub
+      -- Snacks will auto-detect from git remote URL
+      remote_patterns = {
+        { "^git@(.+):(.+)/(.+)%.git$", "https://%1/%2/%3" },
+        { "^https?://(.+)/(.+)/(.+)%.git$", "https://%1/%2/%3" },
+        { "^git@(.+):(.+)/(.+)$", "https://%1/%2/%3" },
+        { "^https?://(.+)/(.+)/(.+)$", "https://%1/%2/%3" },
+      },
+    },
   },
 }
