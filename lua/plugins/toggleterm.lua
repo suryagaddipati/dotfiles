@@ -48,7 +48,10 @@ return {
 
     local function set_terminal_keymaps()
       local opts = {buffer = 0}
+      -- Terminal mode: Exit terminal mode and close ToggleTerm
       vim.keymap.set('t', '<Esc>', [[<C-\><C-n>:ToggleTerm<CR>]], opts)
+      -- Normal mode: Close ToggleTerm directly  
+      vim.keymap.set('n', '<Esc>', '<cmd>ToggleTerm<CR>', opts)
       vim.keymap.set('t', 'jk', [[<C-\><C-n>]], opts)
       vim.keymap.set('t', '<C-h>', [[<Cmd>wincmd h<CR>]], opts)
       vim.keymap.set('t', '<C-j>', [[<Cmd>wincmd j<CR>]], opts)
