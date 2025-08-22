@@ -18,6 +18,7 @@ brew "gh"
 brew "curl"
 brew "jq"
 brew "just"
+brew "gemini-cli"
 
 # Terminal & Shell
 brew "bash"
