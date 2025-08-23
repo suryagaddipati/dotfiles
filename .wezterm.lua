@@ -222,7 +222,7 @@ wezterm.on("format-tab-title", function(tab)
   local cwd = cwd_uri and cwd_uri.file_path or ""
   local folder = cwd:match("([^/]+)$") or cwd
 
-  local branch = cwd and get_git_branch(cwd) or nil
+  local branch = ""---cwd --and get_git_branch(cwd) or nil
   if branch and #branch > 0 and branch ~= "HEAD" then
     return { { Text = " " .. folder .. " [" .. branch .. "] " } }
   else
