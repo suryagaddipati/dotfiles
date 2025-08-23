@@ -46,13 +46,17 @@ end)
 -- Terminal configuration
 config.term = "xterm-256color"
 
+-- Color scheme (using built-in Catppuccin theme)
+config.color_scheme = 'Catppuccin Mocha'
+
 -- Tab bar configuration
 config.enable_tab_bar = true
-config.use_fancy_tab_bar = false
-config.tab_bar_at_bottom = true
+config.use_fancy_tab_bar = false  -- Retro tab bar
+config.tab_bar_at_bottom = false  -- Move tab bar to top
 config.hide_tab_bar_if_only_one_tab = false  -- Show even with one tab for consistency
-config.show_tab_index_in_tab_bar = true
+config.show_tab_index_in_tab_bar = false  -- We'll handle this in format-tab-title
 config.switch_to_last_active_tab_when_closing_tab = true
+config.tab_max_width = 20  -- Limit tab width
 
 -- Performance optimizations
 config.max_fps = 120
@@ -231,7 +235,7 @@ wezterm.on('format-tab-title', function(tab, tabs, panes, config, hover, max_wid
 end)
 
 -- =============================================================================
--- STATUS BAR TO SHOW LEADER KEY STATE
+-- STATUS BAR TO SHOW LEADER KEY STATE AND WORKSPACE
 -- =============================================================================
 wezterm.on('update-status', function(window, pane)
   local leader = ''
@@ -239,8 +243,14 @@ wezterm.on('update-status', function(window, pane)
     leader = '⚡ LEADER '  -- Shows when Ctrl-Y is active
   end
   
-  -- Set the right status with leader indicator (no color)
-  window:set_right_status(leader)
+  -- Get current workspace
+  local workspace = window:active_workspace()
+  
+  -- Set left status with workspace
+  window:set_left_status('  [' .. workspace .. '] ')
+  
+  -- Set the right status with leader indicator
+  window:set_right_status(leader .. '  ')
 end)
 
 -- =============================================================================
