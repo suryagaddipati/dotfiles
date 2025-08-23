@@ -196,6 +196,7 @@ brew "z3"
 
 # Casks (GUI Applications)
 cask "alacritty"
+cask "wezterm"
 cask "amethyst"
 cask "corretto@11"
 cask "corretto@8"
