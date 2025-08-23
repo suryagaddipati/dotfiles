@@ -22,7 +22,7 @@ config.quit_when_all_windows_are_closed = true
 
 -- Start window maximized
 wezterm.on('gui-startup', function(cmd)
-  local tab, pane, window = mux.spawn_window(cmd or {})
+  local _, _, window = mux.spawn_window(cmd or {})
   local gui_window = window:gui_window()
   gui_window:maximize()
 end)
