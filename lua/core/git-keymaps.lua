@@ -200,9 +200,17 @@ keymap('n', '<leader>gwl', function()
   local worktrees = get_worktrees()
   local items = {}
   
+  -- Get current worktree path to identify the active one
+  local current_path = vim.fn.getcwd()
+  local current_wt_output = vim.fn.system('git rev-parse --show-toplevel 2>/dev/null'):gsub('\n', '')
+  
   for _, wt in ipairs(worktrees) do
-    table.insert(items, string.format('%-20s %-30s %s',
-      wt.name, wt.branch or '(detached)', wt.commit or ''))
+    local is_active = (wt.path == current_wt_output)
+    local marker = is_active and '● ' or '  '
+    local format_string = is_active and '%s%-18s %-30s %s' or '%s%-18s %-30s %s'
+    
+    table.insert(items, string.format(format_string,
+      marker, wt.name, wt.branch or '(detached)', wt.commit or ''))
   end
   
   if #items == 0 then
@@ -215,7 +223,8 @@ keymap('n', '<leader>gwl', function()
     actions = {
       ['default'] = function(selected)
         if selected and #selected > 0 then
-          local name = selected[1]:match('^(%S+)')
+          -- Skip the marker when extracting the name
+          local name = selected[1]:match('^%s*%S*%s+(%S+)') or selected[1]:match('^%s*(%S+)')
           for _, wt in ipairs(worktrees) do
             if wt.name == name then
               switch_to_worktree(wt)
