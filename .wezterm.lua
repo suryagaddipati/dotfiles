@@ -3,21 +3,6 @@ local config = wezterm.config_builder()
 local mux = wezterm.mux
 local act = wezterm.action
 
--- Helper function to get git branch
-local function get_git_branch(pane)
-  local cwd = pane:get_current_working_dir()
-  if not cwd then return '' end
-  
-  local success, stdout = wezterm.run_child_process({
-    'git', '-C', cwd.file_path, 'rev-parse', '--abbrev-ref', 'HEAD'
-  })
-  
-  if success then
-    local branch = stdout:gsub('[\n\r]', '')
-    return branch ~= '' and ' ' .. branch or ''
-  end
-  return ''
-end
 
 -- Shell configuration
 config.default_prog = { '/bin/bash' }
@@ -51,12 +36,12 @@ config.color_scheme = 'Catppuccin Mocha'
 
 -- Tab bar configuration
 config.enable_tab_bar = true
-config.use_fancy_tab_bar = false  -- Retro tab bar
+config.use_fancy_tab_bar = false  -- Must be false for format-tab-title to work
 config.tab_bar_at_bottom = false  -- Move tab bar to top
 config.hide_tab_bar_if_only_one_tab = false  -- Show even with one tab for consistency
-config.show_tab_index_in_tab_bar = false  -- We'll handle this in format-tab-title
+config.show_tab_index_in_tab_bar = false  -- We handle this ourselves in format-tab-title
 config.switch_to_last_active_tab_when_closing_tab = true
-config.tab_max_width = 20  -- Limit tab width
+config.tab_max_width = 25  -- Limit tab width
 
 -- Performance optimizations
 config.max_fps = 120
@@ -84,7 +69,7 @@ config.keys = {
   -- ==========================================================================
   -- LEADER KEY BINDINGS (Tmux-style with Ctrl-Y prefix)
   -- ==========================================================================
-  
+
   -- Pane/Split Management (matching tmux)
   { key = 's', mods = 'LEADER', action = act.SplitVertical { domain = 'CurrentPaneDomain' } },
   { key = 'v', mods = 'LEADER', action = act.SplitHorizontal { domain = 'CurrentPaneDomain' } },
@@ -95,19 +80,19 @@ config.keys = {
   { key = 'q', mods = 'LEADER', action = act.PaneSelect },  -- Show pane numbers
   { key = 'o', mods = 'LEADER', action = act.RotatePanes 'Clockwise' },
   { key = 'Space', mods = 'LEADER', action = act.PaneSelect { mode = 'SwapWithActive' } },
-  
+
   -- Pane Navigation (with leader)
   { key = 'h', mods = 'LEADER', action = act.ActivatePaneDirection 'Left' },
   { key = 'j', mods = 'LEADER', action = act.ActivatePaneDirection 'Down' },
   { key = 'k', mods = 'LEADER', action = act.ActivatePaneDirection 'Up' },
   { key = 'l', mods = 'LEADER', action = act.ActivatePaneDirection 'Right' },
-  
+
   -- Pane Resizing (with leader)
   { key = 'H', mods = 'LEADER|SHIFT', action = act.AdjustPaneSize { 'Left', 5 } },
   { key = 'J', mods = 'LEADER|SHIFT', action = act.AdjustPaneSize { 'Down', 5 } },
   { key = 'K', mods = 'LEADER|SHIFT', action = act.AdjustPaneSize { 'Up', 5 } },
   { key = 'L', mods = 'LEADER|SHIFT', action = act.AdjustPaneSize { 'Right', 5 } },
-  
+
   -- Tab/Window Management (matching tmux windows)
   { key = 'c', mods = 'LEADER', action = act.SpawnTab 'CurrentPaneDomain' },
   { key = 'n', mods = 'LEADER', action = act.ActivateTabRelative(1) },
@@ -125,7 +110,7 @@ config.keys = {
   { key = 'X', mods = 'LEADER|SHIFT', action = act.CloseCurrentTab { confirm = false } },
   { key = '<', mods = 'LEADER|SHIFT', action = act.MoveTabRelative(-1) },
   { key = '>', mods = 'LEADER|SHIFT', action = act.MoveTabRelative(1) },
-  
+
   -- Tab direct access (with leader)
   { key = '1', mods = 'LEADER', action = act.ActivateTab(0) },
   { key = '2', mods = 'LEADER', action = act.ActivateTab(1) },
@@ -136,24 +121,35 @@ config.keys = {
   { key = '7', mods = 'LEADER', action = act.ActivateTab(6) },
   { key = '8', mods = 'LEADER', action = act.ActivateTab(7) },
   { key = '9', mods = 'LEADER', action = act.ActivateTab(8) },
-  
+
   -- Copy Mode (matching tmux)
   { key = 'Enter', mods = 'LEADER', action = act.ActivateCopyMode },
   { key = '[', mods = 'LEADER', action = act.ActivateCopyMode },
   { key = 'P', mods = 'LEADER|SHIFT', action = act.PasteFrom 'Clipboard' },
   { key = '/', mods = 'LEADER', action = act.Search { CaseInSensitiveString = '' } },
-  
+
   -- Config reload (matching tmux)
   { key = 'r', mods = 'LEADER', action = act.ReloadConfiguration },
-  
+
   -- Test binding - shows a notification when leader works
   { key = '?', mods = 'LEADER|SHIFT', action = wezterm.action_callback(function(window, pane)
     window:toast_notification('WezTerm', 'Leader key is working! (Ctrl-Y)', nil, 2000)
   end) },
-  
+
+  -- Debug binding - shows current directory and git branch
+  { key = 'G', mods = 'LEADER|SHIFT', action = wezterm.action_callback(function(window, pane)
+    window:toast_notification('Debug', 'Testing notification system...', nil, 4000)
+    local cwd = pane:get_current_working_dir()
+    if cwd then
+      window:toast_notification('CWD', tostring(cwd), nil, 4000)
+    else
+      window:toast_notification('CWD', 'No working directory detected', nil, 4000)
+    end
+  end) },
+
   -- Clear screen
   { key = 'C', mods = 'LEADER|SHIFT', action = act.ClearScrollback 'ScrollbackAndViewport' },
-  
+
   -- ==========================================================================
   -- WORKSPACE MANAGEMENT (Replaces tmux sessions)
   -- ==========================================================================
@@ -169,12 +165,12 @@ config.keys = {
       end
     end),
   }},
-  
+
   -- Quick workspace switching
   { key = '1', mods = 'CTRL|ALT', action = act.SwitchToWorkspace { name = 'main' } },
   { key = '2', mods = 'CTRL|ALT', action = act.SwitchToWorkspace { name = 'backend' } },
   { key = '3', mods = 'CTRL|ALT', action = act.SwitchToWorkspace { name = 'frontend' } },
-  
+
   -- Session management (with leader, like tmux)
   { key = 'S', mods = 'LEADER|SHIFT', action = act.PromptInputLine {
     description = 'Enter name for new workspace',
@@ -188,11 +184,11 @@ config.keys = {
     end),
   }},
   { key = 's', mods = 'LEADER', action = act.ShowLauncherArgs { flags = 'WORKSPACES' } },
-  
+
   -- ==========================================================================
   -- STANDARD SHORTCUTS
   -- ==========================================================================
-  
+
   -- macOS standard
   { key = 't', mods = 'CMD', action = act.SpawnTab 'CurrentPaneDomain' },
   { key = 'w', mods = 'CMD', action = act.CloseCurrentTab { confirm = false } },
@@ -201,7 +197,7 @@ config.keys = {
   { key = 'n', mods = 'CMD', action = act.SpawnWindow },
   { key = 'v', mods = 'CMD', action = act.PasteFrom 'Clipboard' },
   { key = 'c', mods = 'CMD', action = act.CopyTo 'Clipboard' },
-  
+
   -- Additional useful shortcuts
   { key = 'Tab', mods = 'CTRL', action = act.ActivateTabRelative(1) },
   { key = 'Tab', mods = 'CTRL|SHIFT', action = act.ActivateTabRelative(-1) },
@@ -212,27 +208,28 @@ config.keys = {
 -- =============================================================================
 -- TAB TITLE FORMATTING (Shows git branch and directory)
 -- =============================================================================
-wezterm.on('format-tab-title', function(tab, tabs, panes, config, hover, max_width)
-  local title = tab.tab_title
-  
-  -- If no explicit title set, use active pane title
-  if not title or #title == 0 then
-    title = tab.active_pane.title
+
+local function get_git_branch(path)
+  local f = io.popen("git -C " .. path .. " rev-parse --abbrev-ref HEAD 2>/dev/null")
+  if not f then return nil end
+  local branch = f:read("*l")
+  f:close()
+  return branch
+end
+
+wezterm.on("format-tab-title", function(tab)
+  local cwd_uri = tab.active_pane.current_working_dir
+  local cwd = cwd_uri and cwd_uri.file_path or ""
+  local folder = cwd:match("([^/]+)$") or cwd
+
+  local branch = cwd and get_git_branch(cwd) or nil
+  if branch and #branch > 0 and branch ~= "HEAD" then
+    return { { Text = " " .. folder .. " [" .. branch .. "] " } }
+  else
+    return { { Text = " " .. folder .. " " } }
   end
-  
-  -- Get git branch for active pane
-  local branch = get_git_branch(tab.active_pane)
-  
-  -- Format: [index] title (branch)
-  local formatted = string.format('[%d] %s%s', tab.tab_index + 1, title, branch)
-  
-  -- Truncate if too long
-  if #formatted > max_width then
-    formatted = wezterm.truncate_right(formatted, max_width - 3) .. '...'
-  end
-  
-  return formatted
 end)
+
 
 -- =============================================================================
 -- STATUS BAR TO SHOW LEADER KEY STATE AND WORKSPACE
@@ -242,13 +239,13 @@ wezterm.on('update-status', function(window, pane)
   if window:leader_is_active() then
     leader = '⚡ LEADER '  -- Shows when Ctrl-Y is active
   end
-  
+
   -- Get current workspace
   local workspace = window:active_workspace()
-  
+
   -- Set left status with workspace
   window:set_left_status('  [' .. workspace .. '] ')
-  
+
   -- Set the right status with leader indicator
   window:set_right_status(leader .. '  ')
 end)
@@ -275,14 +272,14 @@ config.mouse_bindings = {
     mods = 'NONE',
     action = act.PasteFrom 'Clipboard',
   },
-  
+
   -- Ctrl+Click opens links
   {
     event = { Up = { streak = 1, button = 'Left' } },
     mods = 'CTRL',
     action = act.OpenLinkAtMouseCursor,
   },
-  
+
   -- Middle click closes tab
   {
     event = { Up = { streak = 1, button = 'Middle' } },
