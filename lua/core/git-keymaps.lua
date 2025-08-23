@@ -195,6 +195,39 @@ keymap('n', '<leader>gwd', function()
   end, function(wt) return wt.name ~= 'main' end)
 end, { desc = 'Delete git worktree' })
 
+-- List worktrees
+keymap('n', '<leader>gwl', function()
+  local worktrees = get_worktrees()
+  local items = {}
+  
+  for _, wt in ipairs(worktrees) do
+    table.insert(items, string.format('%-20s %-30s %s',
+      wt.name, wt.branch or '(detached)', wt.commit or ''))
+  end
+  
+  if #items == 0 then
+    vim.notify('No worktrees found', vim.log.levels.INFO)
+    return
+  end
+  
+  require('fzf-lua').fzf_exec(items, {
+    prompt = 'Git worktrees> ',
+    actions = {
+      ['default'] = function(selected)
+        if selected and #selected > 0 then
+          local name = selected[1]:match('^(%S+)')
+          for _, wt in ipairs(worktrees) do
+            if wt.name == name then
+              switch_to_worktree(wt)
+              break
+            end
+          end
+        end
+      end
+    }
+  })
+end, { desc = 'List git worktrees' })
+
 -- Sync tmux windows with worktrees
 keymap('n', '<leader>gwS', function()
   if not vim.env.TMUX then
