@@ -4,6 +4,28 @@
     "type": "command",
     "command": "input=$(cat); model_name=$(echo \"$input\" | jq -r '.model.display_name' | sed 's/@.*//'); tokens=$(echo \"$input\" | jq -r '.usage.tokens // 0'); tokens_k=$(echo \"scale=1; $tokens/1000\" | bc 2>/dev/null || echo \"0\"); printf \"%s [%sk]\" \"$model_name\" \"$tokens_k\""
   },
+  "hooks": {
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/claude-activity-tracker.sh add"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/claude-activity-tracker.sh stop"
+          }
+        ]
+      }
+    ]
+  },
   "permissions": {
     "allow": [
       "Bash(mise:*)",
@@ -34,6 +56,7 @@
       "Bash(sh -c \"$FZF_DEFAULT_COMMAND\")",
       "Bash(fd:*)",
       "Bash(bash:*)",
+      "Bash(bash ~/.claude/claude-activity-tracker.sh:*)",
       "Bash(brew install:*)",
       "Bash(~/.local/bin/cs:*)",
       "Bash(java:*)",
