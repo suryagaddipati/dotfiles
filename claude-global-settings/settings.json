@@ -10,12 +10,45 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash ~/.claude/claude-activity-tracker.sh add"
+            "command": "bash ~/.claude/claude-activity-tracker.sh notification"
           }
         ]
       }
     ],
     "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/claude-activity-tracker.sh stop"
+          }
+        ]
+      }
+    ],
+
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/claude-activity-tracker.sh stop"
+          }
+        ]
+      }
+    ],
+
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/claude-activity-tracker.sh stop"
+          }
+        ]
+      }
+    ],
+
+    "UserPromptSubmit": [
       {
         "hooks": [
           {
