@@ -48,6 +48,28 @@
       }
     ],
 
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/claude-activity-tracker.sh stop"
+          }
+        ]
+      }
+    ],
+
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/claude-activity-tracker.sh stop"
+          }
+        ]
+      }
+    ],
+
     "UserPromptSubmit": [
       {
         "hooks": [
