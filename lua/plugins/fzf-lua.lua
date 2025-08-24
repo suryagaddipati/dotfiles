@@ -44,6 +44,7 @@ return {
     { '<leader>tw', function() require('plugins.fzf-pickers.tmux').tmux_windows() end, desc = 'Tmux windows (current session)' },
     { '<leader>ts', function() require('plugins.fzf-pickers.tmux').tmux_sessions() end, desc = 'Tmux sessions' },
     { '<leader>tm', function() require('plugins.fzf-pickers.tmux').code_projects() end, desc = 'Code projects (~/code tmux sessions)' },
+    { '<leader>tc', function() require('plugins.fzf-pickers.tmux').claude_activity_windows() end, desc = 'Claude activity windows' },
   },
   opts = {
     -- Global settings
