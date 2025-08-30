@@ -159,7 +159,6 @@ sdk() {
     [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
     sdk "$@"
 }
-. "$HOME/.cargo/env"
 
 # Source private bash configuration if it exists
 if [ -f ~/.bashrc_private ]; then
