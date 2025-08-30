@@ -16,13 +16,9 @@ import = [
 [font]
 size = 20.0
 
-[font.normal]
-family = "Hack Nerd Font"
-style = "Regular"
-
-[window]
-decorations = "none"
-startup_mode = "Fullscreen"
+# [window]
+# decorations = "none"
+# startup_mode = "Fullscreen"
 
 [env]
 TERM = "xterm-256color"
