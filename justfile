@@ -190,7 +190,10 @@ setup-claude:
 # Install system dependencies
 install-deps:
     @printf "{{blue}}Installing system dependencies...{{nc}}\n"
-    @if command -v apt > /dev/null; then \
+    @if command -v pacman > /dev/null; then \
+        printf "{{yellow}}Using pacman package manager...{{nc}}\n"; \
+        sudo pacman -S --needed --noconfirm git curl base-devel xclip; \
+    elif command -v apt > /dev/null; then \
         printf "{{yellow}}Using apt package manager...{{nc}}\n"; \
         sudo apt update && sudo apt install -y git curl build-essential xclip; \
     elif command -v brew > /dev/null; then \
