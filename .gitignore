@@ -3,3 +3,5 @@ tags
 .bashrc_private
 workspace
 claude-global-settings/ide/
+claude-global-settings/statsig
+claude-global-settings/.credentials.json
