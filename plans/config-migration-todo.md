@@ -14,7 +14,7 @@ Based on analysis of `~/.config`, here are directories and files that can be man
 ## Medium Priority (System/UI configs)
 
 - [x] **`hypr/`** - Hyprland window manager (multiple .conf files) ✓
-- [ ] **`waybar/`** - Status bar (config.jsonc, style.css)
+- [x] **`waybar/`** - Status bar (config.jsonc, style.css) ✓
 - [ ] **`mako/`** - Notification daemon (currently symlinked to omarchy)
 - [ ] **`btop/`** - System monitor (btop.conf)
 - [ ] **`fastfetch/`** - System info (config.jsonc)
