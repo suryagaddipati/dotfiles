@@ -15,8 +15,8 @@ claude_config_dir := home_dir / '.claude'
 claude_global_dir := dotfiles_dir / 'claude-global-settings'
 
 # Files to manage
-dotfiles := '.bashrc .gitconfig .tmux.conf init.lua .bash_profile .wezterm.lua'
-nvim_dirs := 'lua'
+dotfiles := '.bashrc .gitconfig .tmux.conf .bash_profile .wezterm.lua'
+config_dirs := '.config/nvim'
 config_files := '.config/alacritty/alacritty.toml .config/mise/config.toml .config/mise/settings.toml'
 claude_files := '.claude/hooks.json .claude/settings.local.json .claude/.mcp.json'
 claude_dirs := '.claude/agents .claude/commands'
@@ -78,23 +78,18 @@ install: setup-nvim setup-tmux setup-claude
     @mkdir -p "{{home_dir}}/.local/bin"
     @for file in {{dotfiles}}; do \
         if [ -f "{{dotfiles_dir}}/$file" ]; then \
-            if [ "$file" = "init.lua" ]; then \
-                printf "{{green}}Linking $file to nvim config{{nc}}\n"; \
-                ln -sf "{{dotfiles_dir}}/$file" "{{nvim_config_dir}}/$file"; \
-            else \
-                printf "{{green}}Linking $file{{nc}}\n"; \
-                ln -sf "{{dotfiles_dir}}/$file" "{{home_dir}}/$file"; \
-            fi \
+            printf "{{green}}Linking $file{{nc}}\n"; \
+            ln -sf "{{dotfiles_dir}}/$file" "{{home_dir}}/$file"; \
         else \
             printf "{{yellow}}Warning: $file not found{{nc}}\n"; \
         fi \
     done
-    @for dir in {{nvim_dirs}}; do \
+    @for dir in {{config_dirs}}; do \
         if [ -d "{{dotfiles_dir}}/$dir" ]; then \
-            printf "{{green}}Linking nvim $dir directory{{nc}}\n"; \
-            ln -sf "{{dotfiles_dir}}/$dir" "{{nvim_config_dir}}/$dir"; \
+            printf "{{green}}Linking $dir directory{{nc}}\n"; \
+            ln -sf "{{dotfiles_dir}}/$dir" "{{home_dir}}/$dir"; \
         else \
-            printf "{{yellow}}Warning: nvim $dir directory not found{{nc}}\n"; \
+            printf "{{yellow}}Warning: $dir directory not found{{nc}}\n"; \
         fi \
     done
     @for file in {{config_files}}; do \
@@ -280,18 +275,15 @@ uninstall:
     @printf "{{blue}}Removing dotfile symlinks...{{nc}}\n"
     @for file in {{dotfiles}}; do \
         target_file="{{home_dir}}/$file"; \
-        if [ "$file" = "init.lua" ]; then \
-            target_file="{{nvim_config_dir}}/$file"; \
-        fi; \
         if [ -L "$target_file" ]; then \
             printf "{{yellow}}Removing symlink: $file{{nc}}\n"; \
             rm "$target_file"; \
         fi \
     done
-    @for dir in {{nvim_dirs}}; do \
-        target_dir="{{nvim_config_dir}}/$dir"; \
+    @for dir in {{config_dirs}}; do \
+        target_dir="{{home_dir}}/$dir"; \
         if [ -L "$target_dir" ]; then \
-            printf "{{yellow}}Removing symlink: nvim $dir{{nc}}\n"; \
+            printf "{{yellow}}Removing symlink: $dir{{nc}}\n"; \
             rm "$target_dir"; \
         fi \
     done

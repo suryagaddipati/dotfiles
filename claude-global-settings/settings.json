@@ -134,5 +134,6 @@
   "statusLine": {
     "type": "command",
     "command": "input=$(cat); model_name=$(echo \"$input\" | jq -r '.model.display_name' | sed 's/@.*//'); tokens=$(echo \"$input\" | jq -r '.usage.tokens // 0'); tokens_k=$(echo \"scale=1; $tokens/1000\" | bc 2>/dev/null || echo \"0\"); printf \"%s [%sk]\" \"$model_name\" \"$tokens_k\""
-  }
+  },
+  "model": "sonnet"
 }
