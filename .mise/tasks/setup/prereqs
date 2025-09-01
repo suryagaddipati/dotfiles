@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+#MISE description="Check if all prerequisites are installed"
+
+set -euo pipefail
+
+printf "${BLUE}Checking prerequisites...${NC}\n"
+printf "=========================\n"
+missing=0
+
+for cmd in git curl; do
+    if command -v "$cmd" > /dev/null 2>&1; then
+        printf "${GREEN}✓${NC} $cmd found\n"
+    else
+        printf "${RED}✗${NC} $cmd not found\n"
+        missing=1
+    fi
+done
+
+for cmd in mise tmux nvim rg fzf; do
+    if command -v "$cmd" > /dev/null 2>&1; then
+        printf "${GREEN}✓${NC} $cmd found\n"
+    else
+        printf "${YELLOW}!${NC} $cmd not found (will be installed via mise)\n"
+    fi
+done
+
+if command -v gcc > /dev/null 2>&1 || command -v clang > /dev/null 2>&1; then
+    printf "${GREEN}✓${NC} build tools found\n"
+else
+    printf "${RED}✗${NC} build tools (gcc/clang) not found\n"
+    missing=1
+fi
+
+if [ "$missing" -eq 1 ]; then
+    printf "\n${YELLOW}Missing prerequisites detected.${NC}\n"
+    printf "${YELLOW}Run 'mise run deps:install' to install missing tools.${NC}\n"
+    exit 1
+else
+    printf "\n${GREEN}All prerequisites satisfied!${NC}\n"
+fi

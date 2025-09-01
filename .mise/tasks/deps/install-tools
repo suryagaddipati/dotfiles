@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+#MISE description="Install tools via mise (cross-platform)"
+
+set -euo pipefail
+
+printf "${BLUE}Installing tools via mise...${NC}\n"
+if command -v mise > /dev/null 2>&1; then
+    printf "${YELLOW}Installing neovim, tmux, and CLI utilities...${NC}\n"
+    mise install
+    printf "${GREEN}Tools installed via mise!${NC}\n"
+else
+    printf "${RED}mise not found. Run 'mise run deps:install-mise' first.${NC}\n"
+    exit 1
+fi

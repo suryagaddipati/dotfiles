@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+#MISE description="Update dotfiles from git repository"
+
+set -euo pipefail
+
+printf "${BLUE}Updating dotfiles...${NC}\n"
+git pull origin master
+printf "${GREEN}Update complete!${NC}\n"
+printf "${YELLOW}Reload your shell: source ~/.bashrc${NC}\n"

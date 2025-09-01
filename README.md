@@ -7,11 +7,20 @@ Optimized configuration for bash, git, tmux, and neovim with vim-style navigatio
 ```bash
 git clone https://github.com/yourusername/dotfiles.git ~/dotfiles
 cd ~/dotfiles
-just full-install    # Complete setup with dependencies
+mise run workflows:full-install    # Complete setup with dependencies
 ```
 
 ## Essential Commands
 
+**Using mise tasks (recommended):**
+```bash
+mise run install                   # Install dotfiles with backup
+mise run setup:prereqs             # Check installation status  
+mise run update                    # Update from git
+mise tasks                         # Show all available tasks
+```
+
+**Legacy commands (still supported):**
 ```bash
 just install        # Install dotfiles with backup
 just status         # Check installation status  
@@ -530,15 +539,55 @@ ld = lsp definition, lr = lsp references, lh = lsp hover
 cc = claude code, cf = claude focus, ca = claude accept
 ```
 
+## Installation Tasks
+
+All tasks are organized using mise's file-based task system for better maintainability:
+
+### Setup Tasks
+```bash
+mise run setup:prereqs             # Check prerequisites 
+mise run setup:tmux                # Setup tmux plugin manager
+mise run setup:claude              # Setup Claude configuration
+```
+
+### Dependency Installation
+```bash
+mise run deps:install              # Install system dependencies
+mise run deps:install-mise         # Install mise tool manager
+mise run deps:install-tools        # Install mise tools (tmux, nvim, etc.)
+mise run deps:install-dev          # Install development tools
+mise run deps:install-lsp          # Install language servers
+```
+
+### Main Installation
+```bash
+mise run install                   # Install dotfiles with symlinking
+mise run quick-install             # Alias for install
+mise run uninstall                 # Remove dotfile symlinks
+mise run update                    # Update from git repository
+```
+
+### Workflows
+```bash
+mise run workflows:default         # Show available tasks
+mise run workflows:full-install    # Complete installation workflow
+```
+
 ## Prerequisites
 
+### System Requirements
 - **git** - Version control and repository management
+- **curl** - Download tools and scripts
+- **build-essential** - Compilation tools (gcc/clang)
+- **xclip** - Clipboard integration (Linux)
+
+### Tools (Auto-installed via mise)
+- **mise** - Unified tool version manager
 - **tmux** - Terminal multiplexer for session management
 - **neovim** - Text editor (>= 0.9 required)
-- **curl** - Download tools and scripts
-- **build-essential** - Compilation tools
 - **ripgrep** - Fast text search
-- **xclip** - Clipboard integration
-- **just** - Task runner for automated setup
+- **fzf** - Fuzzy finder
+
+**Note:** Most tools are automatically installed via mise. Only basic system packages need manual installation.
 
 For detailed configuration see [CLAUDE.md](CLAUDE.md).

@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+#MISE description="Quick installation (alias for install)"
+#MISE depends=["install"]
+
+# This is just an alias that depends on the main install task
+echo "Quick install completed via main install task"

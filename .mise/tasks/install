@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+#MISE description="Install dotfiles with automatic symlinking"
+#MISE depends=["setup:tmux", "setup:claude"]
+
+set -euo pipefail
+
+printf "${BLUE}Installing dotfiles...${NC}\n"
+mkdir -p "$HOME_DIR/.config"
+mkdir -p "$HOME_DIR/.local/bin"
+
+# Link home directory dotfiles
+for file in $DOTFILES; do
+    if [ -f "$DOTFILES_DIR/$file" ]; then
+        printf "${GREEN}Linking $file${NC}\n"
+        ln -sf "$DOTFILES_DIR/$file" "$HOME_DIR/$file"
+    else
+        printf "${YELLOW}Warning: $file not found${NC}\n"
+    fi
+done
+
+# Link all directories in .config/ except claude
+if [ -d "$DOTFILES_DIR/.config" ]; then
+    for dir in "$DOTFILES_DIR/.config"/*; do
+        if [ -d "$dir" ]; then
+            dirname=$(basename "$dir")
+            if [ "$dirname" != "claude" ]; then
+                printf "${GREEN}Linking .config/$dirname${NC}\n"
+                # Remove existing symlink or directory first
+                rm -rf "$HOME_DIR/.config/$dirname"
+                ln -sf "$dir" "$HOME_DIR/.config/$dirname"
+            fi
+        fi
+    done
+fi
+
+# Git compatibility: link .gitconfig to git config file if it exists
+if [ -f "$DOTFILES_DIR/.config/git/config" ]; then
+    printf "${GREEN}Linking .gitconfig${NC}\n"
+    ln -sf "$DOTFILES_DIR/.config/git/config" "$HOME_DIR/.gitconfig"
+fi
+
+printf "${GREEN}Dotfiles installation complete!${NC}\n"
+printf "${YELLOW}Run 'source ~/.bashrc' to reload your shell${NC}\n"

@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+#MISE description="Install language servers for neovim LSP"
+
+set -euo pipefail
+
+printf "${BLUE}Installing language servers for neovim...${NC}\n"
+if command -v mise > /dev/null 2>&1; then
+    printf "${YELLOW}Installing bash-language-server...${NC}\n"
+    mise exec -- npm install -g bash-language-server
+    printf "${YELLOW}Installing yaml-language-server...${NC}\n"
+    mise exec -- npm install -g yaml-language-server
+    printf "${YELLOW}Installing other language servers...${NC}\n"
+    mise exec -- npm install -g typescript-language-server
+    mise exec -- npm install -g vscode-langservers-extracted
+    printf "${GREEN}Language servers installed!${NC}\n"
+else
+    printf "${RED}mise not found. Run 'mise run deps:install-mise' first.${NC}\n"
+    exit 1
+fi

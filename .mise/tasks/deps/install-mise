@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+#MISE description="Install mise (replaces NVM, SDKMAN, etc.)"
+
+set -euo pipefail
+
+printf "${BLUE}Installing mise...${NC}\n"
+if command -v mise > /dev/null 2>&1; then
+    printf "${GREEN}mise already installed${NC}\n"
+else
+    printf "${YELLOW}Installing mise...${NC}\n"
+    curl https://mise.run | sh
+    printf "${YELLOW}Adding mise to PATH...${NC}\n"
+    echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+    export PATH="$HOME/.local/bin:$PATH"
+fi

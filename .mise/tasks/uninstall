@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+#MISE description="Remove dotfile symlinks"
+
+set -euo pipefail
+
+printf "${BLUE}Removing dotfile symlinks...${NC}\n"
+
+# Remove home directory dotfiles
+for file in $DOTFILES; do
+    target_file="$HOME_DIR/$file"
+    if [ -L "$target_file" ]; then
+        printf "${YELLOW}Removing symlink: $file${NC}\n"
+        rm "$target_file"
+    fi
+done
+
+# Remove all .config/ directory symlinks except claude
+if [ -d "$HOME_DIR/.config" ]; then
+    for link in "$HOME_DIR/.config"/*; do
+        if [ -L "$link" ]; then
+            dirname=$(basename "$link")
+            if [ "$dirname" != "claude" ]; then
+                printf "${YELLOW}Removing symlink: .config/$dirname${NC}\n"
+                rm "$link"
+            fi
+        fi
+    done
+fi
+
+# Remove .gitconfig symlink
+if [ -L "$HOME_DIR/.gitconfig" ]; then
+    printf "${YELLOW}Removing symlink: .gitconfig${NC}\n"
+    rm "$HOME_DIR/.gitconfig"
+fi
+
+# Remove all Claude configuration symlinks
+printf "${YELLOW}Removing Claude configuration symlinks...${NC}\n"
+if [ -d "$CLAUDE_CONFIG_DIR" ]; then
+    for item in "$CLAUDE_CONFIG_DIR"/*; do
+        if [ -L "$item" ]; then
+            itemname=$(basename "$item")
+            printf "${YELLOW}Removing symlink: $itemname${NC}\n"
+            rm "$item"
+        fi
+    done
+fi
+printf "${GREEN}Dotfiles uninstalled${NC}\n"

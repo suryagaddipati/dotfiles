@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+#MISE description="Setup tmux plugin manager (TPM)"
+
+set -euo pipefail
+
+printf "${BLUE}Setting up tmux plugin manager (TPM)...${NC}\n"
+if [ ! -d "$HOME_DIR/.tmux/plugins/tpm" ]; then
+    printf "${YELLOW}Installing TPM...${NC}\n"
+    git clone https://github.com/tmux-plugins/tpm "$HOME_DIR/.tmux/plugins/tpm"
+    printf "${GREEN}TPM installed successfully${NC}\n"
+    printf "${YELLOW}Installing tmux plugins...${NC}\n"
+    "$HOME_DIR/.tmux/plugins/tpm/bin/install_plugins"
+    printf "${GREEN}Tmux plugins installed${NC}\n"
+else
+    printf "${GREEN}TPM already installed${NC}\n"
+    printf "${YELLOW}Updating tmux plugins...${NC}\n"
+    "$HOME_DIR/.tmux/plugins/tpm/bin/update_plugins" all
+fi

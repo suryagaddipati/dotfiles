@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+#MISE description="Install system dependencies"
+#MISE depends=["deps:install-mise", "deps:install-tools"]
+
+set -euo pipefail
+
+printf "${BLUE}Installing system dependencies...${NC}\n"
+if command -v pacman > /dev/null; then
+    printf "${YELLOW}Using pacman package manager...${NC}\n"
+    sudo pacman -S --needed --noconfirm git curl base-devel xclip
+elif command -v apt > /dev/null; then
+    printf "${YELLOW}Using apt package manager...${NC}\n"
+    sudo apt update && sudo apt install -y git curl build-essential xclip
+elif command -v brew > /dev/null; then
+    printf "${YELLOW}Using homebrew package manager...${NC}\n"
+    brew install git curl
+elif command -v yum > /dev/null; then
+    printf "${YELLOW}Using yum package manager...${NC}\n"
+    sudo yum install -y git curl xclip
+else
+    printf "${RED}No supported package manager found. Please install dependencies manually:${NC}\n"
+    printf "  git curl build-essential xclip\n"
+    exit 1
+fi
+
+printf "${GREEN}Dependencies installed!${NC}\n"

@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+#MISE description="Setup Claude configuration"
+
+set -euo pipefail
+
+printf "${BLUE}Setting up Claude configuration...${NC}\n"
+mkdir -p "$CLAUDE_CONFIG_DIR"
+printf "${YELLOW}Linking Claude configuration...${NC}\n"
+if [ -d "$DOTFILES_DIR/.config/claude" ]; then
+    for item in "$DOTFILES_DIR/.config/claude"/*; do
+        if [ -e "$item" ]; then
+            itemname=$(basename "$item")
+            printf "${GREEN}Linking $itemname${NC}\n"
+            ln -sf "$item" "$CLAUDE_CONFIG_DIR/$itemname"
+        fi
+    done
+else
+    printf "${YELLOW}Warning: .config/claude directory not found${NC}\n"
+fi
+
+# Make claude-activity-tracker.sh executable if it exists
+if [ -f "$CLAUDE_CONFIG_DIR/claude-activity-tracker.sh" ]; then
+    chmod +x "$CLAUDE_CONFIG_DIR/claude-activity-tracker.sh"
+    printf "${GREEN}Made claude-activity-tracker.sh executable${NC}\n"
+fi
+printf "${GREEN}✓ Successfully configured Claude settings${NC}\n"

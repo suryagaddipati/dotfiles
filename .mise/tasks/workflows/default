@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+#MISE description="Show available tasks"
+
+printf "${BLUE}Dotfiles Management${NC}\n"
+printf "\n"
+mise tasks
