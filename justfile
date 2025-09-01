@@ -16,8 +16,8 @@ claude_global_dir := dotfiles_dir / 'claude-global-settings'
 
 # Files to manage
 dotfiles := '.bashrc .gitconfig .tmux.conf .bash_profile .wezterm.lua'
-config_dirs := '.config/nvim'
-config_files := '.config/alacritty/alacritty.toml .config/mise/config.toml .config/mise/settings.toml'
+config_dirs := '.config/nvim .config/alacritty'
+config_files := '.config/mise/config.toml .config/mise/settings.toml'
 claude_files := '.claude/hooks.json .claude/settings.local.json .claude/.mcp.json'
 claude_dirs := '.claude/agents .claude/commands'
 claude_scripts := '.claude/mcp-install.sh'
