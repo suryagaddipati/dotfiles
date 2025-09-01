@@ -11,8 +11,9 @@ nvim_config_dir := home_dir / '.config/nvim'
 vim_dir := home_dir / '.vim'
 alacritty_config_dir := home_dir / '.config/alacritty'
 mise_config_dir := home_dir / '.config/mise'
+# NOTE: Claude Code doesn't respect XDG_CONFIG_HOME and always uses ~/.claude
 claude_config_dir := home_dir / '.claude'
-claude_global_dir := dotfiles_dir / 'claude-global-settings'
+claude_user_dir := dotfiles_dir / '.config/claude'
 
 # Files to manage
 dotfiles := '.bashrc .gitconfig .tmux.conf .bash_profile .wezterm.lua'
@@ -132,55 +133,64 @@ setup-nvim: check-nvim
 check-nvim:
     @which nvim > /dev/null || (printf "{{red}}Error: neovim not found. Please install neovim first.{{nc}}\n" && exit 1)
 
-# Setup Claude global settings
+# Setup Claude configuration
 setup-claude:
-    @printf "{{blue}}Setting up Claude global settings...{{nc}}\n"
+    @printf "{{blue}}Setting up Claude configuration...{{nc}}\n"
+    @# Create ~/.claude directory if it doesn't exist
+    @mkdir -p "{{claude_config_dir}}"
     @# Save existing session-specific directories if they exist
     @if [ -e "{{claude_config_dir}}" ] && [ ! -L "{{claude_config_dir}}" ]; then \
-        printf "{{yellow}}Backing up existing ~/.claude directory...{{nc}}\n"; \
-        mkdir -p "{{claude_config_dir}}.backup"; \
-        backup_dir="{{claude_config_dir}}.backup/$$(date +%Y%m%d_%H%M%S)"; \
-        mv "{{claude_config_dir}}" "$$backup_dir"; \
-        printf "{{yellow}}Preserving session-specific directories...{{nc}}\n"; \
+        printf "{{yellow}}Preserving existing session-specific directories...{{nc}}\n"; \
         for dir in projects local shell-snapshots todos; do \
-            if [ -d "$$backup_dir/$$dir" ]; then \
-                mkdir -p "{{claude_global_dir}}/$$dir"; \
-                cp -r "$$backup_dir/$$dir"/* "{{claude_global_dir}}/$$dir" 2>/dev/null || true; \
+            if [ -d "{{claude_config_dir}}/$dir" ]; then \
+                printf "  {{green}}✓{{nc}} Preserving $dir/\n"; \
             fi; \
         done; \
     fi
-    @# Remove existing symlink if it exists
-    @if [ -L "{{claude_config_dir}}" ]; then \
-        printf "{{yellow}}Removing existing symlink...{{nc}}\n"; \
-        rm "{{claude_config_dir}}"; \
-    fi
-    @# Create symlink to claude-global-settings
-    @printf "{{green}}Creating symlink from claude-global-settings to ~/.claude{{nc}}\n"
-    @ln -sf "{{claude_global_dir}}" "{{claude_config_dir}}"
-    @# Create session-specific directories if they don't exist
-    @for dir in projects local shell-snapshots todos; do \
-        mkdir -p "{{claude_config_dir}}/$$dir"; \
+    @# Link individual files from .claude-user to ~/.claude
+    @printf "{{yellow}}Linking Claude configuration files...{{nc}}\n"
+    @for file in CLAUDE.md settings.json claude-activity-tracker.sh; do \
+        if [ -f "{{claude_user_dir}}/$file" ]; then \
+            printf "{{green}}Linking $file{{nc}}\n"; \
+            ln -sf "{{claude_user_dir}}/$file" "{{claude_config_dir}}/$file"; \
+        else \
+            printf "{{yellow}}Warning: $file not found in .claude-user{{nc}}\n"; \
+        fi; \
     done
-    @# Verify the symlink was created successfully
-    @if [ -L "{{claude_config_dir}}" ]; then \
-        printf "{{green}}✓ Successfully installed Claude global settings{{nc}}\n"; \
-    else \
-        printf "{{red}}✗ Failed to create symlink{{nc}}\n"; \
-        exit 1; \
-    fi
-    @# List key configuration files
-    @printf "\n{{yellow}}Key Claude configuration files:{{nc}}\n"
-    @[ -f "{{claude_config_dir}}/CLAUDE.md" ] && printf "  ✓ CLAUDE.md (global)\n" || true
-    @[ -f "{{claude_config_dir}}/settings.json" ] && printf "  ✓ settings.json\n" || true
-    @[ -f "{{claude_config_dir}}/settings.local.json" ] && printf "  ✓ settings.local.json\n" || true
-    @[ -f "{{claude_config_dir}}/hooks.json" ] && printf "  ✓ hooks.json\n" || true
-    @[ -d "{{claude_config_dir}}/agents" ] && printf "  ✓ agents/\n" || true
-    @[ -d "{{claude_config_dir}}/commands" ] && printf "  ✓ commands/\n" || true
+    @# Link directories from .claude-user to ~/.claude
+    @printf "{{yellow}}Linking Claude configuration directories...{{nc}}\n"
+    @for dir in agents commands; do \
+        if [ -d "{{claude_user_dir}}/$dir" ]; then \
+            printf "{{green}}Linking $dir/ directory{{nc}}\n"; \
+            ln -sf "{{claude_user_dir}}/$dir" "{{claude_config_dir}}/$dir"; \
+        else \
+            printf "{{yellow}}Warning: $dir/ directory not found in .claude-user{{nc}}\n"; \
+        fi; \
+    done
+    @# Create session-specific directories if they don't exist (not tracked in git)
+    @printf "{{yellow}}Creating session-specific directories...{{nc}}\n"
+    @for dir in projects local shell-snapshots todos; do \
+        if [ ! -d "{{claude_config_dir}}/$dir" ]; then \
+            mkdir -p "{{claude_config_dir}}/$dir"; \
+            printf "{{green}}Created $dir/{{nc}}\n"; \
+        else \
+            printf "{{green}}✓{{nc}} $dir/ already exists\n"; \
+        fi; \
+    done
+    @printf "{{green}}✓ Successfully configured Claude settings{{nc}}\n"
+    @# List configuration status
+    @printf "\n{{yellow}}Configuration files (tracked in git):{{nc}}\n"
+    @[ -L "{{claude_config_dir}}/CLAUDE.md" ] && printf "  {{green}}✓{{nc}} CLAUDE.md (linked)\n" || printf "  {{red}}✗{{nc}} CLAUDE.md (missing)\n"
+    @[ -L "{{claude_config_dir}}/settings.json" ] && printf "  {{green}}✓{{nc}} settings.json (linked)\n" || printf "  {{red}}✗{{nc}} settings.json (missing)\n"
+    @[ -L "{{claude_config_dir}}/claude-activity-tracker.sh" ] && printf "  {{green}}✓{{nc}} claude-activity-tracker.sh (linked)\n" || printf "  {{red}}✗{{nc}} claude-activity-tracker.sh (missing)\n"
+    @printf "\n{{yellow}}Configuration directories (tracked in git):{{nc}}\n"
+    @[ -L "{{claude_config_dir}}/agents" ] && printf "  {{green}}✓{{nc}} agents/ (linked)\n" || printf "  {{red}}✗{{nc}} agents/ (missing)\n"
+    @[ -L "{{claude_config_dir}}/commands" ] && printf "  {{green}}✓{{nc}} commands/ (linked)\n" || printf "  {{red}}✗{{nc}} commands/ (missing)\n"
     @printf "\n{{yellow}}Session directories (not tracked in git):{{nc}}\n"
-    @[ -d "{{claude_config_dir}}/projects" ] && printf "  ✓ projects/\n" || true
-    @[ -d "{{claude_config_dir}}/local" ] && printf "  ✓ local/\n" || true
-    @[ -d "{{claude_config_dir}}/shell-snapshots" ] && printf "  ✓ shell-snapshots/\n" || true
-    @[ -d "{{claude_config_dir}}/todos" ] && printf "  ✓ todos/\n" || true
+    @[ -d "{{claude_config_dir}}/projects" ] && printf "  {{green}}✓{{nc}} projects/\n" || printf "  {{yellow}}○{{nc}} projects/ (will be created on use)\n"
+    @[ -d "{{claude_config_dir}}/local" ] && printf "  {{green}}✓{{nc}} local/\n" || printf "  {{yellow}}○{{nc}} local/ (will be created on use)\n"
+    @[ -d "{{claude_config_dir}}/shell-snapshots" ] && printf "  {{green}}✓{{nc}} shell-snapshots/\n" || printf "  {{yellow}}○{{nc}} shell-snapshots/ (will be created on use)\n"
+    @[ -d "{{claude_config_dir}}/todos" ] && printf "  {{green}}✓{{nc}} todos/\n" || printf "  {{yellow}}○{{nc}} todos/ (will be created on use)\n"
 
 # Install system dependencies
 install-deps:
@@ -246,11 +256,11 @@ install-dev: install-deps
 # Install MCP servers for Claude Code
 install-mcp: setup-claude
     @printf "{{blue}}Installing MCP servers for Claude Code...{{nc}}\n"
-    @if [ -f "{{claude_config_dir}}/mcp-install.sh" ]; then \
-        chmod +x "{{claude_config_dir}}/mcp-install.sh"; \
-        "{{claude_config_dir}}/mcp-install.sh"; \
+    @if [ -f "{{claude_user_dir}}/claude-activity-tracker.sh" ]; then \
+        chmod +x "{{claude_user_dir}}/claude-activity-tracker.sh"; \
+        "{{claude_user_dir}}/claude-activity-tracker.sh"; \
     else \
-        printf "{{red}}MCP install script not found. Run 'just setup-claude' first.{{nc}}\n"; \
+        printf "{{red}}MCP install script not found in .claude-user directory.{{nc}}\n"; \
         exit 1; \
     fi
 
@@ -294,11 +304,22 @@ uninstall:
             rm "$target_file"; \
         fi \
     done
-    @# Remove Claude symlink
-    @if [ -L "{{claude_config_dir}}" ]; then \
-        printf "{{yellow}}Removing Claude global settings symlink{{nc}}\n"; \
-        rm "{{claude_config_dir}}"; \
-    fi
+    @# Remove Claude configuration symlinks
+    @printf "{{yellow}}Removing Claude configuration symlinks...{{nc}}\n"
+    @for file in CLAUDE.md settings.json claude-activity-tracker.sh; do \
+        target_file="{{claude_config_dir}}/$file"; \
+        if [ -L "$target_file" ]; then \
+            printf "{{yellow}}Removing symlink: $file{{nc}}\n"; \
+            rm "$target_file"; \
+        fi; \
+    done
+    @for dir in agents commands; do \
+        target_dir="{{claude_config_dir}}/$dir"; \
+        if [ -L "$target_dir" ]; then \
+            printf "{{yellow}}Removing symlink: $dir/{{nc}}\n"; \
+            rm "$target_dir"; \
+        fi; \
+    done
     @printf "{{green}}Dotfiles uninstalled{{nc}}\n"
 
 
@@ -315,38 +336,41 @@ full-install: install-deps install install-dev install-lsp
 
 # Check Claude settings status
 status-claude:
-    @printf "{{blue}}Claude Global Settings Status{{nc}}\n"
-    @printf "============================\n"
-    @if [ -L "{{claude_config_dir}}" ]; then \
-        printf "{{green}}✓{{nc}} ~/.claude is symlinked to: "; \
-        readlink "{{claude_config_dir}}"; \
-    else \
-        printf "{{red}}✗{{nc}} ~/.claude is not symlinked\n"; \
-    fi
-    @printf "\n{{yellow}}Configuration files:{{nc}}\n"
-    @[ -f "{{claude_config_dir}}/CLAUDE.md" ] && printf "  {{green}}✓{{nc}} CLAUDE.md (global)\n" || printf "  {{red}}✗{{nc}} CLAUDE.md (global)\n"
-    @[ -f "{{claude_config_dir}}/settings.json" ] && printf "  {{green}}✓{{nc}} settings.json\n" || printf "  {{red}}✗{{nc}} settings.json\n"
-    @[ -f "{{claude_config_dir}}/settings.local.json" ] && printf "  {{green}}✓{{nc}} settings.local.json\n" || printf "  {{red}}✗{{nc}} settings.local.json\n"
-    @[ -f "{{claude_config_dir}}/hooks.json" ] && printf "  {{green}}✓{{nc}} hooks.json\n" || printf "  {{red}}✗{{nc}} hooks.json\n"
-    @[ -f "{{claude_config_dir}}/mcp-install.sh" ] && printf "  {{green}}✓{{nc}} mcp-install.sh\n" || printf "  {{red}}✗{{nc}} mcp-install.sh\n"
-    @printf "\n{{yellow}}Tracked directories (in git):{{nc}}\n"
-    @if [ -d "{{claude_config_dir}}/agents" ]; then \
-        count=`find {{claude_config_dir}}/agents -name "*.md" -type f | wc -l | tr -d ' '`; \
-        printf "  {{green}}✓{{nc}} agents/ ($count agents)\n"; \
-    else \
-        printf "  {{red}}✗{{nc}} agents/\n"; \
-    fi
-    @if [ -d "{{claude_config_dir}}/commands" ]; then \
-        count=`find {{claude_config_dir}}/commands -name "*.md" -type f | wc -l | tr -d ' '`; \
-        printf "  {{green}}✓{{nc}} commands/ ($count commands)\n"; \
-    else \
-        printf "  {{red}}✗{{nc}} commands/\n"; \
-    fi
-    @printf "\n{{yellow}}Session directories (not tracked):{{nc}}\n"
+    @printf "{{blue}}Claude Configuration Status{{nc}}\n"
+    @printf "===========================\n"
+    @printf "{{yellow}}Source directory:{{nc}} {{claude_user_dir}}\n"
+    @printf "{{yellow}}Target directory:{{nc}} {{claude_config_dir}}\n"
+    @printf "\n{{yellow}}Configuration files (tracked in git):{{nc}}\n"
+    @for file in CLAUDE.md settings.json claude-activity-tracker.sh; do \
+        if [ -L "{{claude_config_dir}}/$file" ]; then \
+            printf "  {{green}}✓{{nc}} $file (linked to: "; \
+            readlink "{{claude_config_dir}}/$file" | sed 's|^.*/||'; \
+            printf ")\n"; \
+        elif [ -f "{{claude_config_dir}}/$file" ]; then \
+            printf "  {{yellow}}!{{nc}} $file (exists but not linked)\n"; \
+        else \
+            printf "  {{red}}✗{{nc}} $file (missing)\n"; \
+        fi; \
+    done
+    @printf "\n{{yellow}}Configuration directories (tracked in git):{{nc}}\n"
+    @for dir in agents commands; do \
+        if [ -L "{{claude_config_dir}}/$dir" ]; then \
+            count=0; \
+            if [ -d "{{claude_user_dir}}/$dir" ]; then \
+                count=`find "{{claude_user_dir}}/$dir" -name "*.md" -type f 2>/dev/null | wc -l | tr -d ' '`; \
+            fi; \
+            printf "  {{green}}✓{{nc}} $dir/ (linked, $count files)\n"; \
+        elif [ -d "{{claude_config_dir}}/$dir" ]; then \
+            printf "  {{yellow}}!{{nc}} $dir/ (exists but not linked)\n"; \
+        else \
+            printf "  {{red}}✗{{nc}} $dir/ (missing)\n"; \
+        fi; \
+    done
+    @printf "\n{{yellow}}Session directories (not tracked in git):{{nc}}\n"
     @[ -d "{{claude_config_dir}}/projects" ] && printf "  {{green}}✓{{nc}} projects/ (conversation history)\n" || printf "  {{yellow}}○{{nc}} projects/ (will be created on use)\n"
-    @[ -d "{{claude_config_dir}}/todos" ] && printf "  {{green}}✓{{nc}} todos/ (task tracking)\n" || printf "  {{yellow}}○{{nc}} todos/ (will be created on use)\n"
     @[ -d "{{claude_config_dir}}/local" ] && printf "  {{green}}✓{{nc}} local/ (Claude CLI)\n" || printf "  {{yellow}}○{{nc}} local/ (will be created on use)\n"
     @[ -d "{{claude_config_dir}}/shell-snapshots" ] && printf "  {{green}}✓{{nc}} shell-snapshots/ (shell history)\n" || printf "  {{yellow}}○{{nc}} shell-snapshots/ (will be created on use)\n"
+    @[ -d "{{claude_config_dir}}/todos" ] && printf "  {{green}}✓{{nc}} todos/ (task tracking)\n" || printf "  {{yellow}}○{{nc}} todos/ (will be created on use)\n"
 
 # Update dotfiles from git repository
 update:
