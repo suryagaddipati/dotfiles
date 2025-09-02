@@ -46,6 +46,41 @@ ll                  # detailed file listing
 grp pattern ext     # multi-extension search (e.g., grp TODO js py)
 ```
 
+### Hyprland Window Manager
+```bash
+# Special Workspace (Magic)
+Super+M             # Toggle magic workspace (show/hide)
+Super+Shift+M       # Move active window to magic workspace
+
+# Move window back from magic workspace:
+# 1. Super+M (show magic workspace)
+# 2. Focus the window you want to move
+# 3. Super+Shift+[1-9] (move to desired workspace)
+
+# Applications
+Super+Return        # Terminal
+Super+F             # File manager
+Super+B             # Browser
+Super+N             # Neovim
+Super+T             # Activity monitor
+
+# Window Management
+Super+W             # Close active window
+Super+V             # Toggle floating
+Super+J             # Toggle split
+Super+Z             # Toggle fullscreen
+
+# Vim-style Navigation
+Super+h/j/k/l       # Focus window left/down/up/right
+Super+Shift+h/j/k/l # Move window left/down/up/right
+
+# Workspace Management
+Super+[1-9]         # Switch to workspace 1-9
+Super+Shift+[1-9]   # Move window to workspace 1-9
+Super+Tab           # Next workspace
+Super+Shift+Tab     # Previous workspace
+```
+
 ### Tmux (Prefix: Ctrl-Space)
 
 #### Tmux Hierarchy Structure
