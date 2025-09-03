@@ -5,3 +5,5 @@ workspace
 claude-global-settings/ide/
 claude-global-settings/statsig
 claude-global-settings/.credentials.json
+.config/waybar/config-external.jsonc
+.config/waybar/config-laptop.jsonc
