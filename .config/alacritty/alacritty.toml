@@ -14,7 +14,7 @@ import = [
 ]
 
 [font]
-size = 20.0
+size = 14.0
 
 # [window]
 # decorations = "none"
