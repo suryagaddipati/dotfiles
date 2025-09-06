@@ -11,9 +11,9 @@
   font-size: 12px;
 }
 
-/* Larger font for external monitor */
+/* Slightly reduced font for external monitor */
 window#waybar.DP-1 * {
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .modules-left {
