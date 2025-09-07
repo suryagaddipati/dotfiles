@@ -10,7 +10,13 @@ if [ -d "$DOTFILES_DIR/.config/claude" ]; then
     for item in "$DOTFILES_DIR/.config/claude"/*; do
         if [ -e "$item" ]; then
             itemname=$(basename "$item")
+            # Skip if target already exists and is a symlink to prevent circular links
+            if [ -L "$CLAUDE_CONFIG_DIR/$itemname" ] && [ "$(readlink "$CLAUDE_CONFIG_DIR/$itemname")" = "$item" ]; then
+                continue
+            fi
             printf "${GREEN}Linking $itemname${NC}\n"
+            # Remove existing target first to prevent circular symlinks
+            rm -rf "$CLAUDE_CONFIG_DIR/$itemname"
             ln -sf "$item" "$CLAUDE_CONFIG_DIR/$itemname"
         fi
     done

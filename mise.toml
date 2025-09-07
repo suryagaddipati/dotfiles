@@ -12,4 +12,4 @@ BLUE = "\\033[0;34m"
 NC = "\\033[0m"
 
 # Files to manage
-DOTFILES = ".bashrc .tmux.conf .bash_profile .wezterm.lua"
+DOTFILES = ".bashrc .bash_profile"
