@@ -42,7 +42,8 @@ window#waybar.DP-1 * {
 #bluetooth,
 #pulseaudio,
 #custom-omarchy,
-#custom-update {
+#custom-update,
+#custom-pomodoro {
   min-width: 12px;
   margin: 0 7.5px;
 }
@@ -65,4 +66,20 @@ tooltip {
 
 .hidden {
   opacity: 0;
+}
+
+/* Pomodoro timer states */
+#custom-pomodoro.running {
+  color: #a6e3a1; /* green for work sessions */
+  background-color: rgba(166, 227, 161, 0.1);
+}
+
+#custom-pomodoro.paused {
+  color: #f9e2af; /* yellow for paused */
+  background-color: rgba(249, 226, 175, 0.1);
+}
+
+#custom-pomodoro.finished {
+  color: #f38ba8; /* pink for finished/break time */
+  background-color: rgba(243, 139, 168, 0.1);
 }

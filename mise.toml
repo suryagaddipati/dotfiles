@@ -13,3 +13,6 @@ NC = "\\033[0m"
 
 # Files to manage
 DOTFILES = ".bashrc .bash_profile"
+
+[tools]
+rust = "latest"
