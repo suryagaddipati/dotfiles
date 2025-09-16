@@ -104,7 +104,7 @@ return {
       file_icons = true,
       color_icons = true,
       git_icons = true,
-      rg_opts = "--column --line-number --no-heading --color=always --smart-case --max-columns=4096 -e",
+      rg_opts = "--column --line-number --no-heading --color=always --smart-case --max-columns=4096 --hidden -e",
       grep_opts = "--binary-files=without-match --line-number --recursive --color=auto --perl-regexp -e",
     },
 
