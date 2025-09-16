@@ -13,10 +13,10 @@ keymap('n', '<C-k>', '<C-w>k')
 keymap('n', '<C-l>', '<C-w>l')
 
 -- Window resizing
-keymap('n', '<leader>+', '<cmd>resize +4<cr>')
-keymap('n', '<leader>-', '<cmd>resize -4<cr>')
-keymap('n', '<leader>>', '<cmd>vertical resize +10<cr>')
-keymap('n', '<leader><', '<cmd>vertical resize -10<cr>')
+keymap('n', '<leader>+', '<cmd>resize -4<cr>')
+keymap('n', '<leader>-', '<cmd>resize +4<cr>')
+keymap('n', '<leader>>', '<cmd>vertical resize -10<cr>')
+keymap('n', '<leader><', '<cmd>vertical resize +10<cr>')
 
 -- Buffer navigation (vim-standard approach)
 keymap('n', '<C-^>', '<cmd>b#<cr>', { desc = 'Switch to last buffer' })
