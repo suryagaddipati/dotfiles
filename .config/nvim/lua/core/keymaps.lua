@@ -1,5 +1,8 @@
 local keymap = vim.keymap.set
 
+keymap('i', 'jk', '<Esc>', { noremap = true, silent = true, desc = 'Exit insert mode' })
+keymap('i', '<C-;>', '<C-o>a')
+
 keymap('n', '<leader>w', '<cmd>w<cr>')
 keymap('n', '<leader>q', '<cmd>q<cr>')
 keymap('n', '<leader>x', '<cmd>wa<cr><cmd>qa!<cr>')
