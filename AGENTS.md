@@ -1,19 +1,22 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-Dotfiles live at the repo root and are symlinked into `$HOME`. Platform configs reside in `.config/` (notably `nvim/`, `tmux/`, `hypr/`, `waybar/`, `alacritty/`, `git/`). Shell helpers stay in `bash_functions/` and `bash_tools/`. Claude settings live under `.claude/`, while `swiftbar-plugins/` holds menu bar scripts. Automation scripts are defined in `.mise/tasks/`, and higher-level plans or documentation updates belong in `plans/`, `CLAUDE.md`, `NEOVIM.md`, and this guide. Keep new assets in the matching directory so symlinks remain predictable.
+Keep dotfiles at the repo root so they can be symlinked into `$HOME`. Platform-specific configs belong in `.config/` (notably `nvim/`, `tmux/`, `hypr/`, `waybar/`, `alacritty/`, `git/`). Shared shell helpers live under `bash_functions/` and `bash_tools/`. Automation stays in `.mise/tasks/`, while higher-level plans and notes go in `plans/`, `CLAUDE.md`, `NEOVIM.md`, or this guide. Store SwiftBar applets in `swiftbar-plugins/`, and add Claude overrides in `.claude/`. When introducing new assets, match the existing layout so symlinks remain predictable.
 
 ## Build, Test, and Development Commands
-Run `mise run workflows:full-install` for a machine bootstrap (deps, dotfiles, dev tools). Use `mise run install` for a fast resync of symlinks with backups, and `mise run setup:prereqs` to verify required binaries. Legacy `just` targets remain available: `just install` (symlink with backup), `just status` (audit symlinks and report drift), and `just update` (pull latest repo changes). Prefer the `mise run` equivalents when touching task logic.
+- `mise run workflows:full-install`: bootstrap a machine with dependencies, dotfiles, and dev tools.
+- `mise run install`: refresh symlinks quickly, creating backups when paths drift.
+- `mise run setup:prereqs`: confirm required binaries are present and versions align.
+- `just install`, `just status`, `just update`: legacy helpers for the same workflows—prefer the `mise` variants when adjusting tasks.
 
 ## Coding Style & Naming Conventions
-Shell scripts should target bash with 2-space indentation, quoted variables, and descriptive function names. Lua modules (Neovim) use 2-space indentation, snake_case identifiers, and PascalCase module tables. Configuration files should keep their native formats (TOML, JSON, shell) and match existing ordering. Place new language runtimes or tools in `mise.toml`, and update symlink paths instead of editing files in `$HOME` directly.
+Use bash with 2-space indentation, quoted variables, and descriptive function names. Lua (Neovim) files keep 2-space indentation, snake_case identifiers, and PascalCase module tables. Configuration snippets stay in their native formats (TOML, YAML, JSON, shell) and preserve existing ordering. Register new tool versions in `mise.toml` rather than editing `$HOME` copies directly.
 
 ## Testing Guidelines
-This repo relies on smoke checks rather than automated suites. After modifying configs, run `just status` (or `mise run install` followed by `mise run setup:prereqs`) to confirm symlinks and dependencies remain healthy. For Neovim changes, launch `nvim` and trigger `:Lazy sync` to ensure plugins load. Record manual verification steps in the PR description when adding new workflows.
+This repo relies on smoke tests. After config changes, run `just status` or `mise run install` followed by `mise run setup:prereqs` to confirm symlink health. For Neovim updates, open `nvim` and execute `:Lazy sync` to ensure plugins load cleanly. Document manual verification steps in PR descriptions whenever you add or modify automation.
 
 ## Commit & Pull Request Guidelines
-Follow the existing imperative prefixes (`fix:`, `enhance:`, `add:`, `refactor:`) seen in `git log`. Keep subject lines under 72 characters, explain the motivation in body text when the change is non-trivial, and group related config updates together. PRs should summarize the impact, link any tracking issues, include before/after notes or screenshots for UI tweaks (Hyprland, Waybar, SwiftBar), and call out follow-up work.
+Follow imperative commit prefixes such as `fix:`, `enhance:`, `add:`, or `refactor:` seen in `git log`. Keep subject lines under 72 characters and use the body to explain motivation or edge cases. Group related config updates into a single commit when possible. PRs should summarize the impact, link tracking issues, and include before/after screenshots for UI-facing tweaks (Hyprland, Waybar, SwiftBar). Call out any follow-up tasks or manual steps reviewers must perform.
 
 ## Security & Configuration Tips
-Never commit API keys or machine-specific secrets—use environment variables or `.claude/settings.local.json` overrides. Validate third-party scripts before inclusion, pin tool versions in `mise.toml`, and document noteworthy changes in `CLAUDE.md` or `README.md` so other machines stay in sync.
+Never commit secrets; prefer environment variables or `.claude/settings.local.json` overrides. Vet third-party scripts before inclusion, pin versions in `mise.toml`, and record noteworthy config changes in `CLAUDE.md` or `README.md` so other machines stay in sync.
