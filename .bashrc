@@ -134,22 +134,29 @@ _enable_completion() {
 
 # tmux smart session function
 tmux_smart_session() {
+    local session_name
+
     if [ $# -eq 0 ]; then
-        # No arguments - attach to existing session or create default
-        if tmux has-session 2>/dev/null; then
-            tmux attach
-        else
-            tmux new-session -s main
+        session_name=$(basename "${PWD:-.}")
+        session_name="${session_name// /-}"
+        if [ -z "$session_name" ] || [ "$session_name" = "/" ]; then
+            session_name="main"
         fi
     else
-        # Session name provided
         session_name="$1"
-        if tmux has-session -t "$session_name" 2>/dev/null; then
-            tmux attach -t "$session_name"
-        else
-            tmux new-session -s "$session_name"
-        fi
     fi
+
+    if tmux has-session -t "$session_name" 2>/dev/null; then
+        tmux attach -t "$session_name"
+        return
+    fi
+
+    if [ $# -eq 0 ] && tmux has-session 2>/dev/null; then
+        tmux attach
+        return
+    fi
+
+    tmux new-session -s "$session_name"
 }
 
 # Lazy-load SDKMAN for faster startup
