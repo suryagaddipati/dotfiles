@@ -17,6 +17,12 @@ fzf = "latest"
 stylua = "latest"
 shfmt = "latest"
 
+# LSP servers
+lua-language-server = "latest"
+pyright = "latest"
+bash-language-server = "latest"
+gopls = "latest"
+
 [settings]
 paranoid = false
 idiomatic_version_file_enable_tools = ["java"]
