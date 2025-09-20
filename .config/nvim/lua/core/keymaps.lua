@@ -1,4 +1,29 @@
 local keymap = vim.keymap.set
+local function skip_closer()
+  local cursor = vim.api.nvim_win_get_cursor(0)
+  local row, col = cursor[1], cursor[2]
+  local line = vim.api.nvim_get_current_line()
+  local next_char = line:sub(col + 1, col + 1)
+
+  if next_char ~= '' and next_char:match("[%])}%>\"']") then
+    vim.api.nvim_win_set_cursor(0, { row, col + 1 })
+    return
+  end
+
+  local ok, luasnip = pcall(require, 'luasnip')
+  if ok and luasnip.choice_active() then
+    luasnip.change_choice(1)
+    return
+  end
+
+  local rest = line:sub(col + 2)
+  local move = rest:find("[%])}%>\"']")
+  if move then
+    vim.api.nvim_win_set_cursor(0, { row, col + move + 1 })
+  end
+end
+
+keymap({ 'i', 's' }, '<C-]>', skip_closer, { silent = true, desc = 'Skip closing pair or cycle snippet choice' })
 
 keymap('i', 'jk', '<Esc>', { noremap = true, silent = true, desc = 'Exit insert mode' })
 keymap('i', '<C-;>', '<C-o>a')
@@ -138,4 +163,3 @@ keymap('n', '<leader>tn', ':set number!<CR>', { desc = 'Toggle line numbers' })
 keymap('n', '<leader>tr', ':set relativenumber!<CR>', { desc = 'Toggle relative numbers' })
 keymap('n', '<leader>tw', ':set wrap!<CR>', { desc = 'Toggle word wrap' })
 keymap('n', '<leader>ts', ':set spell!<CR>', { desc = 'Toggle spell check' })
-

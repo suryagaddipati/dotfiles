@@ -34,17 +34,6 @@ return {
       expr = true,
       desc = 'Jump back in snippet'
     },
-    {
-      '<C-l>',
-      function()
-        local luasnip = require('luasnip')
-        if luasnip.choice_active() then
-          luasnip.change_choice(1)
-        end
-      end,
-      mode = { 'i', 's' },
-      desc = 'Change snippet choice'
-    },
   },
   config = function()
     local luasnip = require('luasnip')
