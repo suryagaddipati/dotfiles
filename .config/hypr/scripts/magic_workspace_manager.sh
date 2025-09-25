@@ -6,7 +6,37 @@
 set -euo pipefail
 
 LOG_FILE="/tmp/magic-workspace-manager.log"
+LOCK_FILE="${XDG_RUNTIME_DIR:-/tmp}/magic_workspace_manager.lock"
+exec 9>"$LOCK_FILE"
+if ! flock -n 9; then
+    echo "$(date): Magic workspace manager already running, exiting" >> "$LOG_FILE"
+    exit 0
+fi
+
 echo "$(date): Magic workspace manager started" >> "$LOG_FILE"
+
+STATE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/hypr/magic-workspaces"
+mkdir -p "$STATE_DIR"
+
+state_file() {
+    printf '%s/workspace_%s' "$STATE_DIR" "$1"
+}
+
+get_state() {
+    local file
+    file="$(state_file "$1")"
+    if [ -f "$file" ]; then
+        cat "$file"
+    else
+        printf '0\n'
+    fi
+}
+
+set_state() {
+    local file
+    file="$(state_file "$1")"
+    printf '%s\n' "$2" > "$file"
+}
 
 # Function to get currently visible magic workspaces
 get_visible_magic_workspaces() {
@@ -28,6 +58,31 @@ hide_magic_workspace() {
     hyprctl dispatch togglespecialworkspace "magic${workspace_id}" >/dev/null 2>&1 || true
 }
 
+is_magic_visible() {
+    local workspace_id="$1"
+    local special_name="special:magic${workspace_id}"
+    hyprctl -j monitors | jq -e '.[] | select(.specialWorkspace.name == "'"$special_name"'")' >/dev/null 2>&1
+}
+
+restore_magic_workspace() {
+    local workspace_id="$1"
+    local state
+    state=$(get_state "$workspace_id")
+
+    if [ "$state" != "1" ]; then
+        echo "$(date): No restore needed for workspace $workspace_id (state $state)" >> "$LOG_FILE"
+        return
+    fi
+
+    if is_magic_visible "$workspace_id"; then
+        echo "$(date): Magic workspace already visible for workspace $workspace_id" >> "$LOG_FILE"
+        return
+    fi
+
+    echo "$(date): Restoring magic workspace for workspace $workspace_id" >> "$LOG_FILE"
+    hyprctl dispatch togglespecialworkspace "magic${workspace_id}" >/dev/null 2>&1 || true
+}
+
 # Function to check and hide inappropriate magic workspaces
 check_magic_workspaces() {
     local current_workspace=$(hyprctl activeworkspace -j | jq -r '.id')
@@ -43,6 +98,8 @@ check_magic_workspaces() {
         fi
     done < <(get_visible_magic_workspaces)
     
+    local has_visible_current=false
+
     # Hide magic workspaces that don't belong to the current workspace
     for magic_workspace in "${visible_magic[@]}"; do
         local magic_workspace_id=$(extract_workspace_id "$magic_workspace")
@@ -50,9 +107,16 @@ check_magic_workspaces() {
         if [[ "$magic_workspace_id" != "$current_workspace" ]]; then
             hide_magic_workspace "$magic_workspace"
         else
+            has_visible_current=true
+            set_state "$current_workspace" "1"
             echo "$(date): Keeping $magic_workspace visible (matches current workspace $current_workspace)" >> "$LOG_FILE"
         fi
     done
+
+    if [[ "$has_visible_current" == false ]]; then
+        echo "$(date): Magic workspace not visible for current workspace $current_workspace" >> "$LOG_FILE"
+        restore_magic_workspace "$current_workspace"
+    fi
 }
 
 # Monitor workspace changes by polling (simpler than socat)
