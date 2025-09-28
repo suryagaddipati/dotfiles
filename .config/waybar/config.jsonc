@@ -5,7 +5,7 @@
   "spacing": 0,
   "height": 26,
   "modules-left": ["custom/omarchy", "hyprland/workspaces"],
-  "modules-center": ["clock", "custom/pomodoro", "custom/update"],
+  "modules-center": ["clock", "custom/update"],
   "modules-right": [
     "group/tray-expander",
     "bluetooth",
@@ -64,18 +64,6 @@
     "format-alt": "{:%d %B W%V %Y}",
     "tooltip": false,
     "on-click-right": "omarchy-cmd-tzupdate"
-  },
-  "custom/pomodoro": {
-    "format": "🍅 {}",
-    "exec": "/home/surya/code/dotfiles/bash_functions/pomodoro-tracker.sh status",
-    "return-type": "json",
-    "on-click": "/home/surya/code/dotfiles/bash_functions/pomodoro-tracker.sh toggle; /home/surya/code/dotfiles/bash_functions/pomodoro-tracker.sh check-completion; pkill -SIGRTMIN+8 waybar",
-    "on-click-middle": "/home/surya/code/dotfiles/bash_functions/pomodoro-tracker.sh start --add 25m --notify; /home/surya/code/dotfiles/bash_functions/pomodoro-tracker.sh check-completion; pkill -SIGRTMIN+8 waybar",
-    "on-click-right": "/home/surya/code/dotfiles/bash_functions/pomodoro-tracker.sh stop; pkill -SIGRTMIN+8 waybar",
-    "tooltip": true,
-    "tooltip-format": "Left: Toggle (pause/resume)\nMiddle: Start new 25min session\nRight: Stop timer",
-    "signal": 8,
-    "interval": 1
   },
   "network": {
     "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
