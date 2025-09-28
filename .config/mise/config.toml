@@ -17,11 +17,8 @@ fzf = "latest"
 stylua = "latest"
 shfmt = "latest"
 
-# LSP servers
+# LSP servers (available through mise)
 lua-language-server = "latest"
-pyright = "latest"
-bash-language-server = "latest"
-gopls = "latest"
 
 [settings]
 paranoid = false

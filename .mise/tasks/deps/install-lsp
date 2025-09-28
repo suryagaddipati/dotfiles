@@ -9,9 +9,13 @@ if command -v mise > /dev/null 2>&1; then
     mise exec -- npm install -g bash-language-server
     printf "${YELLOW}Installing yaml-language-server...${NC}\n"
     mise exec -- npm install -g yaml-language-server
+    printf "${YELLOW}Installing pyright...${NC}\n"
+    mise exec -- npm install -g pyright
     printf "${YELLOW}Installing other language servers...${NC}\n"
     mise exec -- npm install -g typescript-language-server
     mise exec -- npm install -g vscode-langservers-extracted
+    printf "${YELLOW}Installing gopls...${NC}\n"
+    mise exec -- go install golang.org/x/tools/gopls@latest
     printf "${GREEN}Language servers installed!${NC}\n"
 else
     printf "${RED}mise not found. Run 'mise run deps:install-mise' first.${NC}\n"
