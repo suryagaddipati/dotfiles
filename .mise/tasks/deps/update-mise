@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+#MISE description="Update mise to latest version (package manager or manual install)"
+
+set -euo pipefail
+
+printf "${BLUE}Updating mise...${NC}\n"
+
+# Check if mise is managed by package manager
+if pacman -Q mise &>/dev/null; then
+    printf "${YELLOW}mise is installed via pacman${NC}\n"
+    printf "Checking for updates in repository...\n"
+
+    if sudo pacman -Sy mise; then
+        printf "${GREEN}mise updated via pacman!${NC}\n"
+    else
+        printf "${YELLOW}No newer version available in pacman repository${NC}\n"
+        printf "Current repo version: $(pacman -Si mise | grep '^Version' | awk '{print $3}')\n"
+        printf "Latest available: $(curl -s https://api.github.com/repos/jdx/mise/releases/latest | grep tag_name | cut -d'"' -f4)\n"
+        printf "\n${BLUE}To install latest version manually:${NC}\n"
+        printf "1. Remove current: sudo pacman -R mise\n"
+        printf "2. Install from GitHub: curl https://mise.run | sh\n"
+        printf "3. Add to PATH: echo 'eval \"\$(~/.local/bin/mise activate bash)\"' >> ~/.bashrc\n"
+    fi
+elif command -v mise &>/dev/null; then
+    printf "${YELLOW}mise found, attempting self-update...${NC}\n"
+    if mise self-update; then
+        printf "${GREEN}mise updated successfully!${NC}\n"
+    else
+        printf "${YELLOW}Self-update not available for this installation method${NC}\n"
+    fi
+else
+    printf "${RED}mise not found. Installing latest version...${NC}\n"
+    curl https://mise.run | sh
+    printf "${GREEN}mise installed! Add to your shell config:${NC}\n"
+    printf "echo 'eval \"\$(~/.local/bin/mise activate bash)\"' >> ~/.bashrc\n"
+fi
+
+printf "\n${BLUE}Current mise version:${NC}\n"
+mise --version 2>/dev/null || echo "mise not found in PATH"

@@ -15,4 +15,5 @@ NC = "\\033[0m"
 DOTFILES = ".bashrc .bash_profile"
 
 [tools]
-rust = "latest"
+# Use specific version to match global config and avoid conflicts
+rust = "1.75"

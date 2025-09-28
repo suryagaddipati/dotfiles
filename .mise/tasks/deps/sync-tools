@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+#MISE description="Sync and install all tools from configuration"
+
+set -euo pipefail
+
+printf "${BLUE}Syncing tools from mise configuration...${NC}\n"
+
+# Install tools with better error handling
+if command -v mise > /dev/null 2>&1; then
+    printf "${YELLOW}Installing tools from global and local configurations...${NC}\n"
+
+    # Install tools one by one for better error reporting
+    while IFS= read -r tool; do
+        tool_name=$(echo "$tool" | cut -d' ' -f1)
+        tool_version=$(echo "$tool" | cut -d' ' -f2)
+
+        printf "Installing ${tool_name}@${tool_version}... "
+        if mise install "${tool_name}@${tool_version}" 2>/dev/null; then
+            printf "${GREEN}✓${NC}\n"
+        else
+            printf "${YELLOW}⚠ failed (may already be installed)${NC}\n"
+        fi
+    done < <(mise ls-remote --installed 2>/dev/null || mise current | grep -v "WARN")
+
+    # Final verification
+    printf "\n${BLUE}Current tool status:${NC}\n"
+    mise current 2>&1 | grep -v "WARN" || true
+
+    printf "\n${GREEN}Tool sync completed!${NC}\n"
+else
+    printf "${RED}mise not found. Install mise first.${NC}\n"
+    exit 1
+fi

@@ -5,9 +5,15 @@ set -euo pipefail
 
 printf "${BLUE}Installing tools via mise...${NC}\n"
 if command -v mise > /dev/null 2>&1; then
-    printf "${YELLOW}Installing neovim, tmux, and CLI utilities...${NC}\n"
-    mise install
-    printf "${GREEN}Tools installed via mise!${NC}\n"
+    printf "${YELLOW}Installing tools from mise configuration...${NC}\n"
+
+    # Install tools, skipping any that fail to avoid blocking the whole process
+    if ! mise install --continue-on-error; then
+        printf "${YELLOW}Some tools failed to install, checking individual status...${NC}\n"
+        mise list --installed
+    fi
+
+    printf "${GREEN}Tool installation completed!${NC}\n"
 else
     printf "${RED}mise not found. Run 'mise run deps:install-mise' first.${NC}\n"
     exit 1
