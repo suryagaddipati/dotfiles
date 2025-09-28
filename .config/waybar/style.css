@@ -43,7 +43,8 @@ window#waybar.DP-1 * {
 #pulseaudio,
 #custom-omarchy,
 #custom-update,
-#custom-pomodoro {
+#custom-pomodoro,
+#custom-stack-indicator {
   min-width: 12px;
   margin: 0 7.5px;
 }
@@ -82,4 +83,10 @@ tooltip {
 #custom-pomodoro.finished {
   color: #f38ba8; /* pink for finished/break time */
   background-color: rgba(243, 139, 168, 0.1);
+}
+
+/* Stack workspace indicator styling */
+#custom-stack-indicator {
+  color: #c678dd; /* purple to match stack workspace theme */
+  font-weight: bold;
 }
