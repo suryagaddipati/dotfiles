@@ -25,8 +25,13 @@ end
 
 keymap({ 'i', 's' }, '<C-]>', skip_closer, { silent = true, desc = 'Skip closing pair or cycle snippet choice' })
 
+keymap('i', 'jj', '<Esc>', { noremap = true, silent = true, desc = 'Exit insert mode' })
 keymap('i', 'jk', '<Esc>', { noremap = true, silent = true, desc = 'Exit insert mode' })
 keymap('i', '<C-;>', '<C-o>a')
+
+keymap('t', 'jj', '<C-\\><C-n>', { noremap = true, silent = true, desc = 'Exit terminal mode' })
+keymap('t', 'jk', '<C-\\><C-n>', { noremap = true, silent = true, desc = 'Exit terminal mode' })
+keymap('t', '<Esc>', '<C-\\><C-n>', { noremap = true, silent = true, desc = 'Exit terminal mode' })
 
 keymap('n', '<leader>w', '<cmd>w<cr>')
 keymap('n', '<leader>q', '<cmd>q<cr>')
