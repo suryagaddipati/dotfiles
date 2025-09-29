@@ -54,7 +54,11 @@ vim.opt.hidden = true
 vim.opt.undofile = true
 vim.opt.swapfile = false
 vim.opt.backup = false
+vim.opt.autowrite = true
+vim.opt.autowriteall = true
 
 vim.opt.syntax = 'on'
 vim.opt.filetype = 'on'
+
+vim.opt.winfixbuf = false
 
