@@ -40,13 +40,19 @@ window#waybar.DP-1 * {
 #battery,
 #network,
 #bluetooth,
-#pulseaudio,
-#custom-omarchy,
-#custom-update,
-#custom-pomodoro,
-#custom-stack-indicator {
+#pulseaudio {
   min-width: 12px;
   margin: 0 7.5px;
+}
+
+#custom-workspace-info {
+  min-width: 12px;
+  margin: 0 7.5px;
+  font-weight: bold;
+  font-size: 18px;
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 4px 12px;
+  border-radius: 8px;
 }
 
 #custom-expand-icon {

@@ -1,15 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Get current workspace ID
-current_workspace=$(hyprctl activeworkspace -j | jq -r '.id')
+# Get current workspace
+workspace=$(hyprctl activeworkspace -j | jq -r '.id')
 
-# Hide all visible stack workspaces
-for i in 1 2 3; do
-    if hyprctl -j monitors | jq -e '.[] | select(.specialWorkspace.name == "special:stack'$i'")' >/dev/null 2>&1; then
-        echo "Hiding stack workspace $i"
-        hyprctl dispatch togglespecialworkspace "stack$i" >/dev/null
+# Hide current workspace's stacks
+for stack_key in A S D; do
+    stack_name="ws${workspace}_${stack_key}"
+    if hyprctl -j monitors | jq -e '.[] | select(.specialWorkspace.name == "special:'$stack_name'")' >/dev/null 2>&1; then
+        hyprctl dispatch togglespecialworkspace "$stack_name" >/dev/null 2>&1 || true
     fi
 done
-
-echo "Returned to base workspace $current_workspace"
