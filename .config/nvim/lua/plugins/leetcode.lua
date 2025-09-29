@@ -13,6 +13,10 @@ return {
   },
   opts = {
     lang = "python3",
+    storage = {
+      home = vim.fn.expand("~/code/leetcode"),
+      cache = vim.fn.stdpath("cache") .. "/leetcode",
+    },
     plugins = {
       non_standalone = true,
     },
@@ -50,8 +54,8 @@ return {
     map("n", "<leader>lrm", "<cmd>Leet random difficulty=medium<CR>", { desc = "Random Medium Problem" })
     
     -- Testing and submission
-    map("n", "<leader>lt", "<cmd>Leet test<CR>", { desc = "Test Solution" })
-    map("n", "<leader>ls", "<cmd>Leet submit<CR>", { desc = "Submit Solution" })
+    map("n", "<leader>lT", "<cmd>Leet test<CR>", { desc = "Test Solution" })
+    map("n", "<leader>lS", "<cmd>Leet submit<CR>", { desc = "Submit Solution" })
     map("n", "<leader>lc", "<cmd>Leet console<CR>", { desc = "Open Console" })
     
     -- Problem info and management
