@@ -59,7 +59,8 @@
     "interval": 1,
     "tooltip": true,
     "return-type": "",
-    "exec-if": "test -n \"$(~/.config/hypr/scripts/stack_workspace_status.sh)\""
+    "exec-if": "test -n \"$(~/.config/hypr/scripts/stack_workspace_status.sh)\"",
+    "escape": false
   },
 
   "cpu": {

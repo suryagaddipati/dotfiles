@@ -9,9 +9,9 @@ get_active_stacks() {
     for i in 1 2 3; do
         if hyprctl -j monitors | jq -e '.[] | select(.specialWorkspace.name == "special:stack'$i'")' >/dev/null 2>&1; then
             case $i in
-                1) active="${active}A" ;;
-                2) active="${active}S" ;;
-                3) active="${active}D" ;;
+                1) active="${active}<span color='#e06c75'>A</span>" ;;
+                2) active="${active}<span color='#98c379'>S</span>" ;;
+                3) active="${active}<span color='#61afef'>D</span>" ;;
             esac
         fi
     done
