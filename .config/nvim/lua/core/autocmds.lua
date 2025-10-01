@@ -110,7 +110,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 })
 
 -- Auto-save functionality
-vim.api.nvim_create_autocmd({ "BufLeave", "FocusLost" }, {
+vim.api.nvim_create_autocmd({ "InsertLeave", "TextChanged", "BufLeave", "FocusLost" }, {
 	group = augroup,
 	pattern = "*",
 	callback = function()
