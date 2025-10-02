@@ -18,7 +18,7 @@ if [ ! -f "$CACHE_FILE" ]; then
 fi
 
 # Check if the special workspace is currently visible
-is_visible=$(hyprctl workspaces -j | jq -r ".[] | select(.name == \"special:$stack_name\") | .id" | wc -l)
+is_visible=$(hyprctl workspaces -j | jq -r ".[] | select(.name == \"$stack_name\") | .id" | wc -l)
 
 if [ "$is_visible" -eq 0 ]; then
     # Special workspace is hidden, add it to JSON (we're showing it)
