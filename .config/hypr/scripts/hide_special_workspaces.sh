@@ -4,12 +4,19 @@ set -euo pipefail
 # Get current workspace
 workspace=$(hyprctl activeworkspace -j | jq -r '.id')
 
-# Hide all special workspaces for current workspace
+# Hide all workspace-specific stacks for current workspace
 for stack_key in A S D; do
     stack_name="ws${workspace}_${stack_key}"
     # Check if this special workspace is visible
     if hyprctl monitors -j | jq -e ".[] | select(.specialWorkspace.name == \"special:$stack_name\")" >/dev/null 2>&1; then
         hyprctl dispatch togglespecialworkspace "$stack_name"
+    fi
+done
+
+# Hide all singleton workspaces
+for singleton in whatsapp chatgpt youtube messages; do
+    if hyprctl monitors -j | jq -e ".[] | select(.specialWorkspace.name == \"special:$singleton\")" >/dev/null 2>&1; then
+        hyprctl dispatch togglespecialworkspace "$singleton"
     fi
 done
 
