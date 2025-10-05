@@ -4,6 +4,7 @@
   "position": "top",
   "spacing": 0,
   "height": 20,
+  "output": "DP-1",
   "modules-left": ["clock"],
   "modules-center": ["custom/workspace-info"],
   "modules-right": [
