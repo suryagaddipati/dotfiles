@@ -23,10 +23,8 @@ return {
       }),
     })
 
-    local lspconfig = require('lspconfig')
     local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-    -- Enhanced diagnostics
     vim.diagnostic.config({
       virtual_text = true,
       signs = true,
@@ -41,7 +39,6 @@ return {
       },
     })
 
-    -- Diagnostic signs
     vim.diagnostic.config({
       signs = {
         text = {
@@ -76,7 +73,6 @@ return {
 
     local servers = { 'lua_ls', 'pyright', 'rust_analyzer', 'gopls', 'bashls', 'jsonls', 'yamlls' }
 
-    -- Only add ts_ls if TypeScript is available
     if vim.fn.executable('tsc') == 1 or vim.fn.executable('typescript') == 1 then
       table.insert(servers, 'ts_ls')
     end
@@ -87,11 +83,10 @@ return {
         capabilities = capabilities,
       }
 
-      -- Server-specific configurations
       if lsp == 'lua_ls' then
         config.settings = {
           Lua = {
-            diagnostics = { 
+            diagnostics = {
               globals = {'vim'},
               disable = {'trailing-space', 'empty-block'}
             },
@@ -125,7 +120,7 @@ return {
         }
       end
 
-      lspconfig[lsp].setup(config)
+      require('lspconfig.' .. lsp).setup(config)
     end
   end,
 }
