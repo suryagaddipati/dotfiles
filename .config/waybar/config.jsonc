@@ -3,7 +3,7 @@
   "layer": "top",
   "position": "top",
   "spacing": 0,
-  "height": 26,
+  "height": 20,
   "modules-left": ["clock"],
   "modules-center": ["custom/workspace-info"],
   "modules-right": [

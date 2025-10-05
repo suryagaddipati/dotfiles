@@ -46,13 +46,8 @@ window#waybar.DP-1 * {
 }
 
 #custom-workspace-info {
-  min-width: 12px;
-  margin: 0 7.5px;
-  font-weight: bold;
-  font-size: 18px;
-  background-color: rgba(255, 255, 255, 0.1);
-  padding: 4px 12px;
-  border-radius: 8px;
+  color: #89b4fa;
+  font-weight: 600;
 }
 
 #custom-expand-icon {
