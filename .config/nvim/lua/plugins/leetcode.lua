@@ -52,7 +52,8 @@ return {
     map("n", "<leader>ld", "<cmd>Leet daily<CR>", { desc = "Daily Problem" })
     map("n", "<leader>lr", "<cmd>Leet random<CR>", { desc = "Random Problem" })
     map("n", "<leader>lrm", "<cmd>Leet random difficulty=medium<CR>", { desc = "Random Medium Problem" })
-    
+    map("n", "<leader>lrh", "<cmd>Leet random difficulty=hard<CR>", { desc = "Random Hard Problem" })
+
     -- Testing and submission
     map("n", "<leader>lT", "<cmd>Leet test<CR>", { desc = "Test Solution" })
     map("n", "<leader>lS", "<cmd>Leet submit<CR>", { desc = "Submit Solution" })
