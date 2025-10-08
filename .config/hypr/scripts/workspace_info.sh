@@ -1,8 +1,26 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Get current workspace number
-workspace=$(hyprctl activeworkspace -j | jq -r '.id')
+# Check if any monitor has a visible special workspace (singleton)
+special_workspace=$(hyprctl monitors -j | jq -r '.[] | select(.specialWorkspace.id != 0) | .specialWorkspace.name' | head -n1)
+
+if [[ -n "$special_workspace" ]]; then
+    case "$special_workspace" in
+        "special:whatsapp") echo "W" ;;
+        "special:chatgpt") echo "C" ;;
+        "special:youtube") echo "Y" ;;
+        "special:messages") echo "Alt+G" ;;
+        "special:btop") echo "T" ;;
+        "special:obsidian") echo "O" ;;
+        *) echo "${special_workspace#special:}" ;;
+    esac
+    exit 0
+fi
+
+# Get current workspace info
+workspace_info=$(hyprctl activeworkspace -j)
+workspace=$(echo "$workspace_info" | jq -r '.id')
+workspace_name=$(echo "$workspace_info" | jq -r '.name')
 
 # Get active stacks for current workspace
 active_stacks=""
