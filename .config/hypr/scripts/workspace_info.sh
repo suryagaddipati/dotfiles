@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Check if any monitor has a visible special workspace (singleton)
+# Check if any monitor has a visible special workspace (singleton, not stack)
 special_workspace=$(hyprctl monitors -j | jq -r '.[] | select(.specialWorkspace.id != 0) | .specialWorkspace.name' | head -n1)
 
-if [[ -n "$special_workspace" ]]; then
+if [[ -n "$special_workspace" && ! "$special_workspace" =~ ^special:ws[0-9]+_[ASD]$ ]]; then
     case "$special_workspace" in
         "special:whatsapp") echo "W" ;;
         "special:chatgpt") echo "C" ;;
