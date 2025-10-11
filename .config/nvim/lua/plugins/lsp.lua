@@ -120,7 +120,7 @@ return {
         }
       end
 
-      require('lspconfig.' .. lsp).setup(config)
+      require('lspconfig')[lsp].setup(config)
     end
   end,
 }
