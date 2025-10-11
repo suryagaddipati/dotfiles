@@ -1,31 +1,22 @@
 # Dotfiles
 
-Optimized configuration for bash, git, tmux, and neovim with vim-style navigation and productivity shortcuts.
+Modern dotfiles with mise task management, neovim, tmux, and unified vim-style navigation.
 
 ## Quick Setup
 
 ```bash
-git clone https://github.com/yourusername/dotfiles.git ~/dotfiles
-cd ~/dotfiles
+git clone https://github.com/suryagaddipati/dotfiles.git ~/code/dotfiles
+cd ~/code/dotfiles
 mise run workflows:full-install    # Complete setup with dependencies
 ```
 
 ## Essential Commands
 
-**Using mise tasks (recommended):**
 ```bash
 mise run install                   # Install dotfiles with backup
-mise run setup:prereqs             # Check installation status  
+mise run setup:prereqs             # Install prerequisites
 mise run update                    # Update from git
 mise tasks                         # Show all available tasks
-```
-
-**Legacy commands (still supported):**
-```bash
-just install        # Install dotfiles with backup
-just status         # Check installation status  
-just backup         # Backup existing configs
-just update         # Update from git
 ```
 
 ## Core Shortcuts
