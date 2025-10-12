@@ -28,8 +28,10 @@ keymap({ 'i', 's' }, '<C-]>', skip_closer, { silent = true, desc = 'Skip closing
 keymap('i', 'jj', '<Esc>', { noremap = true, silent = true, desc = 'Exit insert mode' })
 keymap('i', 'jk', '<Esc>', { noremap = true, silent = true, desc = 'Exit insert mode' })
 keymap('i', '<C-;>', '<C-o>a')
-keymap('i', '<C-e>', '<C-o>A', { noremap = true, silent = true, desc = 'Move to end of line' })
-keymap('i', '<C-a>', '<C-o>I', { noremap = true, silent = true, desc = 'Move to start of line' })
+keymap('i', '<C-e>', '<C-o>$', { noremap = true, silent = true, desc = 'Move to end of line' })
+keymap('i', '<C-a>', '<C-o>^', { noremap = true, silent = true, desc = 'Move to start of line' })
+keymap('i', '<C-b>', '<Left>', { noremap = true, silent = true, desc = 'Move left one character' })
+keymap('i', '<C-f>', '<Right>', { noremap = true, silent = true, desc = 'Move right one character' })
 
 keymap('t', 'jj', '<C-\\><C-n>', { noremap = true, silent = true, desc = 'Exit terminal mode' })
 keymap('t', 'jk', '<C-\\><C-n>', { noremap = true, silent = true, desc = 'Exit terminal mode' })
