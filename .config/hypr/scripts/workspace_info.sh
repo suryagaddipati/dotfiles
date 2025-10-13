@@ -12,6 +12,7 @@ if [[ -n "$special_workspace" && ! "$special_workspace" =~ ^special:ws[0-9]+_[AS
         "special:messages") echo "Alt+G" ;;
         "special:btop") echo "T" ;;
         "special:obsidian") echo "O" ;;
+        "special:calibre") echo "E" ;;
         *) echo "${special_workspace#special:}" ;;
     esac
     exit 0

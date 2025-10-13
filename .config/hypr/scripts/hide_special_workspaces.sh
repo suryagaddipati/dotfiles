@@ -22,7 +22,7 @@ for stack_key in A S D; do
 done
 
 # Hide all singleton workspaces
-for singleton in whatsapp chatgpt youtube messages btop; do
+for singleton in whatsapp chatgpt youtube messages btop calibre; do
     if hyprctl monitors -j | jq -e ".[] | select(.specialWorkspace.name == \"special:$singleton\")" >/dev/null 2>&1; then
         hyprctl dispatch togglespecialworkspace "$singleton"
     fi
