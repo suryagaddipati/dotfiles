@@ -267,3 +267,5 @@ export PATH="$PATH:/Users/suryag/Library/Application Support/Coursier/bin"
 # Add DuckDB executable to PATH
 export PATH="$HOME/code/duckdb/build/release:$PATH"
 
+
+. "$HOME/.local/share/../bin/env"
