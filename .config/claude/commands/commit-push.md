@@ -5,7 +5,9 @@ description: Create a git commit and push to remote
 Create a git commit following these guidelines:
 
 1. Run git status and git diff to see all changes
-2. Analyze the changes and create a concise commit message that:
+2. Analyze the changes and create commits with one logical change per commit:
+   - Create multiple commits if changes span multiple concerns
+   - Each commit should be a single logical change
    - Summarizes the nature of changes (feature/fix/refactor/docs/etc)
    - Focuses on "why" rather than "what"
    - Follows this repository's commit message style

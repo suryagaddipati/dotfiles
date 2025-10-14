@@ -16,7 +16,7 @@ Use bash with 2-space indentation, quoted variables, and descriptive function na
 This repo relies on smoke tests. After config changes, run `just status` or `mise run install` followed by `mise run setup:prereqs` to confirm symlink health. For Neovim updates, open `nvim` and execute `:Lazy sync` to ensure plugins load cleanly. Document manual verification steps in PR descriptions whenever you add or modify automation.
 
 ## Commit & Pull Request Guidelines
-Follow imperative commit prefixes such as `fix:`, `enhance:`, `add:`, or `refactor:` seen in `git log`. Keep subject lines under 72 characters and use the body to explain motivation or edge cases. Group related config updates into a single commit when possible. PRs should summarize the impact, link tracking issues, and include before/after screenshots for UI-facing tweaks (Hyprland, Waybar, SwiftBar). Call out any follow-up tasks or manual steps reviewers must perform.
+Follow imperative commit prefixes such as `fix:`, `enhance:`, `add:`, or `refactor:` seen in `git log`. Keep subject lines under 72 characters and use the body to explain motivation or edge cases. Create multiple commits if needed and commit only one logical change per commit. PRs should summarize the impact, link tracking issues, and include before/after screenshots for UI-facing tweaks (Hyprland, Waybar, SwiftBar). Call out any follow-up tasks or manual steps reviewers must perform.
 
 ## Security & Configuration Tips
 Never commit secrets; prefer environment variables or `.claude/settings.local.json` overrides. Vet third-party scripts before inclusion, pin versions in `mise.toml`, and record noteworthy config changes in `CLAUDE.md` or `README.md` so other machines stay in sync.
