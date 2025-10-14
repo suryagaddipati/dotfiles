@@ -28,10 +28,15 @@ if [ -z "$window_exists" ]; then
             window_exists=$(hyprctl clients -j | jq -r ".[] | select(.class == \"$APP_CLASS\") | .address" | head -n1)
         fi
         if [ -n "$window_exists" ]; then
-            # Move window to special workspace
-            hyprctl dispatch movetoworkspacesilent "$SPECIAL_WS,address:$window_exists"
-            # Show the special workspace
-            hyprctl dispatch togglespecialworkspace "$APP_NAME"
+            # Check if window is already in the special workspace (window rules)
+            current_ws=$(hyprctl clients -j | jq -r ".[] | select(.address == \"$window_exists\") | .workspace.name")
+            if [ "$current_ws" = "$SPECIAL_WS" ]; then
+                # Already in special workspace, focus it to show
+                hyprctl dispatch focuswindow "address:$window_exists"
+            else
+                # Move to special workspace and show it
+                hyprctl dispatch movetoworkspace "$SPECIAL_WS,address:$window_exists"
+            fi
             exit 0
         fi
     done
