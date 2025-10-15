@@ -71,56 +71,65 @@ return {
       vim.keymap.set('n', '<leader>ll', vim.diagnostic.setloclist, opts)
     end
 
-    local servers = { 'lua_ls', 'pyright', 'rust_analyzer', 'gopls', 'bashls', 'jsonls', 'yamlls' }
+    vim.lsp.config('*', {
+      capabilities = capabilities,
+    })
 
-    if vim.fn.executable('tsc') == 1 or vim.fn.executable('typescript') == 1 then
-      table.insert(servers, 'ts_ls')
+    local function setup_lsp(name, config)
+      config = config or {}
+      config.on_attach = on_attach
+      vim.lsp.config(name, config)
+      vim.lsp.enable(name)
     end
 
-    for _, lsp in ipairs(servers) do
-      local config = {
-        on_attach = on_attach,
-        capabilities = capabilities,
+    setup_lsp('lua_ls', {
+      settings = {
+        Lua = {
+          diagnostics = {
+            globals = {'vim'},
+            disable = {'trailing-space', 'empty-block'}
+          },
+          format = {
+            enable = false
+          },
+          workspace = {
+            library = vim.api.nvim_get_runtime_file('', true),
+            checkThirdParty = false,
+          },
+          telemetry = { enable = false },
+        }
       }
+    })
 
-      if lsp == 'lua_ls' then
-        config.settings = {
-          Lua = {
-            diagnostics = {
-              globals = {'vim'},
-              disable = {'trailing-space', 'empty-block'}
-            },
-            format = {
-              enable = false
-            },
-            workspace = {
-              library = vim.api.nvim_get_runtime_file('', true),
-              checkThirdParty = false,
-            },
-            telemetry = { enable = false },
-          }
-        }
-      elseif lsp == 'jsonls' then
-        config.cmd = { 'vscode-json-languageserver', '--stdio' }
-        config.settings = {
-          json = {
-            schemas = require('schemastore').json.schemas(),
-            validate = { enable = true },
-          }
-        }
-      elseif lsp == 'yamlls' then
-        config.settings = {
-          yaml = {
-            schemaStore = {
-              enable = false,
-              url = '',
-            },
-            schemas = require('schemastore').yaml.schemas(),
-          }
-        }
-      end
+    setup_lsp('pyright')
+    setup_lsp('rust_analyzer')
+    setup_lsp('gopls')
+    setup_lsp('bashls')
 
-      require('lspconfig')[lsp].setup(config)
+    setup_lsp('jsonls', {
+      cmd = { 'vscode-json-languageserver', '--stdio' },
+      settings = {
+        json = {
+          schemas = require('schemastore').json.schemas(),
+          validate = { enable = true },
+        }
+      }
+    })
+
+    setup_lsp('yamlls', {
+      settings = {
+        yaml = {
+          schemaStore = {
+            enable = false,
+            url = '',
+          },
+          schemas = require('schemastore').yaml.schemas(),
+        }
+      }
+    })
+
+    if vim.fn.executable('tsc') == 1 or vim.fn.executable('typescript') == 1 then
+      setup_lsp('ts_ls')
     end
   end,
 }
