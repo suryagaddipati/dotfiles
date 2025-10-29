@@ -19,8 +19,8 @@ if [ -z "$window_exists" ]; then
     # App not running, launch it
     eval "$LAUNCH_CMD" &
 
-    # Wait for window to appear (max 5 seconds)
-    for i in {1..50}; do
+    # Wait for window to appear (max 10 seconds)
+    for i in {1..100}; do
         sleep 0.1
         if [ -n "$APP_TITLE" ]; then
             window_exists=$(hyprctl clients -j | jq -r ".[] | select(.class == \"$APP_CLASS\" and (.title | test(\"$APP_TITLE\"))) | .address" | head -n1)
