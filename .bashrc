@@ -120,16 +120,14 @@ if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
 
-# Lazy-load bash completion for faster startup
-_enable_completion() {
-    if ! shopt -oq posix; then
-        if [ -f /usr/share/bash-completion/bash_completion ]; then
-            . /usr/share/bash-completion/bash_completion
-        elif [ -f /etc/bash_completion ]; then
-            . /etc/bash_completion
-        fi
+# Enable bash completion
+if ! shopt -oq posix; then
+    if [ -f /usr/share/bash-completion/bash_completion ]; then
+        . /usr/share/bash-completion/bash_completion
+    elif [ -f /etc/bash_completion ]; then
+        . /etc/bash_completion
     fi
-}
+fi
 
 
 # tmux smart session function
@@ -266,6 +264,3 @@ export PATH="$PATH:/Users/suryag/Library/Application Support/Coursier/bin"
 
 # Add DuckDB executable to PATH
 export PATH="$HOME/code/duckdb/build/release:$PATH"
-
-
-. "$HOME/.local/share/../bin/env"
