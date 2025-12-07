@@ -1,14 +1,40 @@
-@import "../omarchy/current/theme/waybar.css";
+@define-color base #1e1e2e;
+@define-color mantle #181825;
+@define-color crust #11111b;
+@define-color text #cdd6f4;
+@define-color subtext0 #a6adc8;
+@define-color subtext1 #bac2de;
+@define-color surface0 #313244;
+@define-color surface1 #45475a;
+@define-color surface2 #585b70;
+@define-color overlay0 #6c7086;
+@define-color blue #89b4fa;
+@define-color lavender #b4befe;
+@define-color sapphire #74c7ec;
+@define-color sky #89dceb;
+@define-color teal #94e2d5;
+@define-color green #a6e3a1;
+@define-color yellow #f9e2af;
+@define-color peach #fab387;
+@define-color maroon #eba0ac;
+@define-color red #f38ba8;
+@define-color mauve #cba6f7;
+@define-color pink #f5c2e7;
+@define-color flamingo #f2cdcd;
+@define-color rosewater #f5e0dc;
 
 * {
-  background-color: @background;
-  color: @foreground;
-
+  background-color: transparent;
+  color: @text;
   border: none;
   border-radius: 0;
   min-height: 0;
   font-family: CaskaydiaMono Nerd Font;
   font-size: 12px;
+}
+
+window#waybar {
+  background-color: @base;
 }
 
 /* Slightly reduced font for external monitor */
@@ -29,6 +55,11 @@ window#waybar.DP-1 * {
   padding: 0 6px;
   margin: 0 1.5px;
   min-width: 9px;
+  color: @subtext0;
+}
+
+#workspaces button.active {
+  color: @mauve;
 }
 
 #workspaces button.empty {
@@ -43,27 +74,60 @@ window#waybar.DP-1 * {
 #pulseaudio {
   min-width: 12px;
   margin: 0 7.5px;
+  color: @subtext1;
+}
+
+#cpu {
+  color: @sapphire;
+}
+
+#battery {
+  color: @green;
+}
+
+#battery.warning {
+  color: @yellow;
+}
+
+#battery.critical {
+  color: @red;
+}
+
+#network {
+  color: @sky;
+}
+
+#bluetooth {
+  color: @blue;
+}
+
+#pulseaudio {
+  color: @lavender;
+}
+
+#clock {
+  color: @rosewater;
+  margin-left: 8.75px;
 }
 
 #custom-workspace-info {
-  color: #89b4fa;
+  color: @blue;
   font-weight: 600;
 }
 
 #custom-expand-icon {
   margin-right: 7px;
+  color: @overlay0;
 }
 
 tooltip {
   padding: 2px;
+  background-color: @surface0;
+  color: @text;
 }
 
 #custom-update {
   font-size: 10px;
-}
-
-#clock {
-  margin-left: 8.75px;
 }
 
 .hidden {
@@ -72,22 +136,22 @@ tooltip {
 
 /* Pomodoro timer states */
 #custom-pomodoro.running {
-  color: #a6e3a1; /* green for work sessions */
-  background-color: rgba(166, 227, 161, 0.1);
+  color: @green;
+  background-color: alpha(@green, 0.1);
 }
 
 #custom-pomodoro.paused {
-  color: #f9e2af; /* yellow for paused */
-  background-color: rgba(249, 226, 175, 0.1);
+  color: @yellow;
+  background-color: alpha(@yellow, 0.1);
 }
 
 #custom-pomodoro.finished {
-  color: #f38ba8; /* pink for finished/break time */
-  background-color: rgba(243, 139, 168, 0.1);
+  color: @pink;
+  background-color: alpha(@pink, 0.1);
 }
 
 /* Stack workspace indicator styling */
 #custom-stack-indicator {
-  color: #c678dd; /* purple to match stack workspace theme */
+  color: @mauve;
   font-weight: bold;
 }
