@@ -74,17 +74,7 @@ xterm*|rxvt*)
     ;;
 esac
 
-# Lazy-load dircolors and set color aliases
-_setup_colors() {
-    if [ -x /usr/bin/dircolors ]; then
-        test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-        alias ls='ls --color=auto'
-        alias grep='grep --color=auto'
-        alias fgrep='fgrep --color=auto'
-        alias egrep='egrep --color=auto'
-    fi
-}
-# Set basic color aliases immediately (without eval)
+# Color aliases
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
@@ -223,7 +213,7 @@ grp() {
 
 # Uncomment all lines in /etc/hosts
 focus() {
-  sudo sed -i '' 's/^#\(.*\)/\1/' /etc/hosts
+  sudo sed -i 's/^#\(.*\)/\1/' /etc/hosts
   echo "All commented lines in /etc/hosts have been uncommented"
 }
 
@@ -253,14 +243,12 @@ if [ -d "$HOME/.opencode/bin" ]; then
     export PATH=$HOME/.opencode/bin:$PATH
 fi
 
-export PATH=$PATH:/opt/homebrew/bin
-
-# Source FZF functions and configuration
-if [ -f "$HOME/code/dotfiles/bash_functions/fzf-functions.bash" ]; then
-    source "$HOME/code/dotfiles/bash_functions/fzf-functions.bash"
-fi
-
-export PATH="$PATH:/Users/suryag/Library/Application Support/Coursier/bin"
-
-# Add DuckDB executable to PATH
-export PATH="$HOME/code/duckdb/build/release:$PATH"
+# Source OS-specific configuration
+case "$(uname -s)" in
+    Linux)
+        [ -f ~/code/dotfiles/bash_functions/os-linux.bash ] && . ~/code/dotfiles/bash_functions/os-linux.bash
+        ;;
+    Darwin)
+        [ -f ~/code/dotfiles/bash_functions/os-darwin.bash ] && . ~/code/dotfiles/bash_functions/os-darwin.bash
+        ;;
+esac
