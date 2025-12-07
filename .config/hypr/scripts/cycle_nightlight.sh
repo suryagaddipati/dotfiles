@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
 STATE_FILE="${XDG_CACHE_HOME:-$HOME/.cache}/hypr/nightlight_state"
 mkdir -p "$(dirname "$STATE_FILE")"
 
 current_state=$(cat "$STATE_FILE" 2>/dev/null || echo "0")
 
-pkill -9 hyprsunset
+pkill hyprsunset 2>/dev/null || true
 sleep 0.2
 
 case "$current_state" in
