@@ -28,7 +28,7 @@ Use vim-expert when user asks to open files. ask vim-expert to open files you fo
 
 ### Key Technical Details
 - **Neovim leader**: Space (for accessibility)
-- **Tmux prefix**: Ctrl-Space (replaces default Ctrl-B)
+- **Tmux prefix**: Ctrl-S (replaces default Ctrl-B)
 - **Tool versioning**: mise for unified version management
 - **Terminal**: Alacritty with Catppuccin theming
 - **Session management**: Intelligent tmux session handling
@@ -37,8 +37,7 @@ Use vim-expert when user asks to open files. ask vim-expert to open files you fo
 
 **Core configurations:**
 - `.bashrc` - Bash with aliases, functions, mise integration
-- `.tmux.conf` - Tmux with vim navigation and custom shortcuts
-- `.wezterm.lua` - Wezterm terminal configuration
+- `.config/tmux/tmux.conf` - Tmux with vim navigation and custom shortcuts
 - `.bash_profile` - Shell environment setup
 
 **Modern architecture:**
@@ -51,8 +50,7 @@ Use vim-expert when user asks to open files. ask vim-expert to open files you fo
 - `mise.toml` - Project-level mise configuration with tasks
 
 **Installation system:**
-- `mise.toml` - Task definitions (replaces justfile)
-- Legacy `justfile` support maintained for compatibility
+- `.mise/tasks/` - Task definitions for installation and management
 
 ## Configuration Details
 
@@ -63,10 +61,10 @@ Use vim-expert when user asks to open files. ask vim-expert to open files you fo
 - **Tool management**: mise integration for all development tools
 - **Vi mode**: Enabled for vim-style command line editing
 
-### Tmux Configuration (Prefix: Ctrl-Space)
+### Tmux Configuration (Prefix: Ctrl-S)
 - **Navigation**: Alt+hjkl for instant pane switching (no prefix)
 - **Window switching**: Alt+1-9 for instant window access
-- **Split management**: Ctrl-Space s/v for splits
+- **Split management**: Ctrl-S s/v for splits
 - **Session management**: Smart session creation and switching
 - **Copy mode**: Vim-style with system clipboard integration
 
@@ -107,13 +105,6 @@ mise run clean                     # Clean backups and temporary files
 mise tasks                         # Show all available tasks
 ```
 
-### Legacy Support (justfile)
-```bash
-just install        # Install with backup
-just status         # Installation health check
-just update         # Update from git
-```
-
 ### Session Management
 ```bash
 # Tmux smart sessions
@@ -149,28 +140,28 @@ Ctrl+h/j/k/l       # Navigate neovim splits
 Tab/Shift+Tab      # Cycle neovim buffers
 ```
 
-### Tmux (Prefix: Ctrl-Space)
+### Tmux (Prefix: Ctrl-S)
 ```bash
 # Pane management
-Ctrl-Space s       # Split horizontally
-Ctrl-Space v       # Split vertically
-Ctrl-Space h/j/k/l # Navigate panes (with prefix)
-Ctrl-Space f       # Toggle pane zoom
-Ctrl-Space x       # Kill pane
+Ctrl-S s       # Split horizontally
+Ctrl-S v       # Split vertically
+Ctrl-S h/j/k/l # Navigate panes (with prefix)
+Ctrl-S f       # Toggle pane zoom
+Ctrl-S x       # Kill pane
 
 # Window management  
-Ctrl-Space c       # Create window
-Ctrl-Space n/p     # Next/previous window
-Ctrl-Space ,       # Rename window
-Ctrl-Space w       # List windows
+Ctrl-S c       # Create window
+Ctrl-S n/p     # Next/previous window
+Ctrl-S ,       # Rename window
+Ctrl-S w       # List windows
 
 # Session management
-Ctrl-Space S       # Create new session
-Ctrl-Space R       # Rename session
+Ctrl-S S       # Create new session
+Ctrl-S R       # Rename session
 Alt+s              # Session switcher
 
 # System
-Ctrl-Space r       # Reload tmux config
+Ctrl-S r       # Reload tmux config
 F12                # Toggle nested tmux mode
 ```
 
@@ -299,18 +290,11 @@ t infra           # Switch to infrastructure project
 - **Navigation patterns**: Alt+hjkl works system-wide for instant context switching
 
 ### Critical System Details
-- **Tmux prefix changed**: Ctrl-Space (not default Ctrl-B)
+- **Tmux prefix changed**: Ctrl-S (not default Ctrl-B)
 - **Neovim leader**: Space (not comma or other keys)  
 - **Alt shortcuts**: Work without prefix for instant navigation
 - **Bash vi mode**: Enabled for vim-style command line
 - **Tool management**: Everything through mise, not individual version managers
-
-### Migration from Justfile
-The repository maintains backward compatibility with justfile while transitioning to mise tasks:
-- **New installations**: Use `mise run workflows:full-install`  
-- **Existing installations**: `just` commands still work
-- **Task discovery**: `mise tasks` shows all available operations
-- **Future development**: All new automation uses mise tasks
 
 ### Development Environment Features
 - **Consistent theming**: Gruvbox/Catppuccin across all tools
