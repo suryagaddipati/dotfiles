@@ -133,25 +133,3 @@ tooltip {
 .hidden {
   opacity: 0;
 }
-
-/* Pomodoro timer states */
-#custom-pomodoro.running {
-  color: @green;
-  background-color: alpha(@green, 0.1);
-}
-
-#custom-pomodoro.paused {
-  color: @yellow;
-  background-color: alpha(@yellow, 0.1);
-}
-
-#custom-pomodoro.finished {
-  color: @pink;
-  background-color: alpha(@pink, 0.1);
-}
-
-/* Stack workspace indicator styling */
-#custom-stack-indicator {
-  color: @mauve;
-  font-weight: bold;
-}
