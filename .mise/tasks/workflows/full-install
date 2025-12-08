@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #MISE description="Complete installation: dependencies + dotfiles + dev tools"
-#MISE depends=["deps:install", "install", "deps:install-dev", "deps:install-lsp"]
+#MISE depends=["deps:install-packages", "deps:install", "install", "deps:install-dev", "deps:install-lsp"]
 
 printf "\n"
 printf "${GREEN}🎉 Full installation complete!${NC}\n"

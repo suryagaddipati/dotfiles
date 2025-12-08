@@ -1,0 +1,208 @@
+#!/bin/bash
+# Arch Linux Package List - equivalent to Brewfile
+# Usage: ./packages.arch
+# Or manually: pacman -S --needed $(grep -v '^#' packages.arch | grep -v '^$' | grep -v 'AUR:')
+
+set -e
+
+AUR_HELPER="${AUR_HELPER:-yay}"
+
+PACMAN_PACKAGES=(
+    # Core Development Tools
+    git
+    github-cli
+    curl
+    jq
+    just
+
+    # Terminal & Shell
+    bash
+    bash-completion
+    tmux
+    starship
+    lazygit
+    zellij
+
+    # Text Editors
+    neovim
+    helix
+    glow
+
+    # Search & File Management
+    ripgrep
+    bat
+    fd
+    the_silver_searcher
+
+    # Languages & Runtimes
+    go
+    nodejs
+    npm
+    python
+    rust
+    lua
+    luajit
+
+    # Language Tools
+    python-pipx
+    uv
+    yarn
+    luarocks
+    lua-language-server
+    tree-sitter
+
+    # Java & Scala
+    jdk-openjdk
+    jdk11-openjdk
+    jdk17-openjdk
+    jdk21-openjdk
+    scala
+    sbt
+    maven
+
+    # Cloud & Infrastructure
+    aws-cli-v2
+    kubectl
+    kubectx
+    docker
+    docker-compose
+    docker-buildx
+
+    # Database Tools
+    mariadb-clients
+    postgresql
+    sqlite
+
+    # Protocol & Serialization
+    protobuf
+    msgpack-c
+
+    # Build Tools & Libraries
+    base-devel
+    autoconf
+    automake
+    libtool
+    m4
+    pkgconf
+
+    # Compression
+    brotli
+    lz4
+    lzo
+    snappy
+    xz
+    zlib
+    zstd
+
+    # System Libraries
+    abseil-cpp
+    c-ares
+    ca-certificates
+    cairo
+    fontconfig
+    freetype2
+    giflib
+    glib2
+    graphite
+    harfbuzz
+    icu
+    libjpeg-turbo
+    krb5
+    libcbor
+    libevent
+    libfido2
+    libgit2
+    libnghttp2
+    libnghttp3
+    libpng
+    libssh2
+    libtiff
+    libunistring
+    libuv
+    libvterm
+    libx11
+    libxau
+    libxcb
+    libxdmcp
+    libxext
+    libxrender
+    lcms2
+    llvm
+    ncurses
+    oniguruma
+    openssl
+    pcre
+    pcre2
+    pixman
+    readline
+    tcl
+    tk
+    unibilium
+    utf8proc
+    xorgproto
+    z3
+
+    # GUI Applications
+    alacritty
+    wezterm
+
+    # Fonts
+    ttf-hack-nerd
+)
+
+AUR_PACKAGES=(
+    # Terminal Tools
+    autoenv
+
+    # Language Tools
+    nvm
+    pyenv
+    python-tox
+    coursier
+    bloop
+
+    # Cloud Tools
+    google-cloud-cli
+    flytectl
+    kubeconform
+
+    # Other
+    grpcurl
+)
+
+install_pacman() {
+    echo "Installing pacman packages..."
+    sudo pacman -S --needed "${PACMAN_PACKAGES[@]}"
+}
+
+install_aur() {
+    if ! command -v "$AUR_HELPER" &>/dev/null; then
+        echo "AUR helper '$AUR_HELPER' not found. Install yay or paru first."
+        echo "  git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si"
+        return 1
+    fi
+    echo "Installing AUR packages with $AUR_HELPER..."
+    "$AUR_HELPER" -S --needed "${AUR_PACKAGES[@]}"
+}
+
+case "${1:-all}" in
+    pacman) install_pacman ;;
+    aur)    install_aur ;;
+    all)
+        install_pacman
+        install_aur
+        ;;
+    list)
+        echo "=== Pacman Packages ==="
+        printf '%s\n' "${PACMAN_PACKAGES[@]}"
+        echo ""
+        echo "=== AUR Packages ==="
+        printf '%s\n' "${AUR_PACKAGES[@]}"
+        ;;
+    *)
+        echo "Usage: $0 [pacman|aur|all|list]"
+        exit 1
+        ;;
+esac
+
+echo "Done!"

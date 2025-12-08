@@ -1,0 +1,100 @@
+#!/usr/bin/env bash
+#MISE description="Install OS-specific packages (Brewfile or packages.arch)"
+
+set -euo pipefail
+
+install_arch() {
+    printf "${BLUE}Detected Arch Linux${NC}\n"
+
+    if ! command -v yay &>/dev/null && ! command -v paru &>/dev/null; then
+        printf "${YELLOW}Installing yay (AUR helper)...${NC}\n"
+        tmpdir=$(mktemp -d)
+        git clone https://aur.archlinux.org/yay.git "$tmpdir/yay"
+        (cd "$tmpdir/yay" && makepkg -si --noconfirm)
+        rm -rf "$tmpdir"
+    fi
+
+    AUR_HELPER="${AUR_HELPER:-$(command -v yay || command -v paru)}"
+
+    PACMAN_PACKAGES=(
+        git github-cli curl jq just
+        bash bash-completion tmux starship lazygit zellij
+        neovim helix glow
+        ripgrep bat fd the_silver_searcher
+        go nodejs npm python rust lua luajit
+        python-pipx uv yarn luarocks lua-language-server tree-sitter
+        jdk-openjdk jdk11-openjdk jdk17-openjdk jdk21-openjdk scala sbt maven
+        aws-cli-v2 kubectl kubectx docker docker-compose docker-buildx
+        mariadb-clients postgresql sqlite
+        protobuf msgpack-c
+        base-devel autoconf automake libtool m4 pkgconf
+        brotli lz4 lzo snappy xz zlib zstd
+        alacritty wezterm ttf-hack-nerd
+    )
+
+    AUR_PACKAGES=(
+        nvm pyenv python-tox coursier bloop
+        google-cloud-cli grpcurl kubeconform
+    )
+
+    printf "${YELLOW}Installing pacman packages...${NC}\n"
+    sudo pacman -S --needed --noconfirm "${PACMAN_PACKAGES[@]}" || true
+
+    printf "${YELLOW}Installing AUR packages...${NC}\n"
+    "$AUR_HELPER" -S --needed --noconfirm "${AUR_PACKAGES[@]}" || true
+}
+
+install_macos() {
+    printf "${BLUE}Detected macOS${NC}\n"
+
+    if ! command -v brew &>/dev/null; then
+        printf "${YELLOW}Installing Homebrew...${NC}\n"
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    fi
+
+    if [[ -f "$DOTFILES_DIR/Brewfile" ]]; then
+        printf "${YELLOW}Installing from Brewfile...${NC}\n"
+        brew bundle install --file="$DOTFILES_DIR/Brewfile"
+    else
+        printf "${RED}Brewfile not found at $DOTFILES_DIR/Brewfile${NC}\n"
+        exit 1
+    fi
+}
+
+install_debian() {
+    printf "${BLUE}Detected Debian/Ubuntu${NC}\n"
+    printf "${YELLOW}Installing core packages...${NC}\n"
+    sudo apt update
+    sudo apt install -y \
+        git curl jq \
+        bash bash-completion tmux \
+        neovim \
+        ripgrep bat fd-find silversearcher-ag \
+        golang nodejs npm python3 python3-pip rustc cargo lua5.4 \
+        docker.io docker-compose \
+        postgresql-client sqlite3 \
+        build-essential autoconf automake libtool m4 pkg-config \
+        brotli liblz4-tool xz-utils zstd
+}
+
+case "$(uname -s)" in
+    Linux)
+        if command -v pacman &>/dev/null; then
+            install_arch
+        elif command -v apt &>/dev/null; then
+            install_debian
+        else
+            printf "${RED}Unsupported Linux distribution${NC}\n"
+            exit 1
+        fi
+        ;;
+    Darwin)
+        install_macos
+        ;;
+    *)
+        printf "${RED}Unsupported operating system: $(uname -s)${NC}\n"
+        exit 1
+        ;;
+esac
+
+printf "${GREEN}Package installation complete!${NC}\n"
