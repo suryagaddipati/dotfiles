@@ -11,16 +11,21 @@ sleep 0.2
 
 case "$current_state" in
     0)
-        hyprsunset -t 4000 >/dev/null 2>&1 &
+        hyprsunset -t 5000 >/dev/null 2>&1 &
         echo "1" > "$STATE_FILE"
-        notify-send "Night Light" "Medium (4000K)" -t 2000
+        notify-send "Night Light" "Light (5000K)" -t 2000
         ;;
     1)
-        hyprsunset -t 3000 >/dev/null 2>&1 &
+        hyprsunset -t 4000 >/dev/null 2>&1 &
         echo "2" > "$STATE_FILE"
-        notify-send "Night Light" "Warm (3000K)" -t 2000
+        notify-send "Night Light" "Medium (4000K)" -t 2000
         ;;
     2)
+        hyprsunset -t 3000 >/dev/null 2>&1 &
+        echo "3" > "$STATE_FILE"
+        notify-send "Night Light" "Warm (3000K)" -t 2000
+        ;;
+    3)
         hyprsunset -t 6500 >/dev/null 2>&1 &
         echo "0" > "$STATE_FILE"
         notify-send "Night Light" "Off (6500K)" -t 2000
