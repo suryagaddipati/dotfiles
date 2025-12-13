@@ -2,15 +2,10 @@
 # Usage: brew bundle install
 
 # Taps
-tap "atlassian/acli"
 tap "coursier/formulas"
-tap "dbt-labs/dbt"
-tap "flyteorg/tap"
 tap "homebrew/cask-fonts"
 tap "homebrew/cask-versions"
 tap "scalacenter/bloop"
-tap "spotify/public"
-tap "spotify/sptaps"
 
 # Core Development Tools
 brew "git"
@@ -73,42 +68,22 @@ brew "sbt"
 brew "maven"
 brew "coursier"
 brew "bloop"
-brew "scio"
 
 # Cloud & Infrastructure
 brew "awscli"
-brew "kubectl-site"
 brew "kubernetes-cli"
 brew "kubectx"
 brew "kubeconform"
 brew "docker"
 brew "docker-credential-helper"
-brew "flytectl"
 
 # Database Tools
 brew "mysql-client"
 brew "postgresql@14"
 brew "sqlite"
 
-# Spotify Internal Tools
-brew "acli"
-brew "avro-tools"
-brew "data-endpoints-cli"
-brew "gcs-avro-tools"
-brew "gcs-magnolify-tools"
-brew "gcs-parquet-cli"
-brew "gcs-proto-tools"
-brew "go-parquet-tools"
+# Data Tools
 brew "grpcurl"
-brew "hades-cli"
-brew "hmtools"
-brew "honk-cli"
-brew "parquet-cli"
-brew "protoman"
-brew "spotify-disco"
-brew "spgrpcurl"
-brew "spuric"
-brew "styx-cli"
 
 # Protocol & Serialization
 brew "protobuf"
