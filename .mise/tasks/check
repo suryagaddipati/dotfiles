@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+#MISE description="Check if prerequisites are installed"
+
+set -euo pipefail
+
+printf "${BLUE}Checking prerequisites...${NC}\n"
+missing=0
+
+for cmd in git curl mise tmux nvim rg fzf; do
+    if command -v "$cmd" &>/dev/null; then
+        printf "${GREEN}✓${NC} $cmd\n"
+    else
+        printf "${RED}✗${NC} $cmd\n"
+        missing=1
+    fi
+done
+
+[ "$missing" -eq 0 ] && printf "${GREEN}All prerequisites satisfied!${NC}\n" || exit 1

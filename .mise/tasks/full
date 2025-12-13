@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+#MISE description="Complete installation: deps + dotfiles + LSP"
+#MISE depends=["deps", "install", "lsp"]
+
+printf "${GREEN}Full installation complete!${NC}\n"
+printf "Restart terminal or: source ~/.bashrc\n"

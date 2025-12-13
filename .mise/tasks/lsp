@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+#MISE description="Install language servers for neovim"
+
+set -euo pipefail
+
+printf "${BLUE}Installing language servers...${NC}\n"
+mise exec -- npm install -g bash-language-server yaml-language-server pyright typescript-language-server vscode-langservers-extracted
+mise exec -- go install golang.org/x/tools/gopls@latest 2>/dev/null || true
+printf "${GREEN}Language servers installed!${NC}\n"
