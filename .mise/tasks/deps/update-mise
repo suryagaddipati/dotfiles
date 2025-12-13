@@ -6,7 +6,7 @@ set -euo pipefail
 printf "${BLUE}Updating mise...${NC}\n"
 
 # Check if mise is managed by package manager
-if pacman -Q mise &>/dev/null; then
+if command -v pacman &>/dev/null && pacman -Q mise &>/dev/null; then
     printf "${YELLOW}mise is installed via pacman${NC}\n"
     printf "Checking for updates in repository...\n"
 
@@ -21,6 +21,10 @@ if pacman -Q mise &>/dev/null; then
         printf "2. Install from GitHub: curl https://mise.run | sh\n"
         printf "3. Add to PATH: echo 'eval \"\$(~/.local/bin/mise activate bash)\"' >> ~/.bashrc\n"
     fi
+elif command -v brew &>/dev/null && brew list mise &>/dev/null; then
+    printf "${YELLOW}mise is installed via homebrew${NC}\n"
+    brew upgrade mise || printf "${YELLOW}mise is already up to date${NC}\n"
+    printf "${GREEN}mise updated via homebrew!${NC}\n"
 elif command -v mise &>/dev/null; then
     printf "${YELLOW}mise found, attempting self-update...${NC}\n"
     if mise self-update; then

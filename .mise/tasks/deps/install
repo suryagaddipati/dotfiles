@@ -19,7 +19,7 @@ elif command -v yum > /dev/null; then
     sudo yum install -y git curl xclip
 else
     printf "${RED}No supported package manager found. Please install dependencies manually:${NC}\n"
-    printf "  git curl build-essential xclip\n"
+    printf "  git curl build-essential (xclip on Linux)\n"
     exit 1
 fi
 

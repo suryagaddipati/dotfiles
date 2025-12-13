@@ -23,9 +23,10 @@ else
 fi
 
 # Link tmux config if not already linked
-if [ ! -e "$HOME_DIR/.tmux.conf" ] && [ -f "/home/surya/code/dotfiles/.config/tmux/tmux.conf" ]; then
+DOTFILES_DIR="${DOTFILES_DIR:-$(cd "$(dirname "$0")/../.." && pwd)}"
+if [ ! -e "$HOME_DIR/.tmux.conf" ] && [ -f "$DOTFILES_DIR/.config/tmux/tmux.conf" ]; then
     printf "${YELLOW}Linking tmux configuration...${NC}\n"
-    ln -sf "/home/surya/code/dotfiles/.config/tmux/tmux.conf" "$HOME_DIR/.tmux.conf"
+    ln -sf "$DOTFILES_DIR/.config/tmux/tmux.conf" "$HOME_DIR/.tmux.conf"
 fi
 
 # Set TMUX_PLUGIN_MANAGER_PATH for plugin installation
