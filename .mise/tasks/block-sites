@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+#MISE description="Add site blockers to /etc/hosts"
+
+set -euo pipefail
+
+BLOCKED_SITES="$DOTFILES_DIR/.config/hosts/blocked-sites"
+
+if [[ ! -f "$BLOCKED_SITES" ]]; then
+    printf "${RED}Blocked sites file not found: $BLOCKED_SITES${NC}\n"
+    exit 1
+fi
+
+if grep -q "# Block distracting sites" /etc/hosts; then
+    printf "${YELLOW}Block rules already in /etc/hosts${NC}\n"
+else
+    printf "${BLUE}Adding blocked sites to /etc/hosts...${NC}\n"
+    cat "$BLOCKED_SITES" | sudo tee -a /etc/hosts > /dev/null
+    printf "${GREEN}Sites blocked! Restart browser to take effect.${NC}\n"
+fi

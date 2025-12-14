@@ -1,0 +1,10 @@
+# Block distracting sites
+0.0.0.0 reddit.com
+0.0.0.0 www.reddit.com
+0.0.0.0 old.reddit.com
+0.0.0.0 np.reddit.com
+0.0.0.0 new.reddit.com
+0.0.0.0 i.reddit.com
+0.0.0.0 m.reddit.com
+0.0.0.0 news.ycombinator.com
+0.0.0.0 hacker-news.firebaseio.com
