@@ -7,11 +7,7 @@ printf "${BLUE}Installing tools via mise...${NC}\n"
 if command -v mise > /dev/null 2>&1; then
     printf "${YELLOW}Installing tools from mise configuration...${NC}\n"
 
-    # Install tools, skipping any that fail to avoid blocking the whole process
-    if ! mise install --continue-on-error; then
-        printf "${YELLOW}Some tools failed to install, checking individual status...${NC}\n"
-        mise list --installed
-    fi
+    mise install || true
 
     printf "${GREEN}Tool installation completed!${NC}\n"
 else

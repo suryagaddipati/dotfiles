@@ -7,7 +7,7 @@ set -euo pipefail
 printf "${BLUE}Installing system dependencies...${NC}\n"
 if command -v pacman > /dev/null; then
     printf "${YELLOW}Using pacman package manager...${NC}\n"
-    sudo pacman -S --needed --noconfirm git curl base-devel xclip
+    sudo pacman -S --needed --noconfirm git curl base-devel wl-clipboard
 elif command -v apt > /dev/null; then
     printf "${YELLOW}Using apt package manager...${NC}\n"
     sudo apt update && sudo apt install -y git curl build-essential xclip
