@@ -1,3 +1,8 @@
+# Static table lookup for hostnames.
+# See hosts(5) for details.
+127.0.0.1        localhost
+::1              localhost
+
 # Block distracting sites
 0.0.0.0 reddit.com
 0.0.0.0 www.reddit.com
@@ -6,5 +11,10 @@
 0.0.0.0 new.reddit.com
 0.0.0.0 i.reddit.com
 0.0.0.0 m.reddit.com
+0.0.0.0 sh.reddit.com
+0.0.0.0 oauth.reddit.com
+0.0.0.0 out.reddit.com
+0.0.0.0 redd.it
+0.0.0.0 www.redd.it
 0.0.0.0 news.ycombinator.com
 0.0.0.0 hacker-news.firebaseio.com

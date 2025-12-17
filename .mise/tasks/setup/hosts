@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+#MISE description="Copy hosts file to /etc/hosts"
+
+set -euo pipefail
+
+printf "${BLUE}Installing hosts file...${NC}\n"
+sudo cp "$DOTFILES_DIR/.config/hosts/hosts" /etc/hosts
+printf "${GREEN}Hosts file installed!${NC}\n"
