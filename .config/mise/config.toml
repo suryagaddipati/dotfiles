@@ -19,6 +19,9 @@ shfmt = "latest"
 
 # LSP servers (available through mise)
 lua-language-server = "latest"
+clojure = "1.12"
+maven = "latest"
+leiningen = "latest"
 
 [settings]
 paranoid = false
