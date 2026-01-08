@@ -12,12 +12,7 @@ Create a git commit following these guidelines:
    - Focuses on "why" rather than "what"
    - Follows this repository's commit message style
 3. Stage relevant files (avoid committing secrets or .env files)
-4. Create the commit with the message ending with:
-
-🤖 Generated with [Claude Code](https://claude.com/claude-code)
-
-Co-Authored-By: Claude <noreply@anthropic.com>
-
+4. Create the commit (respect the attribution settings in settings.json)
 5. Push to the remote repository with appropriate upstream tracking
 6. Report the final status
 
