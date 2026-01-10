@@ -1,11 +1,12 @@
 return {
   'sindrets/diffview.nvim',
+  event = 'VeryLazy',
   keys = {
     {
       '<leader>gg',
       function()
-        local lib = require('diffview.lib')
-        if lib.get_current_view() then
+        local ok, lib = pcall(require, 'diffview.lib')
+        if ok and lib.get_current_view() then
           vim.cmd('DiffviewClose')
         else
           vim.cmd('DiffviewOpen')
