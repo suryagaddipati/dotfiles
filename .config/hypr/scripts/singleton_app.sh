@@ -33,7 +33,7 @@ find_new_window() {
 }
 
 get_current_stack_workspace() {
-    hyprctl monitors -j | jq -r '.[].specialWorkspace.name // empty' | grep -E '^special:ws[0-9]+_[ASD]$' | head -n1
+    hyprctl monitors -j | jq -r '.[].specialWorkspace.name // empty' | grep -E '^special:ws[0-9]+_[ASD]$' | head -n1 || true
 }
 
 window_exists=$(check_window)
