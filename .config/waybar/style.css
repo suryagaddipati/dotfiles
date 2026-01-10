@@ -130,6 +130,18 @@ tooltip {
   font-size: 10px;
 }
 
+#custom-pomofocus {
+  margin: 0 7.5px;
+}
+
+#custom-pomofocus.active {
+  color: @red;
+}
+
+#custom-pomofocus.inactive {
+  color: @overlay0;
+}
+
 .hidden {
   opacity: 0;
 }

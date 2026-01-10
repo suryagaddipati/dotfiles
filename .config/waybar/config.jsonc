@@ -13,6 +13,7 @@
     "network",
     "pulseaudio",
     "cpu",
+    "custom/pomofocus",
     "battery",
     "custom/menu"
   ],
@@ -110,5 +111,12 @@
     "format": "󰍜",
     "tooltip-format": "Menu",
     "on-click": "omarchy-menu"
+  },
+  "custom/pomofocus": {
+    "format": "{}",
+    "return-type": "json",
+    "exec": "~/.config/hypr/scripts/waybar_pomofocus.sh",
+    "interval": 1,
+    "on-click": "~/.config/hypr/scripts/singleton_app.sh pomofocus 'chrome-pomofocus.io__-Profile_2' \"setsid uwsm app -- chromium --profile-directory='Profile_2' --app='https://pomofocus.io'\""
   }
 }
