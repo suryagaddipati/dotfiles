@@ -172,3 +172,5 @@ keymap('n', '<leader>tn', ':set number!<CR>', { desc = 'Toggle line numbers' })
 keymap('n', '<leader>tr', ':set relativenumber!<CR>', { desc = 'Toggle relative numbers' })
 keymap('n', '<leader>tw', ':set wrap!<CR>', { desc = 'Toggle word wrap' })
 keymap('n', '<leader>ts', ':set spell!<CR>', { desc = 'Toggle spell check' })
+
+keymap('t', '<Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
