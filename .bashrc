@@ -174,6 +174,8 @@ export PATH="$HOME/code/dotfiles/git-commands:$PATH"
 # Add bash_tools to PATH for custom tools
 export PATH="$HOME/code/dotfiles/bash_tools:$PATH"
 
+# Jira CLI
+export PATH="$HOME/code/jira/acli:$PATH"
 
 # Set default editor to neovim
 export EDITOR="nvim"
