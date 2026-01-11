@@ -20,12 +20,14 @@ shfmt = "latest"
 
 # LSP servers (available through mise)
 lua-language-server = "latest"
+"ubi:clojure-lsp/clojure-lsp" = "latest"
 clojure = "1.12"
 maven = "latest"
 leiningen = "latest"
 babashka = "latest"
 awscli = "latest"
 aws-vault = "latest"
+"aqua:99designs/aws-vault" = "latest"
 
 [settings]
 paranoid = false

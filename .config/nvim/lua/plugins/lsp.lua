@@ -131,5 +131,9 @@ return {
     if vim.fn.executable('tsc') == 1 or vim.fn.executable('typescript') == 1 then
       setup_lsp('ts_ls')
     end
+
+    if vim.fn.executable('clojure-lsp') == 1 then
+      setup_lsp('clojure_lsp')
+    end
   end,
 }
