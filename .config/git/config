@@ -25,3 +25,5 @@
 	defaultBranch = main
 [core]
 	editor = vim
+[includeIf "gitdir:~/code/hudl/"]
+	path = ~/code/hudl/.gitconfig-hudl
