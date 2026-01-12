@@ -1,4 +1,8 @@
 {
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
   "permissions": {
     "allow": [
       "Bash(mise:*)",
@@ -59,85 +63,13 @@
     ],
     "deny": []
   },
-  "hooks": {
-    "Notification": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ~/.claude/claude-activity-tracker.sh notification"
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ~/.claude/claude-activity-tracker.sh stop"
-          }
-        ]
-      }
-    ],
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ~/.claude/claude-activity-tracker.sh stop"
-          }
-        ]
-      }
-    ],
-    "SessionEnd": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ~/.claude/claude-activity-tracker.sh stop"
-          }
-        ]
-      }
-    ],
-    "PreToolUse": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ~/.claude/claude-activity-tracker.sh stop"
-          }
-        ]
-      }
-    ],
-    "SubagentStop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ~/.claude/claude-activity-tracker.sh stop"
-          }
-        ]
-      }
-    ],
-    "UserPromptSubmit": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ~/.claude/claude-activity-tracker.sh stop"
-          }
-        ]
-      }
-    ]
-  },
+  "model": "us.anthropic.claude-opus-4-5-20251101-v1:0",
   "statusLine": {
     "type": "command",
     "command": "input=$(cat); model_name=$(echo \"$input\" | jq -r '.model.display_name' | sed 's/@.*//'); tokens=$(echo \"$input\" | jq -r '.usage.tokens // 0'); tokens_k=$(echo \"scale=1; $tokens/1000\" | bc 2>/dev/null || echo \"0\"); printf \"%s [%sk]\" \"$model_name\" \"$tokens_k\""
   },
-  "alwaysThinkingEnabled": true,
-  "attribution": {
-    "commit": "",
-    "pr": ""
-  }
+  "enabledPlugins": {
+    "lua-lsp@claude-plugins-official": true
+  },
+  "alwaysThinkingEnabled": true
 }
