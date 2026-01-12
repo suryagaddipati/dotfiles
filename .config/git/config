@@ -1,6 +1,11 @@
 [user]
 	email = surya.gaddipati@gmail.com
 	name = Surya G
+	signingkey = ~/.ssh/id_ed25519.pub
+[gpg]
+	format = ssh
+[commit]
+	gpgsign = true
 [credential "https://github.com"]
 	helper =
 	helper = !/usr/bin/gh auth git-credential
