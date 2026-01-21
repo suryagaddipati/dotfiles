@@ -30,7 +30,8 @@
     "on-click": "alacritty -e btop"
   },
   "clock": {
-    "format": "{:%a %d  %I:%M %p}",
+    "timezone": "America/Chicago",
+    "format": "{:%a %d  %I:%M %p %Z}",
     "tooltip": false,
     "on-click": "",
     "on-click-right": "omarchy-cmd-tzupdate"
