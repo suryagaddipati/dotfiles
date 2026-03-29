@@ -37,9 +37,8 @@ window#waybar {
   background-color: @base;
 }
 
-/* Slightly reduced font for external monitor */
 window#waybar.DP-1 * {
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .modules-left {
