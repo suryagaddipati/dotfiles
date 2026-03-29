@@ -6,6 +6,7 @@ This file provides global guidance to Claude Code (claude.ai/code) for all devel
 
 **CRITICAL RULES:**
 - NEVER EVER WRITE CODE COMMENTS unless explicitly requested
+- NEVER ask the user to run commands on your behalf - always execute them directly
 - Always use the vim-expert agent when users ask to open files
 - Prioritize concise, direct responses (fewer than 4 lines unless detail requested)
 - Minimize output tokens while maintaining helpfulness

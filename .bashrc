@@ -259,3 +259,8 @@ case "$(uname -s)" in
         [ -f ~/code/dotfiles/bash_functions/os-darwin.bash ] && . ~/code/dotfiles/bash_functions/os-darwin.bash
         ;;
 esac
+
+export HONCHO_API_KEY=local
+export HONCHO_ENDPOINT=local
+
+. "$HOME/.local/share/../bin/env"
