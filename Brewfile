@@ -24,6 +24,9 @@ brew "autoenv"
 brew "lazygit"
 brew "zellij"
 
+# macOS Utilities
+brew "blueutil"
+
 # Text Editors
 brew "neovim"
 brew "helix"

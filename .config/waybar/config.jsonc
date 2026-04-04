@@ -12,7 +12,6 @@
     "network",
     "pulseaudio",
     "cpu",
-    "custom/pomofocus",
     "battery",
     "custom/menu"
   ],
@@ -69,10 +68,10 @@
     }
   },
   "bluetooth": {
-    "format": "",
+    "format": "󰂯",
     "format-disabled": "󰂲",
-    "format-connected": "",
-    "format-connected-battery": "",
+    "format-connected": "󰂱",
+    "format-connected-battery": "󰂱",
     "tooltip-format": "{controller_alias}\t{controller_address}",
     "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{device_enumerate}",
     "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
@@ -111,12 +110,6 @@
     "format": "󰍜",
     "tooltip-format": "Menu",
     "on-click": "omarchy-menu"
-  },
-  "custom/pomofocus": {
-    "format": "{}",
-    "return-type": "json",
-    "exec": "~/.config/hypr/scripts/waybar_pomofocus.sh",
-    "interval": 1,
-    "on-click": "~/.config/hypr/scripts/singleton_app.sh pomofocus 'chrome-pomofocus.io__-Profile_2' \"setsid uwsm app -- chromium --profile-directory='Profile_2' --app='https://pomofocus.io'\""
   }
+
 }
