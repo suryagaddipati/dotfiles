@@ -37,7 +37,7 @@ window#waybar {
   background-color: @base;
 }
 
-window#waybar.DP-1 * {
+window#waybar.DP-3 * {
   font-size: 16px;
 }
 
