@@ -37,7 +37,11 @@ window#waybar {
   background-color: @base;
 }
 
-window#waybar.DP-3 * {
+window#waybar.DP-1 *,
+window#waybar.DP-2 *,
+window#waybar.DP-3 *,
+window#waybar.DP-4 *,
+window#waybar.HDMI-A-1 * {
   font-size: 16px;
 }
 
