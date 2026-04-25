@@ -70,5 +70,6 @@
   "alwaysThinkingEnabled": true,
   "effortLevel": "low",
   "voiceEnabled": true,
-  "skipDangerousModePermissionPrompt": true
+  "skipDangerousModePermissionPrompt": true,
+  "model": "opus"
 }
