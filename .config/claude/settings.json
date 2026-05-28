@@ -71,5 +71,6 @@
   "alwaysThinkingEnabled": true,
   "effortLevel": "low",
   "skipDangerousModePermissionPrompt": true,
+  "theme": "dark",
   "voiceEnabled": true
 }
