@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #MISE description="Install system dependencies"
-#MISE depends=["deps:install-mise", "deps:install-tools"]
+#MISE depends=["deps:install-mise", "deps:install-tools", "deps:install-packages"]
 
 set -euo pipefail
 

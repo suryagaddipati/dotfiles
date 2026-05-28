@@ -36,9 +36,12 @@ export TMUX_PLUGIN_MANAGER_PATH="$HOME_DIR/.tmux/plugins/"
 if command -v tmux >/dev/null 2>&1; then
     if [ -f "$HOME_DIR/.tmux.conf" ]; then
         printf "${YELLOW}Installing/updating tmux plugins...${NC}\n"
-        # Use tmux source-file to ensure config is loaded before plugin operations
+        tmux start-server
+        tmux new-session -d -s __tpm_install 2>/dev/null || true
+        tmux source-file "$HOME_DIR/.tmux.conf"
+        "$HOME_DIR/.tmux/plugins/tpm/bin/install_plugins"
+        tmux kill-session -t __tpm_install 2>/dev/null || true
         tmux source-file "$HOME_DIR/.tmux.conf" 2>/dev/null || true
-        "$HOME_DIR/.tmux/plugins/tpm/bin/install_plugins" 2>/dev/null || printf "${YELLOW}Plugin installation will complete on next tmux start${NC}\n"
         printf "${GREEN}Tmux setup complete${NC}\n"
     else
         printf "${YELLOW}Tmux config not found, plugins will install on first tmux start${NC}\n"
