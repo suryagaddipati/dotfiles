@@ -262,5 +262,3 @@ esac
 
 export HONCHO_API_KEY=local
 export HONCHO_ENDPOINT=local
-
-. "$HOME/.local/share/../bin/env"
