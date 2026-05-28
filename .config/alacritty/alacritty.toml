@@ -1,29 +1,23 @@
 
-[terminal.shell]
-program = "/bin/bash"
-
 [general]
-# Alacritty Configuration (TOML format)
-
 import = [
     "~/.config/alacritty/catppuccin-mocha.toml"
-    # Other available themes:
     # "~/.config/alacritty/catppuccin-macchiato.toml"
     # "~/.config/alacritty/catppuccin-frappe.toml"
     # "~/.config/alacritty/catppuccin-latte.toml"
 ]
 
+[terminal]
+shell = { program = "/opt/homebrew/bin/bash", args = ["-l"] }
+
 [font]
 size = 14.0
-
-# [window]
-# decorations = "none"
-# startup_mode = "Fullscreen"
+normal = { family = "Hack Nerd Font", style = "Regular" }
+bold = { family = "Hack Nerd Font", style = "Bold" }
+italic = { family = "Hack Nerd Font", style = "Italic" }
 
 [env]
 TERM = "xterm-256color"
 
 [selection]
 save_to_clipboard = true
-
-[terminal]
