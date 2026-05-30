@@ -33,6 +33,13 @@ if [ -d "$DOTFILES_DIR/.config" ]; then
     done
 fi
 
+# Link hammerspoon config
+if [ -f "$DOTFILES_DIR/.hammerspoon/init.lua" ]; then
+    printf "${GREEN}Linking .hammerspoon/init.lua${NC}\n"
+    mkdir -p "$HOME_DIR/.hammerspoon"
+    ln -sf "$DOTFILES_DIR/.hammerspoon/init.lua" "$HOME_DIR/.hammerspoon/init.lua"
+fi
+
 # Git compatibility: link .gitconfig to git config file if it exists
 if [ -f "$DOTFILES_DIR/.config/git/config" ]; then
     printf "${GREEN}Linking .gitconfig${NC}\n"
