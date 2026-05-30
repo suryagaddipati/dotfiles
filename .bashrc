@@ -91,6 +91,8 @@ alias l='ls -CF'
 # git alias
 alias g='git'
 
+alias cc='claude agents --dangerously-skip-permissions'
+
 # tmux shortcuts
 alias t='tmux_smart_session'
 
