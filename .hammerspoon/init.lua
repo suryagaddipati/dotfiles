@@ -9,6 +9,7 @@ local appShortcuts = {
     { mods = { "cmd" }, key = "x", app = "WhatsApp" },
     { mods = { "cmd" }, key = "z", app = "Signal" },
     { mods = { "cmd" }, key = "delete", app = "Google Chrome" },
+    { mods = { "cmd" }, key = "s", app = "Signal" },
 }
 
 local previousApp = nil
