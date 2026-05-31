@@ -5,6 +5,7 @@ local appShortcuts = {
     { mods = { "cmd" }, key = "return", app = "Alacritty" },
     { mods = { "cmd" }, key = "g", app = "ChatGPT" },
     { mods = { "cmd" }, key = "d", app = "Codex" },
+    { mods = { "cmd" }, key = "m", app = "Music" },
 }
 
 local previousApp = nil
